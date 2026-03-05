@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bx08udigc4ixf"]
+
+[ext_resource type="Script" uid="uid://x8hx77fij7s2" path="res://Scenes/debug/map_debug_view.gd" id="1_5syuw"]
+[ext_resource type="Script" uid="uid://dnmgwpoemnkk4" path="res://Scripts/map/map_settings.gd" id="2_mcggk"]
+
+[sub_resource type="Resource" id="Resource_mcggk"]
+script = ExtResource("2_mcggk")
+metadata/_custom_type_script = "uid://dnmgwpoemnkk4"
+
+[node name="MapDebugView" type="Node2D" unique_id=437497812]
+script = ExtResource("1_5syuw")
+settings = SubResource("Resource_mcggk")

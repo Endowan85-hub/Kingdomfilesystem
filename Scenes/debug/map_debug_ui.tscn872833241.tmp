@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://8acxguunyqfr"]
+
+[ext_resource type="Script" uid="uid://dpckdgrukb3t0" path="res://Scenes/debug/map_debug_ui.gd" id="1_21chx"]
+
+[node name="MapDebugUI" type="CanvasLayer" unique_id=1867047274]
+script = ExtResource("1_21chx")
