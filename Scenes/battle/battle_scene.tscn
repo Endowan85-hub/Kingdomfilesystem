@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://mfs1snaguw5i"]
+
+[ext_resource type="Script" uid="uid://ko5ydavfksh5" path="res://Scenes/battle/battle_scene.gd" id="1_bscene"]
+[ext_resource type="Script" uid="uid://h6a0xvvotewt" path="res://Scenes/battle/battle_grid.gd" id="2_bgrid"]
+
+[node name="BattleScene" type="Node2D" unique_id=316404221]
+script = ExtResource("1_bscene")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1411000287]
+layer = 10
+
+[node name="Background" type="ColorRect" parent="CanvasLayer" unique_id=327499919]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.05, 0.08, 1)
+
+[node name="BattleGrid" type="Node2D" parent="CanvasLayer" unique_id=506807302]
+script = ExtResource("2_bgrid")
+
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=446505327]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="PanelContainer" parent="CanvasLayer/UI" unique_id=319706677]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 48.0
+grow_horizontal = 2
+
+[node name="TopHBox" type="HBoxContainer" parent="CanvasLayer/UI/TopBar" unique_id=371126556]
+layout_mode = 2
+
+[node name="TurnLabel" type="Label" parent="CanvasLayer/UI/TopBar/TopHBox" unique_id=639004065]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Round 1"
+
+[node name="InfoLabel" type="Label" parent="CanvasLayer/UI/TopBar/TopHBox" unique_id=1980185059]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Battle Ready"
+
+[node name="Actions" type="PanelContainer" parent="CanvasLayer/UI" unique_id=1129789594]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 0.7
+anchor_bottom = 1.0
+offset_top = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ActionHBox" type="HBoxContainer" parent="CanvasLayer/UI/Actions" unique_id=538344178]
+layout_mode = 2
+alignment = 1
+
+[node name="MoveButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=143917108]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Move"
+
+[node name="AttackButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=1432285625]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Attack"
+
+[node name="DefendButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=462727293]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Defend"
+
+[node name="SkillButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=1714723027]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Skill"
+
+[node name="ItemButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=102259992]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Item"
+
+[node name="SkipButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=321022885]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Skip"
+
+[node name="RetreatButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=650970727]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Retreat"
+
+[node name="LogPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=559855086]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_top = 0.07
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LogLabel" type="RichTextLabel" parent="CanvasLayer/UI/LogPanel" unique_id=195811310]
+layout_mode = 2
+bbcode_enabled = true
+
+[node name="StatPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=900000001]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_top = 0.9
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="StatLabel" type="RichTextLabel" parent="CanvasLayer/UI/StatPanel" unique_id=900000002]
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+
+[node name="Scorecard" type="PanelContainer" parent="CanvasLayer" unique_id=800000001]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -280.0
+offset_right = 320.0
+offset_bottom = 280.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/Scorecard" unique_id=800000002]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="CanvasLayer/Scorecard/VBox" unique_id=800000003]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Battle Summary"
+horizontal_alignment = 1
+
+[node name="Content" type="RichTextLabel" parent="CanvasLayer/Scorecard/VBox" unique_id=800000004]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_active = false
+
+[node name="CloseButton" type="Button" parent="CanvasLayer/Scorecard/VBox" unique_id=800000005]
+layout_mode = 2
+text = "Return to Campaign"

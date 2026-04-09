@@ -1,0 +1,13 @@
+res://Scenes/battle/battle_scene.tscn
+res://Scripts/game/battle/battle_tuning_profile.gd
+res://Scenes/battle/battle_scene.gd
+res://Scripts/map/map_generator.gd
+res://Scripts/data/unit_data.gd
+res://Scripts/data/unit_library.gd
+res://Scripts/ui/leader_panel.gd
+res://Scripts/data/item_library.gd
+res://Scripts/map/leader_data.gd
+res://Scripts/game/battle/battle_unit.gd
+res://Scripts/game/ai_planner.gd
+res://Scripts/game/game_state.gd
+res://Scenes/debug/map_debug_view.gd

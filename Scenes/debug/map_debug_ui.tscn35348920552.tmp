@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://44ad4pp2rc5t"]
+
+[ext_resource type="Script" uid="uid://dpckdgrukb3t0" path="res://Scenes/debug/map_debug_ui.gd" id="1_21chx"]
+
+[node name="MapDebugUI" type="CanvasLayer" unique_id=1867047274]
+script = ExtResource("1_21chx")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=283699315]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 370.0
+offset_bottom = 620.0
+
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=942363673]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Panel/VBox" unique_id=1743336348]
+layout_mode = 2
+text = "MAP DEBUG"
+
+[node name="Selected" type="Label" parent="Panel/VBox" unique_id=404118235]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+text = "Selected: (none)"
+autowrap_mode = 2
+clip_text = true
+
+[node name="Mode" type="Label" parent="Panel/VBox" unique_id=268606030]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+text = "Mode: None"
+autowrap_mode = 2
+clip_text = true
+
+[node name="Buttons" type="GridContainer" parent="Panel/VBox" unique_id=1077343939]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="AttackBtn" type="Button" parent="Panel/VBox/Buttons" unique_id=1232972811]
+layout_mode = 2
+text = "Attack"
+
+[node name="TransferBtn" type="Button" parent="Panel/VBox/Buttons" unique_id=1807040891]
+layout_mode = 2
+text = "Transfer"
+
+[node name="UpgradeBtn" type="Button" parent="Panel/VBox/Buttons" unique_id=1115273998]
+layout_mode = 2
+text = "Upgrade Fort"
+
+[node name="ExecuteBtn" type="Button" parent="Panel/VBox/Buttons" unique_id=1046233623]
+layout_mode = 2
+text = "Execute Month"
+
+[node name="ClearBtn" type="Button" parent="Panel/VBox/Buttons" unique_id=214289359]
+layout_mode = 2
+text = "Clear Orders"
+
+[node name="CancelBtn" type="Button" parent="Panel/VBox/Buttons" unique_id=850742416]
+layout_mode = 2
+text = "Cancel Mode"
+
+[node name="LeadersTitle" type="Label" parent="Panel/VBox" unique_id=1271139562]
+layout_mode = 2
+text = "Leaders"
+
+[node name="LeadersList" type="ItemList" parent="Panel/VBox" unique_id=1047120989]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+allow_reselect = true
+
+[node name="SelectedLeader" type="Label" parent="Panel/VBox" unique_id=1875983054]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+text = "Leader: (none)"
+autowrap_mode = 2
+clip_text = true
+
+[node name="MissionRow" type="HBoxContainer" parent="Panel/VBox" unique_id=354577320]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="MissionTypeOption" type="OptionButton" parent="Panel/VBox/MissionRow" unique_id=324448914]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SendMissionBtn" type="Button" parent="Panel/VBox/MissionRow" unique_id=705170336]
+layout_mode = 2
+text = "Send Mission"
+
+[node name="OrdersTitle" type="Label" parent="Panel/VBox" unique_id=1168401792]
+layout_mode = 2
+
+[node name="Orders" type="RichTextLabel" parent="Panel/VBox" unique_id=54082704]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+bbcode_enabled = true
+text = "Orders"
