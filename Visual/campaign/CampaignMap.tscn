@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Visual/campaign/CampaignMap.gd" id="1_campaignmap"]
+
+[node name="CampaignMap" type="Node"]
+script = ExtResource("1_campaignmap")

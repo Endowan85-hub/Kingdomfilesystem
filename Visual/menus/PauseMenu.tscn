@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Visual/menus/PauseMenu.gd" id="1_pausemenu"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+script = ExtResource("1_pausemenu")

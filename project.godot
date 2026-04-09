@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Kingdom (TEST)"
-run/main_scene="uid://bx08udigc4ixf"
+run/main_scene="res://Visual/menus/MainMenu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
+
+[autoload]
+
+SceneManager="*res://Visual/SceneManager.gd"
 
 [display]
 
