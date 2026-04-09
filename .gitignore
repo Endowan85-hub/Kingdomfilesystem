@@ -1,0 +1,8 @@
+# Godot cache and editor files
+.godot/
+
+# Temp files
+*.tmp
+
+# Import cache
+.import/
