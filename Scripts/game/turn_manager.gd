@@ -1,6 +1,10 @@
 class_name TurnManager
 extends RefCounted
 
+# Emitted after each month if a win/lose condition is met.
+# "victory" or "defeat"
+signal game_over(result: String)
+
 # ==================================================
 # SYSTEM CONTRACT
 # --------------------------------------------------
@@ -168,6 +172,12 @@ func execute_month_with_summary(state: GameState, human_id: int, ai_id: int, run
 		var faction: FactionData = item as FactionData
 		faction_ids.append(int(faction.id))
 	state.order_book.clear_all(faction_ids)
+
+	# --- Win / Lose condition check ---
+	var result: String = _check_game_over(state, human_id)
+	if result != "":
+		game_over.emit(result)
+
 	return summary
 
 
@@ -235,6 +245,43 @@ func _count_alive_factions(state: GameState) -> int:
 		if not bool(faction.is_eliminated):
 			alive += 1
 	return alive
+
+
+func _check_game_over(state: GameState, human_id: int) -> String:
+	if state == null or state.map_data == null:
+		return ""
+
+	# --- Victory: all rival factions eliminated ---
+	var rivals_alive: int = 0
+	for item in state.map_data.factions:
+		var f: FactionData = item as FactionData
+		if f == null or int(f.id) == human_id:
+			continue
+		if not bool(f.is_eliminated):
+			rivals_alive += 1
+	if rivals_alive == 0:
+		return "victory"
+
+	# --- Defeat: human faction eliminated OR all human leaders wounded ---
+	for item in state.map_data.factions:
+		var f: FactionData = item as FactionData
+		if f == null or int(f.id) != human_id:
+			continue
+		if bool(f.is_eliminated):
+			return "defeat"
+		# Check all human leaders wounded
+		var any_active: bool = false
+		for leader_item in state.leaders:
+			var leader: LeaderData = leader_item as LeaderData
+			if leader == null or int(leader.faction_id) != human_id:
+				continue
+			if str(leader.status) != "wounded":
+				any_active = true
+				break
+		if not any_active:
+			return "defeat"
+
+	return ""
 
 
 func _update_faction_war_metas(state: GameState, summary: Dictionary) -> void:

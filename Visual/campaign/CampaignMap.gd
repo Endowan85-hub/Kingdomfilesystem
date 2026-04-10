@@ -41,6 +41,31 @@ func _init_debug_view() -> void:
 
 	add_child(_debug_view)
 
+	# Connect win/lose signal once the debug view has initialized its turn_manager.
+	# Use call_deferred so the debug view's _ready() has run first.
+	call_deferred("_connect_game_over_signal")
+
+
+func _connect_game_over_signal() -> void:
+	if _debug_view == null:
+		return
+	var tm = _debug_view.get("turn_manager")
+	if tm == null:
+		return
+	if tm.is_connected("game_over", _on_game_over):
+		return
+	tm.game_over.connect(_on_game_over)
+
+
+func _on_game_over(result: String) -> void:
+	var gs: GameState = null
+	if _debug_view != null:
+		gs = _debug_view.get("game_state") as GameState
+	if result == "victory":
+		SceneManager.show_victory(gs)
+	else:
+		SceneManager.show_defeat(gs)
+
 
 func _build_hud() -> void:
 	_hud_layer = CanvasLayer.new()
