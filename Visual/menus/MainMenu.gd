@@ -94,7 +94,7 @@ func _on_continue() -> void:
 
 
 func _on_settings() -> void:
-	var settings_scene := load("res://Visual/menus/SettingsMenu.tscn").instantiate()
+	var settings_scene: Node = load("res://Visual/menus/SettingsMenu.tscn").instantiate()
 	add_child(settings_scene)
 
 

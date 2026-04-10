@@ -99,7 +99,7 @@ func _build_ui() -> void:
 		pbtn.custom_minimum_size = Vector2(60, 32)
 		pbtn.toggle_mode = true
 		pbtn.button_pressed = (count == _province_count)
-		var c := count
+		var c: int = count
 		pbtn.toggled.connect(func(pressed: bool) -> void:
 			if pressed:
 				_province_count = c

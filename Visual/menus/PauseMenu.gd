@@ -80,7 +80,7 @@ func _on_resume() -> void:
 
 
 func _on_settings() -> void:
-	var s := load("res://Visual/menus/SettingsMenu.tscn").instantiate()
+	var s: Node = load("res://Visual/menus/SettingsMenu.tscn").instantiate()
 	get_parent().add_child(s)
 
 

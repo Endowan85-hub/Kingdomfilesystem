@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Visual/campaign/ProvincePanel.gd" id="1_provincepanel"]
+
+[node name="ProvincePanel" type="CanvasLayer"]
+script = ExtResource("1_provincepanel")

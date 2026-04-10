@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Visual/campaign/ProvinceTooltip.gd" id="1_tooltip"]
+
+[node name="ProvinceTooltip" type="CanvasLayer"]
+script = ExtResource("1_tooltip")

@@ -1,156 +1,191 @@
 # ==================================================
 # CampaignMap
 # ==================================================
-# The main in-game scene. Wraps the existing MapDebugView
-# (simulation + dev tools) and places the player-facing
-# visual layer on top as a CanvasLayer.
+# Main in-game scene. Manages:
+#   - MapDebugView (simulation engine + dev tools)
+#   - PlayerMap    (player-facing visual map)
+#   - MapHUD       (top/bottom bars, End Turn)
+#   - ProvinceTooltip / ProvincePanel
+#   - PauseMenu
+#   - Win/lose routing via TurnManager signal
 #
-# Phase 1: thin shell — dev view is the primary display.
-# Phase 2: player map rendered here; dev view toggled off by default.
-#
-# DOES NOT modify any simulation files.
+# Phase 2: PlayerMap is the default view.
+#           DEV button toggles the debug view on top.
 # ==================================================
 extends Node
 class_name CampaignMap
 
-const MapDebugViewScene := preload("res://map_debug_view.tscn")
-const MapSettingsScript  := preload("res://Scripts/map/map_settings.gd")
+const MapDebugViewScene  := preload("res://map_debug_view.tscn")
+const PlayerMapScript    := preload("res://Visual/campaign/PlayerMap.gd")
+const MapHUDScript       := preload("res://Visual/campaign/MapHUD.gd")
+const TooltipScript      := preload("res://Visual/campaign/ProvinceTooltip.gd")
+const ProvincePanelScript:= preload("res://Visual/campaign/ProvincePanel.gd")
 const PauseMenuScene     := preload("res://Visual/menus/PauseMenu.tscn")
 
-var _debug_view: Node          # MapDebugView instance
-var _hud_layer: CanvasLayer    # Player HUD overlay
-var _dev_mode_visible: bool = true
+var _debug_view: Node
+var _player_map: PlayerMap
+var _hud: MapHUD
+var _tooltip: ProvinceTooltip
+var _province_panel: ProvincePanel
+
+var _game_state: GameState
+var _map_data: MapData
+var _human_id: int = 0
+var _turn_manager: TurnManager
+var _processing_turn: bool = false
 var _pause_open: bool = false
 
 
 func _ready() -> void:
 	_init_debug_view()
-	_build_hud()
+	_init_player_map()
+	_init_hud()
+	_init_tooltip()
+	_init_province_panel()
+	call_deferred("_post_init")
 
 
+# --------------------------------------------------
+# Initialization
+# --------------------------------------------------
 func _init_debug_view() -> void:
-	# Instantiate the existing simulation + dev view
 	_debug_view = MapDebugViewScene.instantiate()
-
-	# If SceneManager has a pending game state from FactionSelect,
-	# inject it. Otherwise let the debug view build its own fresh state.
-	var gs: GameState = SceneManager.pending_game_state
-	if gs != null and _debug_view.has_method("receive_game_state"):
-		_debug_view.receive_game_state(gs, SceneManager.pending_map_data)
-	# (Phase 2: full handoff — for now debug view self-initializes)
-
 	add_child(_debug_view)
-
-	# Connect win/lose signal once the debug view has initialized its turn_manager.
-	# Use call_deferred so the debug view's _ready() has run first.
-	call_deferred("_connect_game_over_signal")
+	_debug_view.visible = false  # hidden by default — player map is primary
 
 
-func _connect_game_over_signal() -> void:
-	if _debug_view == null:
-		return
-	var tm = _debug_view.get("turn_manager")
-	if tm == null:
-		return
-	if tm.is_connected("game_over", _on_game_over):
-		return
-	tm.game_over.connect(_on_game_over)
+func _init_player_map() -> void:
+	_player_map = PlayerMapScript.new()
+	add_child(_player_map)
+	_player_map.province_hovered.connect(_on_province_hovered)
+	_player_map.province_clicked.connect(_on_province_clicked)
 
 
-func _on_game_over(result: String) -> void:
-	var gs: GameState = null
-	if _debug_view != null:
-		gs = _debug_view.get("game_state") as GameState
-	if result == "victory":
-		SceneManager.show_victory(gs)
-	else:
-		SceneManager.show_defeat(gs)
+func _init_hud() -> void:
+	_hud = MapHUDScript.new()
+	add_child(_hud)
+	_hud.end_turn_pressed.connect(_on_end_turn)
+	_hud.dev_toggle_pressed.connect(_on_dev_toggle)
+	_hud.pause_pressed.connect(_on_pause)
 
 
-func _build_hud() -> void:
-	_hud_layer = CanvasLayer.new()
-	_hud_layer.layer = 10   # above everything
-	add_child(_hud_layer)
-
-	# --- Top bar ---
-	var top_bar := _hbox_bar(Color(0.05, 0.04, 0.08, 0.88))
-	top_bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top_bar.custom_minimum_size = Vector2(0, 36)
-	_hud_layer.add_child(top_bar)
-
-	var game_title := _hud_label("KINGDOM", 14, Color(0.85, 0.75, 0.40))
-	top_bar.add_child(game_title)
-
-	var spacer := Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top_bar.add_child(spacer)
-
-	# Dev toggle button — small, unobtrusive
-	var dev_btn := Button.new()
-	dev_btn.text = "DEV"
-	dev_btn.toggle_mode = true
-	dev_btn.button_pressed = _dev_mode_visible
-	dev_btn.custom_minimum_size = Vector2(48, 0)
-	dev_btn.add_theme_font_size_override("font_size", 10)
-	dev_btn.toggled.connect(_on_dev_toggle)
-	top_bar.add_child(dev_btn)
-
-	# --- Bottom bar ---
-	var bot_bar := _hbox_bar(Color(0.05, 0.04, 0.08, 0.88))
-	bot_bar.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	bot_bar.custom_minimum_size = Vector2(0, 40)
-	bot_bar.offset_top = -40
-	_hud_layer.add_child(bot_bar)
-
-	var phase_note := _hud_label("Phase 1 — Dev View Active  ·  Player map coming in Phase 2", 11, Color(0.40, 0.38, 0.32))
-	bot_bar.add_child(phase_note)
-
-	var spacer2 := Control.new()
-	spacer2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bot_bar.add_child(spacer2)
-
-	# Pause button
-	var pause_btn := Button.new()
-	pause_btn.text = "Menu  [Esc]"
-	pause_btn.add_theme_font_size_override("font_size", 12)
-	pause_btn.pressed.connect(_on_pause)
-	bot_bar.add_child(pause_btn)
+func _init_tooltip() -> void:
+	_tooltip = TooltipScript.new()
+	add_child(_tooltip)
 
 
-func _hbox_bar(color: Color) -> HBoxContainer:
-	var bar := HBoxContainer.new()
-	bar.anchor_right = 1.0
-	var bg := StyleBoxFlat.new()
-	bg.bg_color = color
-	bar.add_theme_stylebox_override("panel", bg)
-	bar.add_theme_constant_override("separation", 10)
-	return bar
+func _init_province_panel() -> void:
+	_province_panel = ProvincePanelScript.new()
+	add_child(_province_panel)
+	_province_panel.closed.connect(func() -> void: _player_map.refresh())
 
 
-func _hud_label(text: String, size: int, color: Color) -> Label:
-	var lbl := Label.new()
-	lbl.text = text
-	lbl.add_theme_font_size_override("font_size", size)
-	lbl.add_theme_color_override("font_color", color)
-	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	return lbl
+func _post_init() -> void:
+	# Grab state from debug view after its _ready() has run
+	_game_state = _debug_view.get("game_state") as GameState
+	_map_data    = _debug_view.get("map_data")   as MapData
+	_human_id    = int(_debug_view.get("HUMAN_ID") if _debug_view.get("HUMAN_ID") != null else 0)
+	_turn_manager = _debug_view.get("turn_manager") as TurnManager
+
+	# If SceneManager passed a state from FactionSelect, use that instead
+	if SceneManager.pending_game_state != null:
+		_game_state = SceneManager.pending_game_state
+		_map_data    = SceneManager.pending_map_data
+		_human_id    = SceneManager.pending_human_faction_id
+
+	# Wire win/lose signal
+	if _turn_manager != null and not _turn_manager.is_connected("game_over", _on_game_over):
+		_turn_manager.game_over.connect(_on_game_over)
+
+	# Init player map with voronoi data from debug view
+	var voronoi: Dictionary = _debug_view.get("_voronoi_cells") if _debug_view.get("_voronoi_cells") != null else {}
+	_player_map.init(_game_state, _map_data, _human_id, voronoi)
+
+	# Init HUD
+	_hud.game_state = _game_state
+	_hud.human_faction_id = _human_id
+	_hud.refresh()
+
+	# Init tooltip
+	_tooltip.game_state = _game_state
+	_tooltip.human_faction_id = _human_id
+
+	# Init province panel
+	_province_panel.game_state = _game_state
+	_province_panel.human_faction_id = _human_id
 
 
+# --------------------------------------------------
+# Input
+# --------------------------------------------------
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not _pause_open:
 		_on_pause()
 
 
-func _on_dev_toggle(pressed: bool) -> void:
-	_dev_mode_visible = pressed
-	if _debug_view:
-		_debug_view.visible = pressed
+# --------------------------------------------------
+# Province interaction
+# --------------------------------------------------
+func _on_province_hovered(province_id: int) -> void:
+	if province_id >= 0:
+		_tooltip.show_province(province_id)
+		_hud.refresh(province_id)
+	else:
+		_tooltip.hide_tooltip()
+		_hud.refresh(-1)
 
 
+func _on_province_clicked(province_id: int) -> void:
+	_tooltip.hide_tooltip()
+	_province_panel.open(province_id)
+	_hud.refresh(province_id)
+
+
+# --------------------------------------------------
+# End Turn
+# --------------------------------------------------
+func _on_end_turn() -> void:
+	if _processing_turn or _turn_manager == null or _game_state == null:
+		return
+	_processing_turn = true
+
+	# Let the debug view handle the actual turn execution (it owns the turn pipeline)
+	# We call its end-turn method if it exists, otherwise execute directly
+	if _debug_view.visible and _debug_view.has_method("ui_end_turn"):
+		_debug_view.call("ui_end_turn")
+	elif _turn_manager != null:
+		await _turn_manager.execute_month(_game_state, _human_id, -1, true)
+
+	_processing_turn = false
+	_player_map.refresh()
+	_hud.refresh()
+
+
+# --------------------------------------------------
+# Dev toggle
+# --------------------------------------------------
+func _on_dev_toggle(active: bool) -> void:
+	_debug_view.visible = active
+	_player_map.visible = not active
+
+
+# --------------------------------------------------
+# Pause
+# --------------------------------------------------
 func _on_pause() -> void:
 	if _pause_open:
 		return
 	_pause_open = true
-	var pause := PauseMenuScene.instantiate() as PauseMenu
+	var pause: PauseMenu = PauseMenuScene.instantiate() as PauseMenu
 	pause.resumed.connect(func() -> void: _pause_open = false)
 	add_child(pause)
+
+
+# --------------------------------------------------
+# Game over
+# --------------------------------------------------
+func _on_game_over(result: String) -> void:
+	if result == "victory":
+		SceneManager.show_victory(_game_state)
+	else:
+		SceneManager.show_defeat(_game_state)
