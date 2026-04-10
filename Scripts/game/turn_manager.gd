@@ -262,14 +262,14 @@ func _check_game_over(state: GameState, human_id: int) -> String:
 	if rivals_alive == 0:
 		return "victory"
 
-	# --- Defeat: human faction eliminated OR all human leaders wounded ---
+	# --- Defeat: human faction has NO provinces AND all human leaders are wounded ---
 	for item in state.map_data.factions:
 		var f: FactionData = item as FactionData
 		if f == null or int(f.id) != human_id:
 			continue
-		if bool(f.is_eliminated):
-			return "defeat"
-		# Check all human leaders wounded
+		if not bool(f.is_eliminated):
+			break  # still has provinces — no defeat yet
+		# No provinces — now check if all leaders are also wounded
 		var any_active: bool = false
 		for leader_item in state.leaders:
 			var leader: LeaderData = leader_item as LeaderData
