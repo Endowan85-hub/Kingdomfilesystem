@@ -12,6 +12,10 @@ class_name MapHUD
 signal end_turn_pressed
 signal dev_toggle_pressed(active: bool)
 signal pause_pressed
+signal attack_pressed
+signal transfer_pressed
+signal clear_orders_pressed
+signal missions_toggled(active: bool)
 
 var game_state: GameState = null
 var human_faction_id: int = 0
@@ -23,6 +27,10 @@ var _income_label: Label
 var _province_label: Label
 var _selected_label: Label
 var _dev_btn: Button
+var _attack_btn: Button
+var _transfer_btn: Button
+var _clear_btn: Button
+var _missions_btn: Button
 
 
 func _ready() -> void:
@@ -77,6 +85,7 @@ func _build() -> void:
 	_dev_btn.toggled.connect(func(on: bool) -> void: dev_toggle_pressed.emit(on))
 	top.add_child(_dev_btn)
 
+
 	# ── BOTTOM BAR ───────────────────────────────────
 	var bot := _bar_container(true)
 	bot.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -84,22 +93,31 @@ func _build() -> void:
 	bot.offset_top = -46
 	add_child(bot)
 
-	# Selected province summary
+	# Selected province summary / mode indicator
 	_selected_label = _label("Click a province to select it", 12, Color(0.55, 0.53, 0.48))
 	bot.add_child(_selected_label)
 
-	var bot_spacer := Control.new()
-	bot_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bot.add_child(bot_spacer)
+	# Action buttons
+	_attack_btn = _action_btn("⚔ Attack", Color(0.70, 0.25, 0.20))
+	_attack_btn.disabled = true
+	_attack_btn.pressed.connect(func() -> void: attack_pressed.emit())
+	bot.add_child(_attack_btn)
 
-	# Menu button
-	var menu_btn := Button.new()
-	menu_btn.text = "Menu  [Esc]"
-	menu_btn.add_theme_font_size_override("font_size", 12)
-	menu_btn.pressed.connect(func() -> void: pause_pressed.emit())
-	bot.add_child(menu_btn)
+	_transfer_btn = _action_btn("↔ Transfer", Color(0.20, 0.45, 0.70))
+	_transfer_btn.disabled = true
+	_transfer_btn.pressed.connect(func() -> void: transfer_pressed.emit())
+	bot.add_child(_transfer_btn)
 
-	# End Turn button — prominent
+	_clear_btn = _action_btn("✕ Clear", Color(0.40, 0.38, 0.28))
+	_clear_btn.pressed.connect(func() -> void: clear_orders_pressed.emit())
+	bot.add_child(_clear_btn)
+
+	_missions_btn = _action_btn("◆ Missions", Color(0.30, 0.50, 0.65))
+	_missions_btn.toggle_mode = true
+	_missions_btn.toggled.connect(func(on: bool) -> void: missions_toggled.emit(on))
+	bot.add_child(_missions_btn)
+
+	# End Turn button — prominent, placed with action buttons so it's always visible
 	var end_btn := Button.new()
 	end_btn.text = "End Turn ▶"
 	end_btn.custom_minimum_size = Vector2(140, 0)
@@ -112,6 +130,48 @@ func _build() -> void:
 	end_btn.add_theme_stylebox_override("normal", end_style)
 	end_btn.pressed.connect(func() -> void: end_turn_pressed.emit())
 	bot.add_child(end_btn)
+
+	var bot_spacer := Control.new()
+	bot_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bot.add_child(bot_spacer)
+
+	# Menu button — pushed to far right
+	var menu_btn := Button.new()
+	menu_btn.text = "Menu  [Esc]"
+	menu_btn.add_theme_font_size_override("font_size", 12)
+	menu_btn.pressed.connect(func() -> void: pause_pressed.emit())
+	bot.add_child(menu_btn)
+
+
+func hide_dev_button() -> void:
+	if _dev_btn != null:
+		_dev_btn.visible = false
+
+
+func set_action_enabled(can_attack: bool, can_transfer: bool) -> void:
+	if _attack_btn != null:
+		_attack_btn.disabled = not can_attack
+	if _transfer_btn != null:
+		_transfer_btn.disabled = not can_transfer
+
+
+func set_pick_mode_text(text: String) -> void:
+	if _selected_label != null:
+		_selected_label.text = text
+
+
+func _action_btn(label: String, tint: Color) -> Button:
+	var btn := Button.new()
+	btn.text = label
+	btn.add_theme_font_size_override("font_size", 11)
+	btn.custom_minimum_size = Vector2(96, 0)
+	var style := StyleBoxFlat.new()
+	style.bg_color = tint.darkened(0.45)
+	style.border_color = tint.lightened(0.1)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(3)
+	btn.add_theme_stylebox_override("normal", style)
+	return btn
 
 
 func refresh(selected_province_id: int = -1) -> void:

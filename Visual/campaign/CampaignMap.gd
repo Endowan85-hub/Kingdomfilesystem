@@ -21,6 +21,11 @@ const MapHUDScript       := preload("res://Visual/campaign/MapHUD.gd")
 const TooltipScript      := preload("res://Visual/campaign/ProvinceTooltip.gd")
 const ProvincePanelScript:= preload("res://Visual/campaign/ProvincePanel.gd")
 const PauseMenuScene     := preload("res://Visual/menus/PauseMenu.tscn")
+const TurnManagerScript  := preload("res://Scripts/game/turn_manager.gd")
+
+const PICK_NONE:     int = 0
+const PICK_ATTACK:   int = 1
+const PICK_TRANSFER: int = 2
 
 var _debug_view: Node
 var _player_map: PlayerMap
@@ -34,6 +39,11 @@ var _human_id: int = 0
 var _turn_manager: TurnManager
 var _processing_turn: bool = false
 var _pause_open: bool = false
+
+var _pick_mode: int = PICK_NONE
+var _pick_source_id: int = -1
+var _selected_province_id: int = -1
+var _mission_panel: MissionPanel = null
 
 
 func _ready() -> void:
@@ -49,9 +59,14 @@ func _ready() -> void:
 # Initialization
 # --------------------------------------------------
 func _init_debug_view() -> void:
+	# When launched via FactionSelect, skip the debug view entirely —
+	# its CanvasLayer children ignore parent visibility and would bleed through.
+	# The debug view is only needed when launching directly from the editor.
+	if SceneManager.pending_game_state != null:
+		return
 	_debug_view = MapDebugViewScene.instantiate()
 	add_child(_debug_view)
-	_debug_view.visible = false  # hidden by default — player map is primary
+	_debug_view.visible = false
 
 
 func _init_player_map() -> void:
@@ -67,6 +82,10 @@ func _init_hud() -> void:
 	_hud.end_turn_pressed.connect(_on_end_turn)
 	_hud.dev_toggle_pressed.connect(_on_dev_toggle)
 	_hud.pause_pressed.connect(_on_pause)
+	_hud.attack_pressed.connect(_on_attack_pressed)
+	_hud.transfer_pressed.connect(_on_transfer_pressed)
+	_hud.clear_orders_pressed.connect(_on_clear_orders_pressed)
+	_hud.missions_toggled.connect(_on_missions_toggled)
 
 
 func _init_tooltip() -> void:
@@ -78,27 +97,31 @@ func _init_province_panel() -> void:
 	_province_panel = ProvincePanelScript.new()
 	add_child(_province_panel)
 	_province_panel.closed.connect(func() -> void: _player_map.refresh())
+	_province_panel.leader_selection_changed.connect(func() -> void: _update_action_buttons(_selected_province_id))
 
 
 func _post_init() -> void:
-	# Grab state from debug view after its _ready() has run
-	_game_state = _debug_view.get("game_state") as GameState
-	_map_data    = _debug_view.get("map_data")   as MapData
-	_human_id    = int(_debug_view.get("HUMAN_ID") if _debug_view.get("HUMAN_ID") != null else 0)
-	_turn_manager = _debug_view.get("turn_manager") as TurnManager
-
-	# If SceneManager passed a state from FactionSelect, use that instead
 	if SceneManager.pending_game_state != null:
-		_game_state = SceneManager.pending_game_state
-		_map_data    = SceneManager.pending_map_data
-		_human_id    = SceneManager.pending_human_faction_id
+		# Launched from FactionSelect — use SceneManager state, create TurnManager directly
+		_game_state   = SceneManager.pending_game_state
+		_map_data     = SceneManager.pending_map_data
+		_human_id     = SceneManager.pending_human_faction_id
+		_turn_manager = TurnManagerScript.new()
+	elif _debug_view != null:
+		# Launched directly from editor — pull everything from the debug view
+		_game_state   = _debug_view.get("game_state") as GameState
+		_map_data     = _debug_view.get("map_data")   as MapData
+		_human_id     = int(_debug_view.get("HUMAN_ID") if _debug_view.get("HUMAN_ID") != null else 0)
+		_turn_manager = _debug_view.get("turn_manager") as TurnManager
 
 	# Wire win/lose signal
 	if _turn_manager != null and not _turn_manager.is_connected("game_over", _on_game_over):
 		_turn_manager.game_over.connect(_on_game_over)
 
-	# Init player map with voronoi data from debug view
-	var voronoi: Dictionary = _debug_view.get("_voronoi_cells") if _debug_view.get("_voronoi_cells") != null else {}
+	# Init player map — voronoi cells only available when debug view is present
+	var voronoi: Dictionary = {}
+	if _debug_view != null:
+		voronoi = _debug_view.get("_voronoi_cells") if _debug_view.get("_voronoi_cells") != null else {}
 	_player_map.init(_game_state, _map_data, _human_id, voronoi)
 
 	# Init HUD
@@ -114,13 +137,31 @@ func _post_init() -> void:
 	_province_panel.game_state = _game_state
 	_province_panel.human_faction_id = _human_id
 
+	# Hide DEV button when there's no debug view to show
+	if _debug_view == null:
+		_hud.hide_dev_button()
+
+	# Mission panel — wrapped in its own CanvasLayer so it floats above the map
+	var mission_layer := CanvasLayer.new()
+	mission_layer.layer = 12
+	add_child(mission_layer)
+	_mission_panel = MissionPanel.new()
+	_mission_panel.set_game_state(_game_state)
+	_mission_panel.set_human_faction(_human_id)
+	_mission_panel.position = Vector2(30, 80)
+	_mission_panel.visible = false
+	mission_layer.add_child(_mission_panel)
+
 
 # --------------------------------------------------
 # Input
 # --------------------------------------------------
 func _unhandled_key_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel") and not _pause_open:
-		_on_pause()
+	if event.is_action_pressed("ui_cancel"):
+		if _pick_mode != PICK_NONE:
+			_cancel_pick_mode()
+		elif not _pause_open:
+			_on_pause()
 
 
 # --------------------------------------------------
@@ -137,8 +178,24 @@ func _on_province_hovered(province_id: int) -> void:
 
 func _on_province_clicked(province_id: int) -> void:
 	_tooltip.hide_tooltip()
+
+	# Handle pick mode (attack / transfer targeting)
+	if _pick_mode == PICK_ATTACK:
+		_do_queue_attack(_pick_source_id, province_id)
+		_cancel_pick_mode()
+		return
+	elif _pick_mode == PICK_TRANSFER:
+		_do_queue_transfer(_pick_source_id, province_id)
+		_cancel_pick_mode()
+		return
+
+	# Normal selection
+	_selected_province_id = province_id
 	_province_panel.open(province_id)
 	_hud.refresh(province_id)
+	_update_action_buttons(province_id)
+	if _mission_panel != null and _mission_panel.visible:
+		_mission_panel.refresh(province_id)
 
 
 # --------------------------------------------------
@@ -149,9 +206,8 @@ func _on_end_turn() -> void:
 		return
 	_processing_turn = true
 
-	# Let the debug view handle the actual turn execution (it owns the turn pipeline)
-	# We call its end-turn method if it exists, otherwise execute directly
-	if _debug_view.visible and _debug_view.has_method("ui_end_turn"):
+	# Let the debug view handle turn execution when it's active (editor mode)
+	if _debug_view != null and _debug_view.visible and _debug_view.has_method("ui_end_turn"):
 		_debug_view.call("ui_end_turn")
 	elif _turn_manager != null:
 		await _turn_manager.execute_month(_game_state, _human_id, -1, true)
@@ -160,12 +216,20 @@ func _on_end_turn() -> void:
 	_player_map.refresh()
 	_hud.refresh()
 
+	# Push mission results to the panel (clears them from game_state after display)
+	if _mission_panel != null and _game_state != null:
+		var results: Array = _game_state.pending_mission_results.duplicate()
+		_game_state.pending_mission_results.clear()
+		if not results.is_empty():
+			_mission_panel.push_results(results)
+
 
 # --------------------------------------------------
 # Dev toggle
 # --------------------------------------------------
 func _on_dev_toggle(active: bool) -> void:
-	_debug_view.visible = active
+	if _debug_view != null:
+		_debug_view.visible = active
 	_player_map.visible = not active
 
 
@@ -179,6 +243,124 @@ func _on_pause() -> void:
 	var pause: PauseMenu = PauseMenuScene.instantiate() as PauseMenu
 	pause.resumed.connect(func() -> void: _pause_open = false)
 	add_child(pause)
+
+
+# --------------------------------------------------
+# Action buttons — Attack / Transfer / Clear / Missions
+# --------------------------------------------------
+func _update_action_buttons(province_id: int) -> void:
+	if _game_state == null or _map_data == null:
+		return
+	var can_act: bool = false
+	if province_id >= 0 and _map_data.provinces.size() > province_id:
+		var p: ProvinceData = _map_data.provinces[province_id] as ProvinceData
+		var is_own: bool = p != null and int(p.owner_id) == _human_id
+		var has_leader: bool = not _province_panel.get_selected_leader_ids().is_empty()
+		can_act = is_own and has_leader
+	_hud.set_action_enabled(can_act, can_act)
+
+
+func _get_adjacent_ids(province_id: int) -> Array:
+	if _map_data == null:
+		return []
+	var adj = _map_data.adjacency.get(province_id)
+	if adj == null:
+		return []
+	return adj as Array
+
+
+func _on_attack_pressed() -> void:
+	if _selected_province_id < 0 or _game_state == null or _map_data == null:
+		return
+	var src: ProvinceData = _map_data.provinces[_selected_province_id] as ProvinceData
+	if src == null or int(src.owner_id) != _human_id:
+		return
+	_pick_mode = PICK_ATTACK
+	_pick_source_id = _selected_province_id
+	var neighbors: Array = _get_adjacent_ids(_selected_province_id)
+	_player_map.set_pick_mode(PICK_ATTACK, _pick_source_id, neighbors)
+	_hud.set_pick_mode_text("⚔ ATTACK — Click an adjacent enemy province  (Esc to cancel)")
+
+
+func _on_transfer_pressed() -> void:
+	if _selected_province_id < 0 or _game_state == null or _map_data == null:
+		return
+	var src: ProvinceData = _map_data.provinces[_selected_province_id] as ProvinceData
+	if src == null or int(src.owner_id) != _human_id:
+		return
+	_pick_mode = PICK_TRANSFER
+	_pick_source_id = _selected_province_id
+	_player_map.set_pick_mode(PICK_TRANSFER, _pick_source_id)
+	_hud.set_pick_mode_text("↔ TRANSFER — Click a friendly province  (Esc to cancel)")
+
+
+func _cancel_pick_mode() -> void:
+	_pick_mode = PICK_NONE
+	_pick_source_id = -1
+	_player_map.set_pick_mode(PICK_NONE, -1, [])
+	_hud.set_pick_mode_text("Click a province to select it")
+
+
+func _on_clear_orders_pressed() -> void:
+	if _game_state == null or _game_state.order_book == null:
+		return
+	_game_state.order_book.clear_orders_for_faction(_human_id)
+	_player_map.refresh()
+	_hud.refresh()
+
+
+func _do_queue_attack(from_id: int, to_id: int) -> void:
+	if _game_state == null or _game_state.order_book == null or _map_data == null:
+		return
+	var tgt: ProvinceData = _map_data.provinces[to_id] as ProvinceData
+	if tgt == null or int(tgt.owner_id) == _human_id:
+		return  # can't attack own province
+	if not _get_adjacent_ids(from_id).has(to_id):
+		return  # target not adjacent via road
+	# Require at least one leader to be selected before queuing an attack
+	var leaders: Array[int] = _province_panel.get_selected_leader_ids()
+	if leaders.is_empty():
+		return
+	while leaders.size() > 3:
+		leaders.remove_at(leaders.size() - 1)
+	_game_state.order_book.queue_attack(_human_id, from_id, to_id, 0, leaders)
+	_player_map.refresh()
+	_hud.refresh()
+
+
+func _do_queue_transfer(from_id: int, to_id: int) -> void:
+	if _game_state == null or _game_state.order_book == null or _map_data == null:
+		return
+	var tgt: ProvinceData = _map_data.provinces[to_id] as ProvinceData
+	if tgt == null or int(tgt.owner_id) != _human_id:
+		return  # transfer only to own provinces
+	# Require at least one leader to be selected before queuing a transfer
+	var leaders: Array[int] = _province_panel.get_selected_leader_ids()
+	if leaders.is_empty():
+		return
+	while leaders.size() > 3:
+		leaders.remove_at(leaders.size() - 1)
+	_game_state.order_book.queue_transfer(_human_id, from_id, to_id, leaders)
+	_player_map.refresh()
+	_hud.refresh()
+
+
+func _on_missions_toggled(active: bool) -> void:
+	if _mission_panel == null:
+		return
+	_mission_panel.visible = active
+	if active:
+		_mission_panel.refresh(_selected_province_id)
+
+
+# --------------------------------------------------
+# Battle visibility — called by BattleManager to hide/show all campaign UI
+# --------------------------------------------------
+func set_campaign_visible(v: bool) -> void:
+	for child in get_children():
+		var cv = child.get("visible")
+		if cv != null:
+			child.visible = v
 
 
 # --------------------------------------------------

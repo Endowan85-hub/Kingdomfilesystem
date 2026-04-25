@@ -39,6 +39,8 @@ var has_retreated: bool = false  # true on successful retreat — not wounded on
 var retreat_attempts: int = 0    # increments on each failed retreat, boosts next attempt chance
 
 var side: String = ""
+var facing: String = "south"      # current facing direction for sprite rendering
+var sprite_key: String = ""       # e.g. "house_crown" — set at init for leader units
 
 var final_attack: int = 0
 var final_defense: int = 0
@@ -196,11 +198,11 @@ var level: int = 1
 
 func get_equipped_sigil_id() -> String:
 	if is_leader_combatant:
-		if leader_ref != null and leader_ref.has_method("has_method"):
-			return str(leader_ref.equipped_sigil_id) if str(leader_ref.equipped_sigil_id) != "" else ""
-		elif leader_ref != null:
-			return str(leader_ref.equipped_sigil_id)
+		if leader_ref != null:
+			var sid = leader_ref.get("equipped_sigil_id")
+			return str(sid) if sid != null and str(sid) != "" else ""
 	else:
 		if unit_ref != null:
-			return str(unit_ref.equipped_sigil_id)
+			var sid = unit_ref.get("equipped_sigil_id")
+			return str(sid) if sid != null and str(sid) != "" else ""
 	return ""

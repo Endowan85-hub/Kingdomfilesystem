@@ -15,7 +15,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.05, 0.05, 0.08, 1)
+color = Color(0.10, 0.12, 0.08, 1)
+mouse_filter = 2
 
 [node name="BattleGrid" type="Node2D" parent="CanvasLayer" unique_id=506807302]
 script = ExtResource("2_bgrid")
@@ -27,13 +28,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TopBar" type="PanelContainer" parent="CanvasLayer/UI" unique_id=319706677]
+modulate = Color(1, 1, 1, 0.92)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 48.0
+offset_bottom = 36.0
 grow_horizontal = 2
+mouse_filter = 2
 
 [node name="TopHBox" type="HBoxContainer" parent="CanvasLayer/UI/TopBar" unique_id=371126556]
 layout_mode = 2
@@ -45,87 +49,140 @@ text = "Round 1"
 
 [node name="InfoLabel" type="Label" parent="CanvasLayer/UI/TopBar/TopHBox" unique_id=1980185059]
 layout_mode = 2
-size_flags_horizontal = 8
-text = "Battle Ready"
-
-[node name="Actions" type="PanelContainer" parent="CanvasLayer/UI" unique_id=1129789594]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.0
-anchor_right = 0.7
-anchor_bottom = 1.0
-offset_top = -60.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="ActionHBox" type="HBoxContainer" parent="CanvasLayer/UI/Actions" unique_id=538344178]
-layout_mode = 2
-alignment = 1
-
-[node name="MoveButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=143917108]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Move"
-
-[node name="AttackButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=1432285625]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Attack"
-
-[node name="DefendButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=462727293]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Defend"
-
-[node name="SkillButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=1714723027]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Skill"
-
-[node name="ItemButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=102259992]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Item"
-
-[node name="SkipButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=321022885]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Skip"
-
-[node name="RetreatButton" type="Button" parent="CanvasLayer/UI/Actions/ActionHBox" unique_id=650970727]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Retreat"
+size_flags_horizontal = 3
+horizontal_alignment = 1
+text = "Select a unit"
+theme_override_font_sizes/font_size = 12
 
 [node name="LogPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=559855086]
+modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.7
-anchor_top = 0.07
+anchor_left = 0.72
+anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.9
+anchor_bottom = 0.25
+offset_top = 36.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="LogLabel" type="RichTextLabel" parent="CanvasLayer/UI/LogPanel" unique_id=195811310]
 layout_mode = 2
 bbcode_enabled = true
 
-[node name="StatPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=900000001]
+[node name="LeftUnitPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=900000001]
 visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.7
-anchor_top = 0.9
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_right = 380.0
+offset_top = -230.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="LeftHBox" type="HBoxContainer" parent="CanvasLayer/UI/LeftUnitPanel" unique_id=910000030]
+layout_mode = 2
+
+[node name="LeftPortrait" type="TextureRect" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox" unique_id=910000031]
+custom_minimum_size = Vector2(130, 210)
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 3
+stretch_mode = 6
+
+[node name="LeftVBox" type="VBoxContainer" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox" unique_id=910000003]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftUnitName" type="Label" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox" unique_id=910000004]
+layout_mode = 2
+text = "-"
+theme_override_font_sizes/font_size = 14
+
+[node name="LeftHPRow" type="HBoxContainer" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox" unique_id=910000005]
+layout_mode = 2
+
+[node name="LeftHPLbl" type="Label" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox/LeftHPRow" unique_id=910000006]
+layout_mode = 2
+text = "HP"
+theme_override_font_sizes/font_size = 11
+
+[node name="LeftHPBar" type="ProgressBar" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox/LeftHPRow" unique_id=910000007]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+custom_minimum_size = Vector2(0, 16)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="StatLabel" type="RichTextLabel" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox" unique_id=900000002]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+fit_content = true
+
+[node name="RightUnitPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=910000020]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -380.0
+offset_top = -230.0
+offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="StatLabel" type="RichTextLabel" parent="CanvasLayer/UI/StatPanel" unique_id=900000002]
+[node name="RightHBox" type="HBoxContainer" parent="CanvasLayer/UI/RightUnitPanel" unique_id=910000040]
 layout_mode = 2
+
+[node name="RightVBox" type="VBoxContainer" parent="CanvasLayer/UI/RightUnitPanel/RightHBox" unique_id=910000021]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightUnitName" type="Label" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox" unique_id=910000022]
+layout_mode = 2
+text = "-"
+theme_override_font_sizes/font_size = 14
+
+[node name="RightHPRow" type="HBoxContainer" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox" unique_id=910000023]
+layout_mode = 2
+
+[node name="RightHPLbl" type="Label" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox/RightHPRow" unique_id=910000024]
+layout_mode = 2
+text = "HP"
+theme_override_font_sizes/font_size = 11
+
+[node name="RightHPBar" type="ProgressBar" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox/RightHPRow" unique_id=910000025]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+custom_minimum_size = Vector2(0, 16)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="RightStatLabel" type="RichTextLabel" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox" unique_id=910000026]
+layout_mode = 2
+size_flags_vertical = 3
 bbcode_enabled = true
 fit_content = true
+
+[node name="RightPortrait" type="TextureRect" parent="CanvasLayer/UI/RightUnitPanel/RightHBox" unique_id=910000041]
+custom_minimum_size = Vector2(130, 210)
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 3
+stretch_mode = 6
+flip_h = true
 
 [node name="Scorecard" type="PanelContainer" parent="CanvasLayer" unique_id=800000001]
 visible = false

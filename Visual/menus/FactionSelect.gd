@@ -15,7 +15,7 @@ const GameStateScript    = preload("res://Scripts/game/game_state.gd")
 
 var _selected_faction_id: int = -1
 var _selected_entry: Dictionary = {}
-var _province_count: int = 20
+var _province_count: int = 40
 var _map_data: MapData = null
 
 # UI refs
@@ -50,11 +50,20 @@ func _build_ui() -> void:
 	add_child(root_hbox)
 
 	# Left side: title + map preview + faction grid
+	var left_margin := MarginContainer.new()
+	left_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left_margin.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	left_margin.add_theme_constant_override("margin_left",   20)
+	left_margin.add_theme_constant_override("margin_right",  20)
+	left_margin.add_theme_constant_override("margin_top",    16)
+	left_margin.add_theme_constant_override("margin_bottom", 16)
+	root_hbox.add_child(left_margin)
+
 	var left := VBoxContainer.new()
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	left.add_theme_constant_override("separation", 12)
-	left.custom_minimum_size = Vector2(820, 0)
-	root_hbox.add_child(left)
+	left_margin.add_child(left)
 
 	# Title
 	var title_lbl := Label.new()
@@ -81,42 +90,18 @@ func _build_ui() -> void:
 	map_hint.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	map_preview.add_child(map_hint)
 
-	# Province count selector
-	var province_row := HBoxContainer.new()
-	province_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	province_row.add_theme_constant_override("separation", 12)
-	left.add_child(province_row)
-
-	var prov_lbl := Label.new()
-	prov_lbl.text = "Province Count:"
-	prov_lbl.add_theme_color_override("font_color", Color(0.70, 0.68, 0.60))
-	prov_lbl.add_theme_font_size_override("font_size", 13)
-	province_row.add_child(prov_lbl)
-
-	for count in [20, 40]:
-		var pbtn := Button.new()
-		pbtn.text = str(count)
-		pbtn.custom_minimum_size = Vector2(60, 32)
-		pbtn.toggle_mode = true
-		pbtn.button_pressed = (count == _province_count)
-		var c: int = count
-		pbtn.toggled.connect(func(pressed: bool) -> void:
-			if pressed:
-				_province_count = c
-				_generate_map()
-		)
-		province_row.add_child(pbtn)
-
 	# Faction grid scroll
 	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	left.add_child(scroll)
 
 	_card_grid = GridContainer.new()
 	_card_grid.columns = 5
-	_card_grid.add_theme_constant_override("h_separation", 8)
-	_card_grid.add_theme_constant_override("v_separation", 8)
+	_card_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_card_grid.add_theme_constant_override("h_separation", 10)
+	_card_grid.add_theme_constant_override("v_separation", 10)
 	scroll.add_child(_card_grid)
 
 	_build_faction_cards()
@@ -148,7 +133,9 @@ func _build_faction_cards() -> void:
 
 func _make_card(entry: Dictionary, faction: FactionData) -> Control:
 	var card := PanelContainer.new()
-	card.custom_minimum_size = Vector2(148, 130)
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	card.custom_minimum_size = Vector2(0, 160)
 
 	var style_normal := StyleBoxFlat.new()
 	style_normal.bg_color = Color(0.09, 0.10, 0.14)
@@ -176,19 +163,8 @@ func _make_card(entry: Dictionary, faction: FactionData) -> Control:
 	bar.custom_minimum_size = Vector2(0, 4)
 	vbox.add_child(bar)
 
-	# Portrait placeholder
-	var portrait := ColorRect.new()
-	portrait.color = faction.color.darkened(0.6)
-	portrait.custom_minimum_size = Vector2(0, 40)
-	var portrait_hint := Label.new()
-	portrait_hint.text = "[ Portrait ]"
-	portrait_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	portrait_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	portrait_hint.add_theme_color_override("font_color", Color(0.35, 0.35, 0.35))
-	portrait_hint.add_theme_font_size_override("font_size", 9)
-	portrait_hint.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	portrait.add_child(portrait_hint)
-	vbox.add_child(portrait)
+	# Portrait — use sprite if available, else colored placeholder
+	vbox.add_child(_make_portrait(faction, 60))
 
 	# House name
 	var house_lbl := Label.new()
@@ -290,19 +266,8 @@ func _on_faction_selected(faction_id: int, entry: Dictionary, faction: FactionDa
 	bar.custom_minimum_size = Vector2(0, 5)
 	detail_vbox.add_child(bar)
 
-	# Portrait placeholder
-	var portrait_box := ColorRect.new()
-	portrait_box.color = faction.color.darkened(0.65)
-	portrait_box.custom_minimum_size = Vector2(0, 120)
-	var p_lbl := Label.new()
-	p_lbl.text = "[ Leader Portrait ]"
-	p_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	p_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	p_lbl.add_theme_color_override("font_color", Color(0.30, 0.30, 0.30))
-	p_lbl.add_theme_font_size_override("font_size", 11)
-	p_lbl.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	portrait_box.add_child(p_lbl)
-	detail_vbox.add_child(portrait_box)
+	# Portrait — use sprite if available, else colored placeholder
+	detail_vbox.add_child(_make_portrait(faction, 120))
 
 	# Faction + leader names
 	_detail_label(detail_vbox, faction.display_name, 11, Color(0.65, 0.78, 1.0))
@@ -349,3 +314,35 @@ func _on_start_campaign() -> void:
 	game_state.init_with_map(_map_data)
 
 	SceneManager.go_to_campaign(game_state, _map_data, _selected_faction_id)
+
+
+func _make_portrait(faction: FactionData, height: int) -> Control:
+	var fkey: String = str(faction.get("faction_key") if faction.get("faction_key") != null else "")
+	# Prefer portrait file, fall back to battle sprite
+	var candidates: Array = [
+		"res://Art/leaders/%s/portraits/%s_portrait.png" % [fkey, fkey],
+		"res://Art/leaders/%s/sprites/%s.png" % [fkey, fkey],
+	]
+	if fkey != "":
+		for tex_path: String in candidates:
+			if ResourceLoader.exists(tex_path):
+				var tex: Texture2D = load(tex_path) as Texture2D
+				var tr := TextureRect.new()
+				tr.texture = tex
+				tr.custom_minimum_size = Vector2(0, height)
+				tr.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+				tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				return tr
+	# Fallback placeholder
+	var box := ColorRect.new()
+	box.color = faction.color.darkened(0.65)
+	box.custom_minimum_size = Vector2(0, height)
+	var lbl := Label.new()
+	lbl.text = "[ Portrait ]"
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.add_theme_color_override("font_color", Color(0.35, 0.35, 0.35))
+	lbl.add_theme_font_size_override("font_size", 9)
+	lbl.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	box.add_child(lbl)
+	return box

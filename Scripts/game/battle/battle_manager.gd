@@ -187,9 +187,14 @@ static func process_queue() -> void:
 					"target_province": int(setup.get("target_province_id", -1))
 				})
 
-				var map_node = tree.root.get_child(0)
+				# Find CampaignMap and hide all its UI layers
+				var map_node = null
+				for _child in tree.root.get_children():
+					if _child.has_method("set_campaign_visible"):
+						map_node = _child
+						break
 				if map_node != null:
-					map_node.visible = false
+					map_node.set_campaign_visible(false)
 
 				var scene = BattleScenePacked.instantiate()
 				scene.battle_finished.connect(func(result: Dictionary):
@@ -197,7 +202,7 @@ static func process_queue() -> void:
 					DebugLogger.log("event:battle_scene_finished", merged_result)
 
 					if map_node != null:
-						map_node.visible = true
+						map_node.set_campaign_visible(true)
 
 					_writeback(state, setup, merged_result)
 
@@ -211,6 +216,12 @@ static func process_queue() -> void:
 				tree.root.add_child(scene)
 				if scene.has_method("setup_battle"):
 					scene.setup_battle(setup)
+				# Inject Phase 3 visual overlay
+				var _vl_script = load("res://Visual/battle/BattleVisualLayer.gd")
+				if _vl_script != null:
+					var _vl = _vl_script.new()
+					scene.add_child(_vl)
+					_vl.init_layer(scene, setup)
 				return
 
 		var result: Dictionary = _run_headless(setup)
@@ -285,9 +296,14 @@ static func _process_mission_battle(state, mission_instance_id: String) -> void:
 			_apply_mission_battle_result(state, mission, headless)
 			return
 
-		var map_node = tree.root.get_child(0)
+		# Find CampaignMap and hide all its UI layers
+		var map_node = null
+		for _child in tree.root.get_children():
+			if _child.has_method("set_campaign_visible"):
+				map_node = _child
+				break
 		if map_node != null:
-			map_node.visible = false
+			map_node.set_campaign_visible(false)
 
 		var scene = BattleScenePacked.instantiate()
 		scene.battle_finished.connect(func(result: Dictionary):
@@ -295,7 +311,7 @@ static func _process_mission_battle(state, mission_instance_id: String) -> void:
 			DebugLogger.log("event:mission_battle_scene_finished", merged)
 
 			if map_node != null:
-				map_node.visible = true
+				map_node.set_campaign_visible(true)
 
 			_apply_mission_battle_result(state, mission, merged)
 

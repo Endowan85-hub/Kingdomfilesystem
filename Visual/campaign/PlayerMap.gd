@@ -33,6 +33,18 @@ var _voronoi_cells: Dictionary = {}  # int -> Array[Vector2]
 var _hover_id: int = -1
 var _selected_id: int = -1
 
+# Pick mode — set by CampaignMap when attack/transfer is active
+var _pick_mode: int = 0   # 0=none 1=attack 2=transfer
+var _pick_source_id: int = -1
+var _pick_valid_targets: Array = []  # when non-empty, only highlight these
+
+
+func set_pick_mode(mode: int, source_id: int, valid_targets: Array = []) -> void:
+	_pick_mode = mode
+	_pick_source_id = source_id
+	_pick_valid_targets = valid_targets
+	queue_redraw()
+
 const NODE_RADIUS: float = 9.0
 const PICK_RADIUS: float = 16.0
 
@@ -45,9 +57,72 @@ func init(gs: GameState, md: MapData, human_id: int, voronoi: Dictionary) -> voi
 	game_state = gs
 	map_data = md
 	human_faction_id = human_id
-	_voronoi_cells = voronoi
+	if voronoi.is_empty() and md != null:
+		_build_voronoi(md)
+	else:
+		_voronoi_cells = voronoi
 	_frame_map()
 	queue_redraw()
+
+
+# --------------------------------------------------
+# Voronoi generation (used when debug view is not present)
+# --------------------------------------------------
+func _build_voronoi(data: MapData) -> void:
+	_voronoi_cells.clear()
+	if data == null or data.provinces.is_empty():
+		return
+	var bounds: Rect2 = _map_bounds(data)
+	for item_a in data.provinces:
+		var a: ProvinceData = item_a as ProvinceData
+		var poly: Array = [
+			bounds.position,
+			bounds.position + Vector2(bounds.size.x, 0.0),
+			bounds.position + bounds.size,
+			bounds.position + Vector2(0.0, bounds.size.y)
+		]
+		for item_b in data.provinces:
+			var b: ProvinceData = item_b as ProvinceData
+			if a == b:
+				continue
+			poly = _clip_half_plane(poly, a.center, b.center)
+			if poly.size() < 3:
+				break
+		_voronoi_cells[int(a.id)] = poly
+
+
+func _map_bounds(data: MapData) -> Rect2:
+	var minx: float = 1.0e18; var miny: float = 1.0e18
+	var maxx: float = -1.0e18; var maxy: float = -1.0e18
+	for item in data.provinces:
+		var p: ProvinceData = item as ProvinceData
+		minx = minf(minx, p.center.x); miny = minf(miny, p.center.y)
+		maxx = maxf(maxx, p.center.x); maxy = maxf(maxy, p.center.y)
+	if maxx < minx or maxy < miny:
+		return Rect2(Vector2.ZERO, Vector2.ONE)
+	return Rect2(Vector2(minx, miny), Vector2(maxx - minx, maxy - miny))
+
+
+func _clip_half_plane(poly: Array, a: Vector2, b: Vector2) -> Array:
+	var out: Array = []
+	var mid: Vector2 = (a + b) * 0.5
+	var normal: Vector2 = (b - a).normalized()
+	var prev: Vector2 = poly[poly.size() - 1]
+	var prev_in: bool = (prev - mid).dot(normal) <= 0.0
+	for curr in poly:
+		var curr_v: Vector2 = curr
+		var curr_in: bool = (curr_v - mid).dot(normal) <= 0.0
+		if curr_in != prev_in:
+			var dir: Vector2 = curr_v - prev
+			var denom: float = dir.dot(normal)
+			if absf(denom) > 0.000001:
+				var t: float = ((mid - prev).dot(normal)) / denom
+				out.append(prev + dir * t)
+		if curr_in:
+			out.append(curr_v)
+		prev = curr_v
+		prev_in = curr_in
+	return out
 
 
 func refresh() -> void:
@@ -99,6 +174,7 @@ func _draw() -> void:
 	_draw_routes()
 	_draw_cells()
 	_draw_nodes()
+	_draw_order_indicators()
 
 
 func _draw_background() -> void:
@@ -166,6 +242,25 @@ func _draw_cells() -> void:
 			border_w = 1.0
 
 		draw_polyline(pts, border_c, border_w, true)
+
+		# --- Pick mode highlights ---
+		if _pick_mode != 0:
+			if pid == _pick_source_id:
+				# Source province: bright gold ring
+				draw_polyline(pts, Color(1.0, 0.90, 0.20, 1.0), 4.0, true)
+			elif _pick_mode == 1:
+				# Attack mode: only highlight valid adjacent targets
+				var is_valid_target: bool = _pick_valid_targets.is_empty() or _pick_valid_targets.has(pid)
+				if is_valid_target and not is_human and not is_neutral:
+					draw_colored_polygon(pts, Color(1.0, 0.20, 0.15, 0.22))
+					draw_polyline(pts, Color(1.0, 0.30, 0.25, 0.85), 2.0, true)
+				elif is_valid_target and is_neutral:
+					draw_colored_polygon(pts, Color(1.0, 0.55, 0.10, 0.18))
+					draw_polyline(pts, Color(1.0, 0.60, 0.20, 0.75), 2.0, true)
+			elif _pick_mode == 2 and is_human and pid != _pick_source_id:
+				# Transfer mode: highlight own provinces blue
+				draw_colored_polygon(pts, Color(0.25, 0.60, 1.0, 0.22))
+				draw_polyline(pts, Color(0.35, 0.70, 1.0, 0.85), 2.0, true)
 
 		# --- Fort level indicator (small dots) ---
 		if not is_neutral:
@@ -281,6 +376,96 @@ func _faction_color(owner_id: int) -> Color:
 			if f != null and int(f.id) == owner_id:
 				return f.color
 	return Color(0.55, 0.55, 0.55)
+
+
+# --------------------------------------------------
+# Order indicators
+# --------------------------------------------------
+func _draw_order_indicators() -> void:
+	if game_state == null or game_state.order_book == null or map_data == null:
+		return
+
+	for atk in game_state.order_book.get_attacks(human_faction_id):
+		var from_id: int = int(atk.get("from", -1))
+		var to_id:   int = int(atk.get("to",   -1))
+		if from_id < 0 or to_id < 0:
+			continue
+		if from_id >= map_data.provinces.size() or to_id >= map_data.provinces.size():
+			continue
+		var from_p: ProvinceData = map_data.provinces[from_id] as ProvinceData
+		var to_p:   ProvinceData = map_data.provinces[to_id]   as ProvinceData
+		if from_p == null or to_p == null:
+			continue
+		var from_s: Vector2 = _to_screen(from_p.center)
+		var to_s:   Vector2 = _to_screen(to_p.center)
+		# Connecting line
+		draw_line(from_s, to_s, Color(1.0, 0.25, 0.20, 0.55), 2.0)
+		_draw_arrowhead(from_s, to_s, Color(1.0, 0.30, 0.20, 0.90))
+		# Icon above target node
+		_draw_crossed_swords(_to_screen(to_p.center) + Vector2(0.0, -NODE_RADIUS - 16.0),
+				10.0, Color(1.0, 0.28, 0.18, 1.0))
+
+	for xfer in game_state.order_book.get_transfers(human_faction_id):
+		var from_id: int = int(xfer.get("from", -1))
+		var to_id:   int = int(xfer.get("to",   -1))
+		if from_id < 0 or to_id < 0:
+			continue
+		if from_id >= map_data.provinces.size() or to_id >= map_data.provinces.size():
+			continue
+		var from_p: ProvinceData = map_data.provinces[from_id] as ProvinceData
+		var to_p:   ProvinceData = map_data.provinces[to_id]   as ProvinceData
+		if from_p == null or to_p == null:
+			continue
+		var from_s: Vector2 = _to_screen(from_p.center)
+		var to_s:   Vector2 = _to_screen(to_p.center)
+		# Connecting line
+		draw_line(from_s, to_s, Color(0.35, 0.70, 1.0, 0.55), 2.0)
+		_draw_arrowhead(from_s, to_s, Color(0.35, 0.70, 1.0, 0.90))
+		# Icon above target node
+		_draw_transfer_badge(_to_screen(to_p.center) + Vector2(0.0, -NODE_RADIUS - 16.0),
+				10.0, Color(0.35, 0.72, 1.0, 1.0))
+
+
+func _draw_arrowhead(from: Vector2, to: Vector2, color: Color) -> void:
+	var dir: Vector2 = (to - from).normalized()
+	var tip: Vector2 = to - dir * (NODE_RADIUS + 3.0)
+	var perp: Vector2 = Vector2(-dir.y, dir.x)
+	var sz: float = 7.0
+	draw_line(tip, tip - dir * sz + perp * sz * 0.5, color, 2.0)
+	draw_line(tip, tip - dir * sz - perp * sz * 0.5, color, 2.0)
+
+
+func _draw_crossed_swords(center: Vector2, size: float, color: Color) -> void:
+	# Dark backing circle
+	draw_circle(center, size + 3.5, Color(0.05, 0.03, 0.06, 0.88))
+	var h: float = size * 0.82
+	var g: float = size * 0.38   # crossguard half-length
+	var go: float = size * 0.18  # crossguard offset from center
+
+	# Sword 1: top-left → bottom-right
+	draw_line(center + Vector2(-h, -h), center + Vector2(h, h), color, 2.0)
+	var gp1: Vector2 = center + Vector2(-go, -go)
+	var gd1: Vector2 = Vector2(1.0, -1.0).normalized() * g
+	draw_line(gp1 - gd1, gp1 + gd1, color, 2.0)
+
+	# Sword 2: top-right → bottom-left
+	draw_line(center + Vector2(h, -h), center + Vector2(-h, h), color, 2.0)
+	var gp2: Vector2 = center + Vector2(go, -go)
+	var gd2: Vector2 = Vector2(1.0, 1.0).normalized() * g
+	draw_line(gp2 - gd2, gp2 + gd2, color, 2.0)
+
+
+func _draw_transfer_badge(center: Vector2, size: float, color: Color) -> void:
+	# Dark backing circle
+	draw_circle(center, size + 3.5, Color(0.04, 0.05, 0.10, 0.88))
+	var h: float = size * 0.72
+	var tip: float = size * 0.32
+	# Arrow pointing right (→)
+	draw_line(Vector2(center.x - h, center.y), Vector2(center.x + h, center.y), color, 2.0)
+	draw_line(Vector2(center.x + h, center.y),
+			Vector2(center.x + h - tip, center.y - tip * 0.6), color, 2.0)
+	draw_line(Vector2(center.x + h, center.y),
+			Vector2(center.x + h - tip, center.y + tip * 0.6), color, 2.0)
 
 
 func _biome_color(biome: String) -> Color:

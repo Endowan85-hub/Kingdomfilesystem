@@ -106,7 +106,9 @@ func _build_lab_side_units(leader_dict: Dictionary, unit_dicts: Array, side_name
 	var mock_leader = _MockLeader.new(leader_dict)
 	# _no_leader_unit: placeholder used when mission has no enemy leader — skip the leader combatant
 	if not bool(leader_dict.get("_no_leader_unit", false)):
-		out_array.append(BattleUnit.new(null, mock_leader, side_name, true))
+		var bu := BattleUnit.new(null, mock_leader, side_name, true)
+		bu.sprite_key = str(leader_dict.get("faction_key", ""))
+		out_array.append(bu)
 	for u in unit_dicts:
 		if not (u is Dictionary):
 			continue
@@ -119,7 +121,11 @@ func _build_side_units(state: GameState, leader: LeaderData, side_name: String, 
 		return
 
 	# Leaders always fight for themselves, even with zero army units.
-	out_array.append(BattleUnit.new(null, leader, side_name, true))
+	var leader_bu := BattleUnit.new(null, leader, side_name, true)
+	# story_id equals faction_key for story leaders (e.g. "house_crown")
+	if leader.is_story_leader and leader.story_id != "":
+		leader_bu.sprite_key = leader.story_id
+	out_array.append(leader_bu)
 
 	if state == null:
 		return
