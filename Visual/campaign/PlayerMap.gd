@@ -5,10 +5,10 @@
 # Draws styled province fills, borders, route lines,
 # and province nodes on top of a parchment background.
 #
-# Reads from GameState / MapData — never modifies them.
+# Reads from GameState / MapData -- never modifies them.
 # Emits signals for province hover and click.
 #
-# Phase 2 visual layer — no simulation logic here.
+# Phase 2 visual layer -- no simulation logic here.
 # ==================================================
 extends Node2D
 class_name PlayerMap
@@ -16,24 +16,87 @@ class_name PlayerMap
 signal province_hovered(province_id: int)
 signal province_clicked(province_id: int)
 
+
+
 # Set by CampaignMap after initialization
 var game_state: GameState = null
 var map_data: MapData = null
 var human_faction_id: int = 0
 
-# Camera / pan / zoom (mirrors debug view logic)
+# Pixels reserved on the left for the ProvincePanel
+var left_margin: float = 1040.0
+
+# Camera / pan / zoom
 var _zoom: float = 1.0
+var _zoom_min: float = 0.1
+var _zoom_max: float = 20.0
 var _origin: Vector2 = Vector2.ZERO
+
+# Pan input state
 var _is_panning: bool = false
-var _pan_last: Vector2 = Vector2.ZERO
+var _left_held: bool = false
+var _press_pos: Vector2 = Vector2.ZERO
+
+# Smooth center-on-province
+var _cam_target: Vector2 = Vector2.ZERO
+var _cam_lerping: bool = false
+
+# Cached map bounds (set in _frame_map, used for zoom clamping)
+var _map_bounds_rect: Rect2 = Rect2()
 
 # Voronoi cells mirrored from debug view
-var _voronoi_cells: Dictionary = {}  # int -> Array[Vector2]
+var _voronoi_cells: Dictionary = {}        # int -> Array[Vector2]  (original, used for picking)
+var _clipped_cells: Dictionary = {}        # int -> PackedVector2Array (clipped to continent)
+var _continent_poly: PackedVector2Array = PackedVector2Array()
+var _island_polys: Array = []              # Array of PackedVector2Array
+
+var _grass_atlas_tex: Texture2D = null
+var _terrain_tile_data: Array = []
+var _terrain_mesh: ArrayMesh = null
+
+var _light_atlas_tex: Texture2D = null
+var _light_tile_data: Array = []
+var _light_mesh: ArrayMesh = null
+
+var _dark_atlas_tex: Texture2D = null
+var _dark_tile_data: Array = []
+var _dark_mesh: ArrayMesh = null
+
+var _tree_textures: Array = []   # Array of Texture2D
+var _grass_overlay_tex: Texture2D = null
+var _province_lvl1_tex: Texture2D = null
+var _province_lvl2_tex: Texture2D = null
+var _province_biome_textures: Dictionary = {}  # biome -> Array[Texture2D]
+var _road_straight_textures: Array = []  # road_straight_0..3
+var _road_curve_textures: Array = []     # road_curve_0..3
+var _route_paths: Array = []             # prebuilt world-space curve points per route
+
+# River
+const RIVER_TILE_WORLD: float = 45.0
+var _river_tiles: Array = []
+var _river_path_tiles: Array = []        # all tile placements (all branches)
+var _river_parallax_tex: Texture2D = null
+var _river_overlay: Node2D = null
+var _river_grid_path: Array = []         # main river path
+var _river_branch_paths: Array = []      # tributary paths
+var _river_wind_uv: Vector2 = Vector2.ZERO
+
+var _tree_positions: Array = []         # raw from terrain generator
+var _drawable_trees: Array = []         # pre-filtered, coast trees removed
+const TREE_WORLD_SIZE: float = 130.0  # half-width/height in world units
+
+# Weather: GPU shader-driven cloud shadows + sun light wash
+const CloudShadowShader := preload("res://Visual/campaign/CloudShadow.gdshader")
+var _weather_overlay: ColorRect = null
+var _sun_time: float = 0.0
+const SUN_CYCLE_SECONDS: float = 600.0  # full east-to-west sweep duration
+
+
 
 var _hover_id: int = -1
 var _selected_id: int = -1
 
-# Pick mode — set by CampaignMap when attack/transfer is active
+# Pick mode -- set by CampaignMap when attack/transfer is active
 var _pick_mode: int = 0   # 0=none 1=attack 2=transfer
 var _pick_source_id: int = -1
 var _pick_valid_targets: Array = []  # when non-empty, only highlight these
@@ -46,11 +109,20 @@ func set_pick_mode(mode: int, source_id: int, valid_targets: Array = []) -> void
 	queue_redraw()
 
 const NODE_RADIUS: float = 9.0
-const PICK_RADIUS: float = 16.0
+const DRAG_THRESHOLD: float  = 6.0    # px before a click becomes a drag
+const PAN_SPEED_FRAC: float  = 0.75   # fraction of visible map width per second
+const PAN_SMOOTH: float      = 10.0   # lerp speed for click-to-center
+const ZOOM_STEP: float       = 1.15
+const CLOSE_ZOOM_FACTOR: float = 5.0  # default zoom = full-fit x this
+const MIN_ZOOM_FACTOR: float   = 4.0  # zoom-out floor = full-fit x this
+const PAD: float = 60.0
 
-# Parchment-style background colors
-const BG_COLOR       := Color(0.14, 0.11, 0.08)
-const NEUTRAL_BORDER := Color(0.30, 0.27, 0.20, 0.70)
+# Background and border palette
+const OCEAN_COLOR     := Color(0.04, 0.10, 0.22)
+const SHALLOW_COLOR   := Color(0.06, 0.16, 0.34, 0.80)
+const LAND_BASE_COLOR := Color(0.26, 0.22, 0.16)
+const BORDER_DARK     := Color(0.08, 0.06, 0.04, 0.95)
+const BORDER_W_BASE   := 3.0
 
 
 func init(gs: GameState, md: MapData, human_id: int, voronoi: Dictionary) -> void:
@@ -61,8 +133,88 @@ func init(gs: GameState, md: MapData, human_id: int, voronoi: Dictionary) -> voi
 		_build_voronoi(md)
 	else:
 		_voronoi_cells = voronoi
+	_build_continent_poly()
+	_build_clipped_cells()
+	_init_weather()
+	_load_terrain_from_scene_manager()
+	_build_terrain_mesh()
 	_frame_map()
 	queue_redraw()
+
+
+func _ready() -> void:
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	get_viewport().size_changed.connect(_on_viewport_resized)
+
+
+func _on_viewport_resized() -> void:
+	if map_data != null and _map_bounds_rect.size.x > 0:
+		_recompute_zoom_bounds()
+	_update_weather_overlay_rect()
+
+
+func _recompute_zoom_bounds() -> void:
+	var vp := get_viewport_rect().size
+	var full_zoom := _full_fit_zoom(vp)
+	_zoom_min = full_zoom * MIN_ZOOM_FACTOR
+	_zoom_max = full_zoom * 15.0
+	_zoom = clampf(_zoom, _zoom_min, _zoom_max)
+	queue_redraw()
+
+
+func _process(delta: float) -> void:
+	var dirty := false
+
+	_update_weather(delta)
+	_river_wind_uv += Vector2(0.005, 0.0017) * delta
+	dirty = true
+
+	# Smooth camera lerp (click-to-center)
+	if _cam_lerping:
+		var diff := _cam_target - _origin
+		if diff.length() < 0.5 / _zoom:
+			_origin = _cam_target
+			_cam_lerping = false
+		else:
+			_origin += diff * minf(delta * PAN_SMOOTH, 1.0)
+		dirty = true
+
+	# Keyboard pan -- only when no GUI control has focus
+	if get_viewport().gui_get_focus_owner() == null:
+		var kp := Vector2.ZERO
+		if Input.is_key_pressed(KEY_LEFT)  or Input.is_key_pressed(KEY_A): kp.x += 1
+		if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D): kp.x -= 1
+		if Input.is_key_pressed(KEY_UP)    or Input.is_key_pressed(KEY_W): kp.y += 1
+		if Input.is_key_pressed(KEY_DOWN)  or Input.is_key_pressed(KEY_S): kp.y -= 1
+		if kp != Vector2.ZERO:
+			# Speed = fraction of visible world width per second
+			var vp := get_viewport_rect().size
+			var visible_world_w := (vp.x - left_margin) / _zoom
+			_origin += kp * visible_world_w * PAN_SPEED_FRAC * delta
+			_cam_lerping = false
+			dirty = true
+
+	if dirty:
+		queue_redraw()
+
+
+func _center_on_province(pid: int) -> void:
+	if map_data == null:
+		return
+	var wp := Vector2.ZERO
+	var found := false
+	for item in map_data.provinces:
+		var p: ProvinceData = item as ProvinceData
+		if p != null and int(p.id) == pid:
+			wp = p.center
+			found = true
+			break
+	if not found:
+		return
+	var vp := get_viewport_rect().size
+	var sc := Vector2(left_margin + (vp.x - left_margin) * 0.5, vp.y * 0.5)
+	_cam_target = sc / _zoom - wp
+	_cam_lerping = true
 
 
 # --------------------------------------------------
@@ -125,6 +277,119 @@ func _clip_half_plane(poly: Array, a: Vector2, b: Vector2) -> Array:
 	return out
 
 
+func _build_continent_poly() -> void:
+	_continent_poly = PackedVector2Array()
+	_island_polys.clear()
+	if map_data == null or map_data.provinces.is_empty():
+		return
+	var bounds := _map_bounds(map_data)
+	if bounds.size.x <= 0 or bounds.size.y <= 0:
+		return
+
+	# Deterministic seed from province positions
+	var h: int = map_data.provinces.size()
+	for item in map_data.provinces:
+		var p := item as ProvinceData
+		if p != null:
+			h = h * 31 ^ (int(p.center.x * 37.0) + int(p.center.y * 13.0))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = absi(h)
+
+	var cx := bounds.position.x + bounds.size.x * 0.5
+	var cy := bounds.position.y + bounds.size.y * 0.5
+	# Ellipse at 45? reaches only 1/sqrt2 of the corner distance, so we need
+	# expansion x min_r >= sqrt2 to safely contain every province center.
+	# 1.55 x 0.95 = 1.47 > 1.414 -- safe for any aspect ratio.
+	var rx := bounds.size.x * 0.5 * 1.55
+	var ry := bounds.size.y * 0.5 * 1.55
+
+	# Pre-generate phase offsets (10 waves)
+	var ph: Array = []
+	for i in 10:
+		ph.append(rng.randf() * TAU)
+
+	# More points + higher-frequency waves + per-vertex jitter = jagged coast
+	const N := 140
+	for i in N:
+		var angle := float(i) / N * TAU
+		var r := 1.0
+		# Low frequency -- major peninsulas and gulfs
+		r += 0.13 * sin(angle * 2.0 + ph[0])
+		r += 0.10 * sin(angle * 3.0 + ph[1])
+		# Medium frequency -- coves and headlands
+		r += 0.07 * sin(angle * 5.0 + ph[2])
+		r += 0.05 * sin(angle * 7.0 + ph[3])
+		# High frequency -- jagged cliffs and inlets
+		r += 0.04 * sin(angle * 11.0 + ph[4])
+		r += 0.03 * sin(angle * 17.0 + ph[5])
+		r += 0.025 * sin(angle * 23.0 + ph[6])
+		# Per-vertex noise for truly irregular edges
+		r += rng.randf_range(-0.04, 0.04)
+		# Clamp: min 0.95 x 1.55 = 1.47 > sqrt2, all bbox corners stay inland
+		r = maxf(r, 0.95)
+		_continent_poly.append(Vector2(cx + cos(angle) * rx * r, cy + sin(angle) * ry * r))
+
+	# Scatter small islands in the ocean
+	var num_islands := rng.randi_range(4, 7)
+	var attempts := 0
+	while _island_polys.size() < num_islands and attempts < 80:
+		attempts += 1
+		var angle := rng.randf() * TAU
+		var dist := rng.randf_range(1.65, 2.30)
+		var ic := Vector2(cx + cos(angle) * rx * dist, cy + sin(angle) * ry * dist)
+		if Geometry2D.is_point_in_polygon(ic, _continent_poly):
+			continue
+		# Random small noisy ellipse
+		var iph: Array = []
+		for j in 4:
+			iph.append(rng.randf() * TAU)
+		var irx := rng.randf_range(rx * 0.04, rx * 0.11)
+		var iry := rng.randf_range(ry * 0.03, ry * 0.09)
+		var n_pts := rng.randi_range(7, 12)
+		var poly := PackedVector2Array()
+		for j in n_pts:
+			var a := float(j) / n_pts * TAU
+			var ir := 1.0
+			ir += 0.28 * sin(a * 2.0 + iph[0])
+			ir += 0.18 * sin(a * 3.0 + iph[1])
+			ir += 0.12 * sin(a * 5.0 + iph[2])
+			ir += rng.randf_range(-0.12, 0.12)
+			ir = maxf(ir, 0.25)
+			poly.append(Vector2(ic.x + cos(a) * irx * ir, ic.y + sin(a) * iry * ir))
+		_island_polys.append(poly)
+
+
+func _build_clipped_cells() -> void:
+	_clipped_cells.clear()
+	if _continent_poly.size() < 3:
+		# No continent shape yet -- copy originals as fallback
+		for pid in _voronoi_cells.keys():
+			var raw: Array = _voronoi_cells[pid]
+			var pv := PackedVector2Array()
+			for v in raw:
+				pv.append(v as Vector2)
+			_clipped_cells[pid] = pv
+		return
+
+	for pid in _voronoi_cells.keys():
+		var raw: Array = _voronoi_cells[pid]
+		if raw.size() < 3:
+			continue
+		var cell := PackedVector2Array()
+		for v in raw:
+			cell.append(v as Vector2)
+		var results := Geometry2D.intersect_polygons(cell, _continent_poly)
+		if results.is_empty():
+			_clipped_cells[pid] = cell  # interior province -- keep as-is
+		else:
+			# Take the largest result polygon (handles rare split cases)
+			var best: PackedVector2Array = results[0]
+			for r in results:
+				if (r as PackedVector2Array).size() > best.size():
+					best = r
+			_clipped_cells[pid] = best
+
+
 func refresh() -> void:
 	queue_redraw()
 
@@ -138,22 +403,40 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
-		if mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
-			var pid: int = _pick_province(mb.position)
-			if pid >= 0:
-				_selected_id = pid
-				province_clicked.emit(pid)
-				queue_redraw()
-		elif mb.button_index == MOUSE_BUTTON_MIDDLE or (mb.button_index == MOUSE_BUTTON_RIGHT and mb.pressed):
-			_is_panning = mb.pressed
-			_pan_last = mb.position
-		elif mb.button_index == MOUSE_BUTTON_WHEEL_UP:
-			_zoom_at(mb.position, 1.12)
-		elif mb.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			_zoom_at(mb.position, 1.0 / 1.12)
+		match mb.button_index:
+			MOUSE_BUTTON_LEFT:
+				if mb.pressed:
+					_left_held = true
+					_press_pos = mb.position
+					_is_panning = false
+				else:
+					if _is_panning:
+						_is_panning = false
+					elif mb.position.distance_to(_press_pos) < DRAG_THRESHOLD:
+						# Clean click -- select province and smooth-pan to it
+						var pid: int = _pick_province(mb.position)
+						if pid >= 0:
+							_selected_id = pid
+							province_clicked.emit(pid)
+							_center_on_province(pid)
+							queue_redraw()
+					_left_held = false
+			MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT:
+				_is_panning = mb.pressed
+			MOUSE_BUTTON_WHEEL_UP:
+				_zoom_at(mb.position, ZOOM_STEP)
+				_cam_lerping = false
+			MOUSE_BUTTON_WHEEL_DOWN:
+				_zoom_at(mb.position, 1.0 / ZOOM_STEP)
+				_cam_lerping = false
 
 	elif event is InputEventMouseMotion:
 		var mm := event as InputEventMouseMotion
+		# Start left-drag pan once past threshold
+		if _left_held and not _is_panning:
+			if mm.global_position.distance_to(_press_pos) >= DRAG_THRESHOLD:
+				_is_panning = true
+				_cam_lerping = false
 		if _is_panning:
 			_origin += mm.relative / _zoom
 			queue_redraw()
@@ -171,27 +454,692 @@ func _draw() -> void:
 	if map_data == null:
 		return
 	_draw_background()
-	_draw_routes()
 	_draw_cells()
+	_draw_grass_overlays()
+	_draw_rivers()
+	_draw_cell_borders()
+	_draw_routes()
+	_draw_trees()
 	_draw_nodes()
+	_draw_labels()
 	_draw_order_indicators()
 
 
 func _draw_background() -> void:
 	var vp := get_viewport_rect()
-	draw_rect(vp, BG_COLOR)
+	draw_rect(Rect2(Vector2.ZERO, vp.size), OCEAN_COLOR)
+
+	if _continent_poly.size() < 3:
+		return
+
+	# Build screen-space continent polygon
+	var screen_poly := PackedVector2Array()
+	for pt in _continent_poly:
+		screen_poly.append(_to_screen(pt))
+
+	# Shallow water fringe around continent
+	var centroid := Vector2.ZERO
+	for pt in screen_poly:
+		centroid += pt
+	centroid /= screen_poly.size()
+	var shallow_poly := PackedVector2Array()
+	for pt in screen_poly:
+		shallow_poly.append(centroid + (pt - centroid) * 1.06)
+	draw_colored_polygon(shallow_poly, SHALLOW_COLOR)
+
+	# Terrain -- one draw_mesh call instead of N draw_polygon calls
+	var xform := Transform2D(Vector2(_zoom, 0.0), Vector2(0.0, _zoom), _origin * _zoom)
+	if _terrain_mesh != null and _grass_atlas_tex != null:
+		draw_mesh(_terrain_mesh, _grass_atlas_tex, xform)
+	else:
+		draw_colored_polygon(screen_poly, LAND_BASE_COLOR)
+
+
+	# Small islands -- same shallow fringe, same tile approach
+	for island in _island_polys:
+		var sc_i := PackedVector2Array()
+		for pt in (island as PackedVector2Array):
+			sc_i.append(_to_screen(pt))
+		if sc_i.size() < 3:
+			continue
+		var ic := Vector2.ZERO
+		for pt in sc_i:
+			ic += pt
+		ic /= sc_i.size()
+		var shallow_i := PackedVector2Array()
+		for pt in sc_i:
+			shallow_i.append(ic + (pt - ic) * 1.10)
+		draw_colored_polygon(shallow_i, SHALLOW_COLOR)
+		draw_colored_polygon(sc_i, LAND_BASE_COLOR)
+
+
+func _draw_cell_borders() -> void:
+	for item in map_data.provinces:
+		var p: ProvinceData = item as ProvinceData
+		var pid: int = int(p.id)
+		if not _clipped_cells.has(pid):
+			continue
+		var world_pts: PackedVector2Array = _clipped_cells[pid]
+		if world_pts.size() < 3:
+			continue
+		var pts: PackedVector2Array = PackedVector2Array()
+		for v in world_pts:
+			pts.append(_to_screen(v))
+		var is_selected: bool = pid == _selected_id
+		var is_hover: bool = pid == _hover_id
+		draw_polyline(pts, BORDER_DARK, BORDER_W_BASE, true)
+		if is_selected:
+			draw_polyline(pts, Color(1.0, 0.88, 0.30, 1.0), 2.5, true)
+		elif is_hover:
+			draw_polyline(pts, Color(1.0, 1.0, 1.0, 0.80), 1.8, true)
+		if _pick_mode != 0:
+			var owner_id: int = int(p.owner_id)
+			var is_human: bool = owner_id == human_faction_id
+			var is_neutral: bool = owner_id < 0
+			if pid == _pick_source_id:
+				draw_polyline(pts, Color(1.0, 0.90, 0.20, 1.0), 3.5, true)
+			elif _pick_mode == 1:
+				var is_valid_target: bool = _pick_valid_targets.is_empty() or _pick_valid_targets.has(pid)
+				if is_valid_target and not is_human and not is_neutral:
+					draw_polyline(pts, Color(1.0, 0.30, 0.25, 0.90), 2.5, true)
+				elif is_valid_target and is_neutral:
+					draw_polyline(pts, Color(1.0, 0.60, 0.20, 0.85), 2.5, true)
+			elif _pick_mode == 2 and is_human and pid != _pick_source_id:
+				draw_polyline(pts, Color(0.35, 0.70, 1.0, 0.90), 2.5, true)
+
+
+func _draw_grass_overlays() -> void:
+	if _continent_poly.size() < 3:
+		return
+	var screen_poly := PackedVector2Array()
+	for pt in _continent_poly:
+		screen_poly.append(_to_screen(pt))
+	var xform := Transform2D(Vector2(_zoom, 0.0), Vector2(0.0, _zoom), _origin * _zoom)
+
+	if _grass_overlay_tex != null:
+		var tex_sz := _grass_overlay_tex.get_size()
+		var uvs := PackedVector2Array()
+		for pt in _continent_poly:
+			uvs.append(pt / tex_sz)
+		draw_polygon(screen_poly, PackedColorArray(), uvs, _grass_overlay_tex)
+
+	if _light_mesh != null and _light_atlas_tex != null:
+		draw_mesh(_light_mesh, _light_atlas_tex, xform, Color(1, 1, 1, 0.15))
+
+	if _dark_mesh != null and _dark_atlas_tex != null:
+		draw_mesh(_dark_mesh, _dark_atlas_tex, xform, Color(1, 1, 1, 0.15))
+
+
+func _load_terrain_from_scene_manager() -> void:
+	_grass_atlas_tex = null
+	_terrain_tile_data = []
+	_light_atlas_tex = null
+	_light_tile_data = []
+	var terrain: MapTerrainGenerator = SceneManager.pending_terrain
+	if terrain == null:
+		# Editor / direct-launch fallback -- generate synchronously now
+		terrain = MapTerrainGenerator.new()
+		terrain.generate_from_map(map_data)
+	_grass_atlas_tex = terrain.atlas
+	_terrain_tile_data = terrain.tile_data
+	_light_atlas_tex = terrain.light_atlas
+	_light_tile_data = terrain.light_tile_data
+	_dark_atlas_tex = terrain.dark_atlas
+	_dark_tile_data = terrain.dark_tile_data
+	_tree_textures = terrain.tree_textures
+	_tree_positions = terrain.tree_positions
+	_filter_coast_trees()
+	_grass_overlay_tex = load("res://Art/map/terrain/grass.png") as Texture2D
+	_province_lvl1_tex = load("res://Art/map/terrain/province_lvl1.png") as Texture2D
+	_province_lvl2_tex = load("res://Art/map/terrain/province_lvl2.png") as Texture2D
+	_province_biome_textures = {
+		"plains":   _load_biome_texs("plains",   ["plainsprovince3", "plainsprovince4"]),
+		"forest":   _load_biome_texs("forest",   ["forestprovince1"]),
+		"mountain": _load_biome_texs("mountain", ["mountainprovince1", "mountainprovince2", "mountainprovince3", "mountainprovince4"]),
+		"desert":   _load_biome_texs("desert",   ["desertprovince1", "desertprovince2", "desertprovince3", "desertprovince4"]),
+		"tundra":   _load_biome_texs("tundra",   ["tundraprovince1", "tundraprovince2", "tundraprovince3", "tundraprovince4"]),
+		"swamp":    _load_biome_texs("swamp",    ["swampprovince1", "swampprovince2", "swampprovince3", "swampprovince4"]),
+		"coast":    _load_biome_texs("coast",    ["coastalprovince1", "coastalprovince2", "coastalprovince3", "coastalprovince4"]),
+	}
+	_road_straight_textures.clear()
+	_road_curve_textures.clear()
+	for i in 4:
+		var st := load("res://Art/map/terrain/road_straight_%d.png" % i) as Texture2D
+		if st:
+			_road_straight_textures.append(st)
+		var cv := load("res://Art/map/terrain/road_curve_%d.png" % i) as Texture2D
+		if cv:
+			_road_curve_textures.append(cv)
+	_build_route_paths()
+	_load_river_tiles()
+	_build_river_path()
+
+
+func _load_biome_texs(biome: String, names: Array) -> Array:
+	var arr: Array = []
+	for n in names:
+		var t := load("res://Art/map/terrain/%s.png" % n) as Texture2D
+		if t:
+			arr.append(t)
+	return arr
+
+
+func _build_route_paths() -> void:
+	_route_paths.clear()
+	if map_data == null:
+		return
+	for r in map_data.routes:
+		var a: ProvinceData = map_data.provinces[int(r.a)] as ProvinceData
+		var b: ProvinceData = map_data.provinces[int(r.b)] as ProvinceData
+		var pa: Vector2 = a.center
+		var pb: Vector2 = b.center
+
+		var seed_val: int = absi(int(r.a) * 2654435761 ^ int(r.b) * 2246822519)
+		var rng := RandomNumberGenerator.new()
+		rng.seed = seed_val
+
+		var diff: Vector2 = pb - pa
+		var length: float = diff.length()
+		var perp: Vector2 = Vector2(-diff.y, diff.x).normalized()
+		# Build as rigid straight runs -- random length segments with sharp corrections
+		var curve_pts: Array = [pa]
+		var pos: Vector2 = pa
+		# Max drift off the direct line before correction kicks in harder
+		var max_drift: float = clampf(length * 0.12, 5.0, 25.0)
+
+		while pos.distance_to(pb) > 8.0:
+			var to_dest: Vector2 = pb - pos
+			var dist_left: float = to_dest.length()
+
+			# Random straight run length -- 8 to 22 world units
+			var run_len: float = rng.randf_range(8.0, 22.0)
+			run_len = minf(run_len, dist_left)
+
+			# Base direction toward destination, with a perpendicular drift
+			var base_dir: Vector2 = to_dest.normalized()
+			var drift: float = rng.randf_range(-max_drift, max_drift)
+			# Pull drift back toward center line as we get closer to destination
+			var pull: float = clampf(1.0 - dist_left / length, 0.0, 1.0)
+			drift *= (1.0 - pull * 0.85)
+
+			var end_pos: Vector2 = pos + base_dir * run_len + perp * drift
+			# Clamp so we don't overshoot too wildly
+			end_pos = pos.lerp(pb, clampf(run_len / dist_left, 0.0, 1.0)) + perp * drift
+
+			curve_pts.append(end_pos)
+			pos = end_pos
+
+		curve_pts.append(pb)
+
+		var style_idx: int = seed_val % max(_road_straight_textures.size(), 1)
+		_route_paths.append({ "pts": curve_pts, "style": style_idx })
+
+func _load_river_tiles() -> void:
+	_river_tiles.clear()
+	for i in range(1, 8):
+		var t := load("res://Art/map/terrain/river_tiles/River_%04d.png" % i) as Texture2D
+		_river_tiles.append(t)
+	# Index 7: T-junction, tributary enters from east
+	_river_tiles.append(load("res://Art/map/terrain/river_tiles/River_000Teast8.png") as Texture2D)
+	# Index 8: T-junction, tributary enters from west
+	_river_tiles.append(load("res://Art/map/terrain/river_tiles/River_000Twest17.png") as Texture2D)
+	_river_parallax_tex = load("res://Art/map/terrain/sky_parallax.png") as Texture2D
+	# Set up overlay node with shader
+	if _river_overlay == null:
+		_river_overlay = load("res://Visual/campaign/RiverOverlay.gd").new()
+		var mat := ShaderMaterial.new()
+		mat.shader = load("res://Visual/campaign/RiverParallax.gdshader") as Shader
+		mat.set_shader_parameter("parallax_tex", _river_parallax_tex)
+		_river_overlay.material = mat
+		add_child(_river_overlay)
+	_river_overlay.river_tiles = _river_tiles
+	_river_overlay.tile_world = RIVER_TILE_WORLD
+
+
+func _build_river_path() -> void:
+	_river_path_tiles.clear()
+	_river_branch_paths.clear()
+	_river_grid_path.clear()
+	if map_data == null:
+		return
+	var bounds := _map_bounds(map_data)
+	if bounds.size.x <= 0:
+		return
+
+	var grid := RIVER_TILE_WORLD
+	var rng := RandomNumberGenerator.new()
+	var h: int = map_data.provinces.size() * 7919
+	for item in map_data.provinces:
+		var p := item as ProvinceData
+		if p != null:
+			h = h * 31 ^ (int(p.center.x * 7.0) + int(p.center.y * 13.0))
+	rng.seed = absi(h)
+
+	# --- Main river: headwater (upper-center) → south coast ---
+	var cx := bounds.position.x + bounds.size.x * 0.5
+	var headwater := Vector2(
+		round(cx / grid) * grid,
+		round((bounds.position.y + bounds.size.y * 0.15) / grid) * grid)
+
+	# South coast: lowest Y on continent polygon
+	var south_pt := headwater
+	for pt in _continent_poly:
+		if (pt as Vector2).y > south_pt.y:
+			south_pt = pt
+	var end_y: float = round(south_pt.y / grid) * grid
+
+	var junction_fracs: Array = [0.25, 0.5, 0.75]
+	var junction_indices: Array = []
+	_river_grid_path = _build_branch(headwater, end_y, rng, bounds, grid, true, junction_fracs, junction_indices)
+	_add_tiles_from_path(_river_grid_path, true)
+
+	# --- Tributaries: branch from junction outward NE or NW toward boundary ---
+	# Build occupied set: all main river positions + junction points
+	var occupied: Dictionary = {}
+	for pt in _river_grid_path:
+		var key := Vector2(round((pt as Vector2).x / grid), round((pt as Vector2).y / grid))
+		occupied[key] = true
+
+	var num_tribs := 3
+	for t in num_tribs:
+		var join_idx: int = junction_indices[t]
+		var join_pt: Vector2 = _river_grid_path[join_idx]
+		var side := 1.0 if t % 2 == 0 else -1.0
+		var outward := Vector2.RIGHT if side > 0 else Vector2.LEFT
+		var raw: Array = _build_tributary_meander(join_pt, outward, grid, rng, bounds, occupied)
+		if raw.size() < 2:
+			continue
+		var trib_slice: Array = raw.slice(0, raw.size() - 1)
+		_add_tiles_from_path(trib_slice, false, {}, 1)
+		var t_tile_idx := 7 if side > 0 else 8
+		_replace_tile_at_pos(join_pt, t_tile_idx)
+		# Add this tributary's positions to occupied so later ones don't cross it
+		for pt in raw:
+			var key := Vector2(round((pt as Vector2).x / grid), round((pt as Vector2).y / grid))
+			occupied[key] = true
+		_river_branch_paths.append(raw)
+
+
+func _build_branch(start: Vector2, end_y: float, rng: RandomNumberGenerator,
+		bounds: Rect2, grid: float, is_main: bool,
+		junction_fracs: Array = [], junction_indices: Array = []) -> Array:
+	var path: Array = [start]
+	var cur := start
+	var last_dir := Vector2.DOWN
+	var h_streak := 0
+	var max_h := 4 if is_main else 3
+	# Estimate total steps to pre-compute which step indices must be vertical
+	var est_steps: int = int((end_y - start.y) / grid) + 1
+	var locked: Dictionary = {}
+	var pending_fracs: Array = junction_fracs.duplicate()
+	for frac in pending_fracs:
+		var ji: int = int(est_steps * frac)
+		locked[ji - 1] = true
+		locked[ji]     = true
+		locked[ji + 1] = true
+		junction_indices.append(ji)
+	while cur.y < end_y:
+		var step_idx: int = path.size()  # index this step will land at
+		var force_down: bool = locked.has(step_idx)
+		var choices: Array = [Vector2.DOWN, Vector2.DOWN, Vector2.DOWN]
+		if not force_down and h_streak < max_h:
+			var margin := grid * 2.0
+			if cur.x > bounds.position.x + margin:
+				choices.append(Vector2.LEFT)
+				choices.append(Vector2.LEFT)
+			if cur.x < bounds.position.x + bounds.size.x - margin:
+				choices.append(Vector2.RIGHT)
+				choices.append(Vector2.RIGHT)
+		var next_dir: Vector2 = Vector2.DOWN if force_down else choices[rng.randi() % choices.size()]
+		if not force_down and next_dir == -last_dir:
+			next_dir = Vector2.DOWN
+		h_streak = h_streak + 1 if next_dir.x != 0 else 0
+		cur += next_dir * grid
+		path.append(cur)
+		last_dir = next_dir
+	return path
+
+
+func _build_tributary(start: Vector2, join: Vector2, grid: float,
+		rng: RandomNumberGenerator, _bounds: Rect2) -> Array:
+	var path: Array = [start]
+	var cur := start
+	var h_streak := 0
+	var safety := 0
+	while safety < 30:
+		safety += 1
+		var dx := join.x - cur.x
+		var dy := join.y - cur.y
+		# Snap if close enough
+		if absf(dx) < grid * 0.1 and absf(dy) < grid * 0.1:
+			break
+		var choices: Array = []
+		# Horizontal: move toward junction x
+		if absf(dx) >= grid * 0.9 and h_streak < 3:
+			var h_dir := Vector2.RIGHT if dx > 0 else Vector2.LEFT
+			choices.append(h_dir)
+			if rng.randf() < 0.5:
+				choices.append(h_dir)  # slight bias
+		# Vertical: move down toward junction y
+		if dy >= grid * 0.9:
+			choices.append(Vector2.DOWN)
+			choices.append(Vector2.DOWN)
+		if choices.is_empty():
+			break
+		var next_dir: Vector2 = choices[rng.randi() % choices.size()]
+		h_streak = h_streak + 1 if next_dir.x != 0 else 0
+		cur += next_dir * grid
+		path.append(cur)
+	# Force exact junction endpoint
+	if path.is_empty() or (path[path.size()-1] as Vector2).distance_to(join) > grid * 0.1:
+		path.append(join)
+	return path
+
+
+func _build_tributary_meander(junction: Vector2, outward: Vector2, grid: float,
+		rng: RandomNumberGenerator, bounds: Rect2, occupied: Dictionary = {}) -> Array:
+	var first_step := junction + outward * grid
+	var path: Array = [junction, first_step]
+	var cur := first_step
+	var last_dir := outward
+	var h_streak := 1
+	for _s in 35:
+		var candidates: Array = []
+		# Outward (east/west) and up (north) are the valid directions
+		for dir in [outward, outward, Vector2.UP, Vector2.UP]:
+			if dir == -last_dir:
+				continue
+			var next_pos: Vector2 = cur + (dir as Vector2) * grid
+			var key := Vector2(round(next_pos.x / grid), round(next_pos.y / grid))
+			if occupied.has(key):
+				continue
+			if not Geometry2D.is_point_in_polygon(next_pos, _continent_poly):
+				continue
+			candidates.append(dir)
+		if candidates.is_empty():
+			break
+		var next_dir: Vector2 = candidates[rng.randi() % candidates.size()]
+		h_streak = h_streak + 1 if next_dir.x != 0 else 0
+		cur += next_dir * grid
+		path.append(cur)
+		last_dir = next_dir
+	return path
+
+
+func _replace_tile_at_pos(pos: Vector2, tile_idx: int, is_main: bool = false) -> void:
+	for i in _river_path_tiles.size():
+		var entry := _river_path_tiles[i] as Dictionary
+		if (entry["pos"] as Vector2).distance_to(pos) < 1.0:
+			_river_path_tiles[i] = {"pos": pos, "tile": tile_idx, "main": entry.get("main", is_main)}
+			return
+	_river_path_tiles.append({"pos": pos, "tile": tile_idx, "main": is_main})
+
+
+func _add_tiles_from_path(path: Array, is_main: bool = false, forced_tiles: Dictionary = {}, skip_first: int = 0) -> void:
+	for i in path.size():
+		var from_dir := Vector2.ZERO
+		var to_dir := Vector2.ZERO
+		if i > 0:
+			from_dir = (path[i] - path[i - 1]).normalized()
+		if i < path.size() - 1:
+			to_dir = (path[i + 1] - path[i]).normalized()
+		if i < skip_first:
+			continue
+		var tile_idx: int = forced_tiles[i] if forced_tiles.has(i) else _select_river_tile(from_dir, to_dir)
+		_river_path_tiles.append({"pos": path[i], "tile": tile_idx, "main": is_main})
+
+
+func _select_river_tile(from_dir: Vector2, to_dir: Vector2) -> int:
+	if from_dir == Vector2.ZERO: from_dir = to_dir
+	if to_dir == Vector2.ZERO: to_dir = from_dir
+	# 0=0001 H, 1=0002 H, 2=0003 V, 3=0004 V, 4=0005 NE, 5=0006 NW, 6=0007 SW, 7=0008 SE
+	if from_dir.y != 0 and to_dir.y != 0: return 2  # vertical
+	if from_dir.x != 0 and to_dir.x != 0: return 0  # horizontal
+	var entry := -from_dir
+	var exit_dir := to_dir
+	var up := entry == Vector2.UP or exit_dir == Vector2.UP
+	var down := entry == Vector2.DOWN or exit_dir == Vector2.DOWN
+	var right := entry == Vector2.RIGHT or exit_dir == Vector2.RIGHT
+	var left := entry == Vector2.LEFT or exit_dir == Vector2.LEFT
+	if up and right: return 5    # NE (top->right) = 0006
+	if up and left: return 6     # NW (top->left)  = 0007
+	if down and right: return 3  # SE (right->down) = 0004
+	if down and left: return 4   # SW (left->down)  = 0005
+	return 2
+
+
+func _draw_rivers() -> void:
+	if _river_path_tiles.is_empty():
+		return
+
+	# --- Pass 1: parallax water fill polygon for all branches ---
+	var all_paths: Array = [_river_grid_path] + _river_branch_paths
+	for branch in all_paths:
+		_draw_river_parallax_strip(branch)
+
+	# --- Pass 2: tile sprites — main river N→S first, then tributaries ---
+	var tile_sz := RIVER_TILE_WORLD * _zoom * 1.12
+	var half := tile_sz * 0.5
+	var main_tiles: Array = []
+	var trib_tiles: Array = []
+	for entry in _river_path_tiles:
+		if (entry as Dictionary).get("main", false):
+			main_tiles.append(entry)
+		else:
+			trib_tiles.append(entry)
+	main_tiles.sort_custom(func(a, b): return (a["pos"] as Vector2).y < (b["pos"] as Vector2).y)
+	for entry in main_tiles + trib_tiles:
+		var tile_idx: int = entry["tile"]
+		if tile_idx < 0 or tile_idx >= _river_tiles.size():
+			continue
+		var tex: Texture2D = _river_tiles[tile_idx]
+		if tex == null:
+			continue
+		var sp: Vector2 = _to_screen(entry["pos"])
+		draw_texture_rect(tex, Rect2(sp.x - half, sp.y - half, tile_sz, tile_sz), false)
+
+
+func _draw_river_parallax_strip(path: Array) -> void:
+	if _river_parallax_tex == null or path.size() < 2:
+		return
+	var tex_sz := _river_parallax_tex.get_size()
+	var water_w := RIVER_TILE_WORLD * 0.22
+	# Chaikin smoothing
+	var smooth: Array = path.duplicate()
+	for _pass in 3:
+		var s2: Array = [smooth[0]]
+		for i in range(smooth.size() - 1):
+			var a: Vector2 = smooth[i]; var b: Vector2 = smooth[i + 1]
+			s2.append(a.lerp(b, 0.25)); s2.append(a.lerp(b, 0.75))
+		s2.append(smooth[smooth.size() - 1])
+		smooth = s2
+	var left_pts := PackedVector2Array()
+	var right_pts := PackedVector2Array()
+	var left_uvs := PackedVector2Array()
+	var right_uvs := PackedVector2Array()
+	var n := smooth.size()
+	for i in n:
+		var pt: Vector2 = smooth[i]
+		var dir := Vector2.DOWN
+		if i < n - 1: dir = (smooth[i + 1] - pt).normalized()
+		elif i > 0:   dir = (pt - smooth[i - 1]).normalized()
+		var perp := Vector2(-dir.y, dir.x)
+		var lw := pt - perp * water_w; var rw := pt + perp * water_w
+		left_pts.append(_to_screen(lw)); right_pts.append(_to_screen(rw))
+		left_uvs.append(lw / tex_sz + _river_wind_uv)
+		right_uvs.append(rw / tex_sz + _river_wind_uv)
+	var poly := PackedVector2Array(); var uvs := PackedVector2Array()
+	for i in left_pts.size():
+		poly.append(left_pts[i]); uvs.append(left_uvs[i])
+	for i in range(right_pts.size() - 1, -1, -1):
+		poly.append(right_pts[i]); uvs.append(right_uvs[i])
+	draw_polygon(poly, PackedColorArray(), uvs, _river_parallax_tex)
+
+
+func _build_terrain_mesh() -> void:
+	_terrain_mesh = null
+	_light_mesh = null
+
+	if not _terrain_tile_data.is_empty() and _grass_atlas_tex != null:
+		_terrain_mesh = _triangulate_tiles(_terrain_tile_data)
+
+	if not _light_tile_data.is_empty() and _light_atlas_tex != null:
+		_light_mesh = _triangulate_tiles(_light_tile_data)
+
+	if not _dark_tile_data.is_empty() and _dark_atlas_tex != null:
+		_dark_mesh = _triangulate_tiles(_dark_tile_data)
+
+
+func _triangulate_tiles(tile_data: Array) -> ArrayMesh:
+	var verts := PackedVector2Array()
+	var uvs   := PackedVector2Array()
+	var colors := PackedColorArray()
+	for td in tile_data:
+		var pts: PackedVector2Array = td.world_pts
+		var uv_pts: PackedVector2Array = td.uvs
+		for i in range(1, pts.size() - 1):
+			verts.append(pts[0]);   uvs.append(uv_pts[0]);   colors.append(Color.WHITE)
+			verts.append(pts[i]);   uvs.append(uv_pts[i]);   colors.append(Color.WHITE)
+			verts.append(pts[i+1]); uvs.append(uv_pts[i+1]); colors.append(Color.WHITE)
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = verts
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_COLOR]  = colors
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
+
+
+const TREE_DRAW_COAST_BUFFER: float = 60.0
+const TREE_PROVINCE_BUFFER: float = 150.0
+
+func _init_weather() -> void:
+	if _weather_overlay == null:
+		_weather_overlay = ColorRect.new()
+		_weather_overlay.name = "WeatherOverlay"
+		_weather_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_weather_overlay.color = Color(1, 1, 1, 1)
+		var mat := ShaderMaterial.new()
+		mat.shader = CloudShadowShader
+
+		var noise := FastNoiseLite.new()
+		noise.seed = 1337
+		noise.noise_type = FastNoiseLite.TYPE_PERLIN
+		noise.fractal_type = FastNoiseLite.FRACTAL_FBM
+		noise.fractal_octaves = 4
+		noise.frequency = 0.01
+
+		var noise_tex := NoiseTexture2D.new()
+		noise_tex.seamless = true
+		noise_tex.width = 512
+		noise_tex.height = 512
+		noise_tex.noise = noise
+
+		mat.set_shader_parameter("noise_tex", noise_tex)
+		_weather_overlay.material = mat
+		add_child(_weather_overlay)
+
+	var bounds := _map_bounds_rect
+	if bounds.size.x <= 0:
+		bounds = _map_bounds(map_data)
+	if bounds.size.x > 0:
+		var mat := _weather_overlay.material as ShaderMaterial
+		mat.set_shader_parameter("sun_radius", maxf(bounds.size.x, bounds.size.y) * 1.4)
+
+	_update_weather_overlay_rect()
+
+
+func _update_weather_overlay_rect() -> void:
+	if _weather_overlay == null:
+		return
+	_weather_overlay.position = Vector2.ZERO
+	_weather_overlay.size = get_viewport_rect().size
+
+
+func _update_weather(delta: float) -> void:
+	if _weather_overlay == null:
+		return
+	var mat := _weather_overlay.material as ShaderMaterial
+	if mat == null:
+		return
+	mat.set_shader_parameter("cam_origin", _origin)
+	mat.set_shader_parameter("cam_zoom", _zoom)
+
+	# Slowly sweep the sun from east to west across the map, looping forever.
+	var bounds := _map_bounds_rect
+	if bounds.size.x <= 0:
+		bounds = _map_bounds(map_data)
+	if bounds.size.x > 0:
+		_sun_time += delta
+		var t := fmod(_sun_time / SUN_CYCLE_SECONDS, 1.0)
+		var margin: float = bounds.size.x * 0.1
+		var east_x: float = bounds.position.x + bounds.size.x + margin
+		var west_x: float = bounds.position.x - margin
+		var sun_x: float = lerp(east_x, west_x, t)
+		var sun_y: float = bounds.position.y + bounds.size.y * 0.5
+		mat.set_shader_parameter("sun_world_pos", Vector2(sun_x, sun_y))
+
+
+
+
+func _filter_coast_trees() -> void:
+	_drawable_trees.clear()
+	var province_centers: Array = []
+	if map_data != null:
+		for item in map_data.provinces:
+			var p := item as ProvinceData
+			if p != null:
+				province_centers.append(p.center)
+
+	var skip_coast := _continent_poly.size() < 3
+	var n := _continent_poly.size()
+	for entry in _tree_positions:
+		var pos: Vector2 = entry["pos"]
+		var near_province := false
+		for c in province_centers:
+			if (c as Vector2).distance_to(pos) < TREE_PROVINCE_BUFFER:
+				near_province = true
+				break
+		if near_province:
+			continue
+		if skip_coast:
+			_drawable_trees.append(entry)
+			continue
+		var min_d := INF
+		for i in n:
+			var a: Vector2 = _continent_poly[i]
+			var b: Vector2 = _continent_poly[(i + 1) % n]
+			min_d = minf(min_d, pos.distance_to(Geometry2D.get_closest_point_to_segment(pos, a, b)))
+			if min_d < TREE_DRAW_COAST_BUFFER:
+				break
+		if min_d >= TREE_DRAW_COAST_BUFFER:
+			_drawable_trees.append(entry)
+
+func _draw_trees() -> void:
+	if _tree_textures.is_empty() or _drawable_trees.is_empty():
+		return
+	var sz: float = TREE_WORLD_SIZE * _zoom
+	for entry in _drawable_trees:
+		var tex: Texture2D = _tree_textures[entry["tex_idx"] % _tree_textures.size()]
+		var sp: Vector2 = _to_screen(entry["pos"])
+		var flip: bool = entry.get("flip", false)
+		var rect := Rect2(sp.x - sz * 0.5, sp.y - sz, sz, sz) if not flip else Rect2(sp.x + sz * 0.5, sp.y - sz, -sz, sz)
+		draw_texture_rect(tex, rect, false)
 
 
 func _draw_cells() -> void:
 	for item in map_data.provinces:
 		var p: ProvinceData = item as ProvinceData
 		var pid: int = int(p.id)
-		if not _voronoi_cells.has(pid):
+		if not _clipped_cells.has(pid):
 			continue
 
-		var raw_pts: Array = _voronoi_cells[pid]
+		var world_pts: PackedVector2Array = _clipped_cells[pid]
+		if world_pts.size() < 3:
+			continue
 		var pts: PackedVector2Array = PackedVector2Array()
-		for v in raw_pts:
+		for v in world_pts:
 			pts.append(_to_screen(v))
 
 		var owner_id: int = int(p.owner_id)
@@ -200,67 +1148,47 @@ func _draw_cells() -> void:
 		var is_hover: bool = pid == _hover_id
 		var is_selected: bool = pid == _selected_id
 
-		# --- Fill ---
+		# --- Fill: faction color dominant, biome as a subtle tint ---
 		var biome_c: Color = _biome_color(p.biome)
 		var fill_c: Color
 		if is_neutral:
-			fill_c = biome_c.darkened(0.15)
-			fill_c.a = 0.55
+			fill_c = biome_c.darkened(0.20)
+			fill_c.a = 0.70
 		else:
 			var faction_c: Color = _faction_color(owner_id)
-			fill_c = biome_c.lerp(faction_c, 0.35)
-			fill_c.a = 0.75
-			if is_human:
-				fill_c.a = 0.85
+			fill_c = faction_c.lerp(biome_c, 0.20)
+			fill_c.a = 0.88
 
 		if is_hover:
-			fill_c = fill_c.lightened(0.18)
+			fill_c = fill_c.lightened(0.15)
 		if is_selected:
-			fill_c = fill_c.lightened(0.25)
+			fill_c = fill_c.lightened(0.22)
 
+		# Province fill -- faction/biome tint over the grass base
 		draw_colored_polygon(pts, fill_c)
 
-		# --- Border ---
-		var border_c: Color
-		var border_w: float
+		# --- Border: thick dark base, then thin highlight for selected/hover ---
+		draw_polyline(pts, BORDER_DARK, BORDER_W_BASE, true)
 		if is_selected:
-			border_c = Color(1.0, 0.90, 0.40, 1.0)
-			border_w = 3.5
+			draw_polyline(pts, Color(1.0, 0.88, 0.30, 1.0), 2.5, true)
 		elif is_hover:
-			border_c = Color(1.0, 1.0, 1.0, 0.85)
-			border_w = 2.5
-		elif is_human:
-			border_c = _faction_color(owner_id)
-			border_c.a = 1.0
-			border_w = 2.5
-		elif not is_neutral:
-			border_c = _faction_color(owner_id)
-			border_c.a = 0.80
-			border_w = 1.8
-		else:
-			border_c = NEUTRAL_BORDER
-			border_w = 1.0
+			draw_polyline(pts, Color(1.0, 1.0, 1.0, 0.80), 1.8, true)
 
-		draw_polyline(pts, border_c, border_w, true)
-
-		# --- Pick mode highlights ---
+		# --- Pick mode highlights (overlaid on top of base border) ---
 		if _pick_mode != 0:
 			if pid == _pick_source_id:
-				# Source province: bright gold ring
-				draw_polyline(pts, Color(1.0, 0.90, 0.20, 1.0), 4.0, true)
+				draw_polyline(pts, Color(1.0, 0.90, 0.20, 1.0), 3.5, true)
 			elif _pick_mode == 1:
-				# Attack mode: only highlight valid adjacent targets
 				var is_valid_target: bool = _pick_valid_targets.is_empty() or _pick_valid_targets.has(pid)
 				if is_valid_target and not is_human and not is_neutral:
-					draw_colored_polygon(pts, Color(1.0, 0.20, 0.15, 0.22))
-					draw_polyline(pts, Color(1.0, 0.30, 0.25, 0.85), 2.0, true)
+					draw_colored_polygon(pts, Color(1.0, 0.20, 0.15, 0.20))
+					draw_polyline(pts, Color(1.0, 0.30, 0.25, 0.90), 2.5, true)
 				elif is_valid_target and is_neutral:
-					draw_colored_polygon(pts, Color(1.0, 0.55, 0.10, 0.18))
-					draw_polyline(pts, Color(1.0, 0.60, 0.20, 0.75), 2.0, true)
+					draw_colored_polygon(pts, Color(1.0, 0.55, 0.10, 0.16))
+					draw_polyline(pts, Color(1.0, 0.60, 0.20, 0.85), 2.5, true)
 			elif _pick_mode == 2 and is_human and pid != _pick_source_id:
-				# Transfer mode: highlight own provinces blue
-				draw_colored_polygon(pts, Color(0.25, 0.60, 1.0, 0.22))
-				draw_polyline(pts, Color(0.35, 0.70, 1.0, 0.85), 2.0, true)
+				draw_colored_polygon(pts, Color(0.25, 0.60, 1.0, 0.20))
+				draw_polyline(pts, Color(0.35, 0.70, 1.0, 0.90), 2.5, true)
 
 		# --- Fort level indicator (small dots) ---
 		if not is_neutral:
@@ -280,12 +1208,43 @@ func _draw_fort_indicator(p: ProvinceData, pts: PackedVector2Array) -> void:
 
 
 func _draw_routes() -> void:
-	if map_data == null:
+	if map_data == null or _road_straight_textures.is_empty() or _route_paths.is_empty():
 		return
-	for r in map_data.routes:
-		var a: ProvinceData = map_data.provinces[int(r.a)] as ProvinceData
-		var b: ProvinceData = map_data.provinces[int(r.b)] as ProvinceData
-		draw_line(_to_screen(a.center), _to_screen(b.center), Color(0.55, 0.48, 0.32, 0.50), 1.5)
+
+	var stamp_w: float = 1.6 * _zoom   # drawn tile size in screen pixels
+	var step: float = stamp_w * 0.65
+	var half: float = stamp_w * 0.5
+
+	for ri in _route_paths.size():
+		var entry: Dictionary = _route_paths[ri]
+		var world_pts: Array = entry["pts"]
+		var tex: Texture2D = _road_straight_textures[entry["style"]]
+
+		var screen_pts: Array = []
+		for wp in world_pts:
+			screen_pts.append(_to_screen(wp))
+
+		# Two-pass soft edge: wide faded halo then sharp core
+		for pass_i in 2:
+			var w: float = stamp_w * (1.6 if pass_i == 0 else 1.0)
+			var alpha: float = 0.25 if pass_i == 0 else 1.0
+			var col := Color(0.72, 0.65, 0.55, alpha)
+			var accum: float = 0.0
+			var last_dir: Vector2 = Vector2.RIGHT
+			for ci in range(1, screen_pts.size()):
+				var prev: Vector2 = screen_pts[ci - 1]
+				var curr: Vector2 = screen_pts[ci]
+				var seg: Vector2 = curr - prev
+				var seg_len: float = seg.length()
+				if seg_len > 0.0:
+					last_dir = seg / seg_len
+				accum += seg_len
+				while accum >= step:
+					accum -= step
+					var stamp_pos: Vector2 = curr - last_dir * accum
+					draw_set_transform_matrix(Transform2D(last_dir.angle(), stamp_pos))
+					draw_texture_rect(tex, Rect2(-w * 0.5, -w * 0.5, w, w), false, col)
+	draw_set_transform_matrix(Transform2D.IDENTITY)
 
 
 func _draw_nodes() -> void:
@@ -296,22 +1255,54 @@ func _draw_nodes() -> void:
 		var owner_id: int = int(p.owner_id)
 		var is_neutral: bool = owner_id < 0
 
-		var node_c: Color
-		if is_neutral:
-			node_c = Color(0.45, 0.42, 0.38)
+		# Pick biome-specific texture, fall back to lvl1 default
+		var province_tex: Texture2D = null
+		if int(p.fort_level) >= 2:
+			province_tex = _province_lvl2_tex
 		else:
-			node_c = _faction_color(owner_id)
-
-		# Outer ring
-		draw_circle(pos, NODE_RADIUS + 1.5, Color(0.10, 0.08, 0.06, 0.85))
-		# Inner fill
-		draw_circle(pos, NODE_RADIUS, node_c)
+			var biome: String = str(p.biome) if p.biome != "" else "plains"
+			var biome_arr: Array = _province_biome_textures.get(biome, [])
+			if biome_arr.is_empty():
+				province_tex = _province_lvl1_tex
+			else:
+				province_tex = biome_arr[pid % biome_arr.size()]
+		if province_tex != null:
+			var sz: float = 128.0 * _zoom * 0.3
+			var half: float = sz * 0.5
+			var flip: bool = (pid * 2654435761) % 3 == 0
+			var rect := Rect2(pos.x - half, pos.y - sz, sz, sz) if not flip else Rect2(pos.x + half, pos.y - sz, -sz, sz)
+			draw_texture_rect(province_tex, rect, false, Color(1.0, 0.96, 0.88, 0.88))
 
 		# Leader presence dot (white pip if leaders are here)
 		if game_state != null and not is_neutral:
 			var leaders: Array = game_state.get_province_leaders(pid, false)
 			if not leaders.is_empty():
 				draw_circle(pos, 3.5, Color(1, 1, 1, 0.90))
+
+
+func _draw_labels() -> void:
+	var font: Font = ThemeDB.fallback_font
+	if font == null:
+		return
+	# Font size scales with zoom, clamped to always be readable
+	var font_size: int = clamp(int(_zoom * 5.0), 13, 20)
+
+	for item in map_data.provinces:
+		var p: ProvinceData = item as ProvinceData
+		var pos: Vector2 = _to_screen(p.center)
+		var label: String = str(p.display_name)
+		var text_w: float = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+		# Centered above the node dot -- fort indicators sit below so no clash
+		var draw_pos: Vector2 = Vector2(pos.x - text_w * 0.5, pos.y - NODE_RADIUS - 5)
+
+		# Shadow
+		draw_string(font, draw_pos + Vector2(1, 1), label,
+				HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, 0.90))
+		# Warm white for owned, muted tan for neutral
+		var text_c: Color = Color(0.68, 0.64, 0.56, 0.85) if int(p.owner_id) < 0 \
+				else Color(1.0, 0.97, 0.88, 1.0)
+		draw_string(font, draw_pos, label,
+				HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_c)
 
 
 # --------------------------------------------------
@@ -325,9 +1316,16 @@ func _to_world(screen: Vector2) -> Vector2:
 	return screen / _zoom - _origin
 
 
+func _full_fit_zoom(vp: Vector2) -> float:
+	if _map_bounds_rect.size.x <= 0 or _map_bounds_rect.size.y <= 0:
+		return 1.0
+	return minf((vp.x - left_margin - PAD * 2.0) / _map_bounds_rect.size.x,
+				(vp.y - PAD * 2.0) / _map_bounds_rect.size.y)
+
+
 func _zoom_at(screen_pos: Vector2, factor: float) -> void:
 	var world_before: Vector2 = _to_world(screen_pos)
-	_zoom = clamp(_zoom * factor, 0.15, 8.0)
+	_zoom = clampf(_zoom * factor, _zoom_min, _zoom_max)
 	_origin = screen_pos / _zoom - world_before
 	queue_redraw()
 
@@ -335,17 +1333,41 @@ func _zoom_at(screen_pos: Vector2, factor: float) -> void:
 func _frame_map() -> void:
 	if map_data == null or map_data.provinces.is_empty():
 		return
-	var min_pt := Vector2(INF, INF)
-	var max_pt := Vector2(-INF, -INF)
-	for item in map_data.provinces:
-		var p: ProvinceData = item as ProvinceData
-		min_pt = min_pt.min(p.center)
-		max_pt = max_pt.max(p.center)
-	var bounds := Rect2(min_pt, max_pt - min_pt)
+	_map_bounds_rect = _map_bounds(map_data)
+	if _map_bounds_rect.size.x <= 0 or _map_bounds_rect.size.y <= 0:
+		return
+
 	var vp := get_viewport_rect().size
-	var pad := 80.0
-	_zoom = min((vp.x - pad * 2.0) / bounds.size.x, (vp.y - pad * 2.0) / bounds.size.y)
-	_origin = -bounds.position + Vector2(pad, pad) / _zoom
+	var full_zoom := _full_fit_zoom(vp)
+	_zoom_min = full_zoom * MIN_ZOOM_FACTOR
+	_zoom_max = full_zoom * 15.0
+	_zoom = clampf(full_zoom * CLOSE_ZOOM_FACTOR, _zoom_min, _zoom_max)
+
+	# Focus on the starting province (human province with the ruler stationed),
+	# fall back to centroid of all human provinces, then map center
+	var focus_world: Vector2
+	var ruler_province: ProvinceData = null
+	var fallback_pts: Array = []
+	if game_state != null:
+		for item in map_data.provinces:
+			var p: ProvinceData = item as ProvinceData
+			if p == null or int(p.owner_id) != human_faction_id:
+				continue
+			fallback_pts.append(p.center)
+			if p.ruler_leader_id >= 0 and ruler_province == null:
+				ruler_province = p
+	if ruler_province != null:
+		focus_world = ruler_province.center
+	elif not fallback_pts.is_empty():
+		var sum := Vector2.ZERO
+		for c in fallback_pts:
+			sum += c as Vector2
+		focus_world = sum / fallback_pts.size()
+	else:
+		focus_world = _map_bounds_rect.position + _map_bounds_rect.size * 0.5
+
+	var sc := Vector2(vp.x * 0.5, vp.y * 0.5)
+	_origin = sc / _zoom - focus_world
 
 
 # --------------------------------------------------
@@ -354,9 +1376,29 @@ func _frame_map() -> void:
 func _pick_province(screen_pos: Vector2) -> int:
 	if map_data == null:
 		return -1
+	# Ignore clicks on the panel side
+	if screen_pos.x < left_margin:
+		return -1
 	var world_pos: Vector2 = _to_world(screen_pos)
+
+	# Primary: point-in-polygon (works well when provinces are large on screen)
+	for item in map_data.provinces:
+		var p: ProvinceData = item as ProvinceData
+		var pid: int = int(p.id)
+		if not _voronoi_cells.has(pid):
+			continue
+		var raw: Array = _voronoi_cells[pid]
+		if raw.size() < 3:
+			continue
+		var pv := PackedVector2Array()
+		for v in raw:
+			pv.append(v as Vector2)
+		if Geometry2D.is_point_in_polygon(world_pos, pv):
+			return pid
+
+	# Fallback: nearest center (catches clicks near edges/borders)
 	var best_id: int = -1
-	var best_dist: float = PICK_RADIUS / _zoom
+	var best_dist: float = 32.0 / _zoom
 	for item in map_data.provinces:
 		var p: ProvinceData = item as ProvinceData
 		var d: float = world_pos.distance_to(p.center)
@@ -442,13 +1484,13 @@ func _draw_crossed_swords(center: Vector2, size: float, color: Color) -> void:
 	var g: float = size * 0.38   # crossguard half-length
 	var go: float = size * 0.18  # crossguard offset from center
 
-	# Sword 1: top-left → bottom-right
+	# Sword 1: top-left -> bottom-right
 	draw_line(center + Vector2(-h, -h), center + Vector2(h, h), color, 2.0)
 	var gp1: Vector2 = center + Vector2(-go, -go)
 	var gd1: Vector2 = Vector2(1.0, -1.0).normalized() * g
 	draw_line(gp1 - gd1, gp1 + gd1, color, 2.0)
 
-	# Sword 2: top-right → bottom-left
+	# Sword 2: top-right -> bottom-left
 	draw_line(center + Vector2(h, -h), center + Vector2(-h, h), color, 2.0)
 	var gp2: Vector2 = center + Vector2(go, -go)
 	var gd2: Vector2 = Vector2(1.0, 1.0).normalized() * g
@@ -460,12 +1502,13 @@ func _draw_transfer_badge(center: Vector2, size: float, color: Color) -> void:
 	draw_circle(center, size + 3.5, Color(0.04, 0.05, 0.10, 0.88))
 	var h: float = size * 0.72
 	var tip: float = size * 0.32
-	# Arrow pointing right (→)
+	# Arrow pointing right (->)
 	draw_line(Vector2(center.x - h, center.y), Vector2(center.x + h, center.y), color, 2.0)
 	draw_line(Vector2(center.x + h, center.y),
 			Vector2(center.x + h - tip, center.y - tip * 0.6), color, 2.0)
 	draw_line(Vector2(center.x + h, center.y),
 			Vector2(center.x + h - tip, center.y + tip * 0.6), color, 2.0)
+
 
 
 func _biome_color(biome: String) -> Color:
