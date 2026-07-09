@@ -23,17 +23,137 @@ var _detail_panel: Control
 var _start_btn: Button
 var _card_grid: GridContainer
 
+const BAD_SEEDS_PATH := "user://bad_river_seeds.json"
+var _bad_seeds: Dictionary = {}
+
 
 func _ready() -> void:
+	_load_bad_seeds()
 	_generate_map()
 	_build_ui()
+
+
+func _load_bad_seeds() -> void:
+	if not FileAccess.file_exists(BAD_SEEDS_PATH):
+		return
+	var f := FileAccess.open(BAD_SEEDS_PATH, FileAccess.READ)
+	if f == null:
+		return
+	var parsed = JSON.parse_string(f.get_as_text())
+	if parsed is Dictionary:
+		_bad_seeds = parsed
+
+
+func _save_bad_seeds() -> void:
+	var f := FileAccess.open(BAD_SEEDS_PATH, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(_bad_seeds))
 
 
 func _generate_map() -> void:
 	var settings := MapSettingsScript.new()
 	settings.province_count = _province_count
 	var generator := MapGeneratorScript.new()
-	_map_data = generator.generate_map(settings)
+	const MAX_ATTEMPTS := 10
+	for attempt in MAX_ATTEMPTS:
+		settings.seed = 0  # let generator randomize each time
+		_map_data = generator.generate_map(settings)
+		var sid := str(_map_data.map_seed)
+		if _bad_seeds.has(sid):
+			DebugLogger.log("river_seed_skipped", {"seed": sid, "attempt": attempt})
+			continue
+		if _river_is_feasible(_map_data):
+			DebugLogger.log("river_seed_accepted", {"seed": sid, "attempt": attempt})
+			break
+		DebugLogger.log("river_seed_bad", {"seed": sid, "attempt": attempt})
+		_bad_seeds[sid] = true
+		_save_bad_seeds()
+
+
+# Quick A* feasibility check — same logic as PlayerMap._build_branch but
+# lightweight (no continent polygon, bounds-only wall check) so we can run
+# it before the scene transition.
+func _river_is_feasible(md: MapData) -> bool:
+	if md == null or md.provinces.is_empty():
+		return false
+	const GRID := 45.0
+	const COST_DOWN := 1.0
+	const COST_LATERAL := 3.0
+	const COST_UP := 12.0
+
+	# Compute bounds
+	var minx := 1.0e18; var miny := 1.0e18
+	var maxx := -1.0e18; var maxy := -1.0e18
+	for item in md.provinces:
+		var p := item as ProvinceData
+		minx = minf(minx, p.center.x); miny = minf(miny, p.center.y)
+		maxx = maxf(maxx, p.center.x); maxy = maxf(maxy, p.center.y)
+	var bounds := Rect2(Vector2(minx, miny), Vector2(maxx - minx, maxy - miny))
+
+	# Precompute blocked cells
+	var blocked: Dictionary = {}
+	var x := bounds.position.x - GRID
+	while x <= bounds.position.x + bounds.size.x + GRID:
+		var y := bounds.position.y - GRID
+		while y <= bounds.position.y + bounds.size.y + GRID:
+			var best_biome := ""
+			var best_d := 1.0e18
+			for item in md.provinces:
+				var p := item as ProvinceData
+				var d := Vector2(x, y).distance_squared_to(p.center)
+				if d < best_d:
+					best_d = d
+					best_biome = p.biome
+			if best_biome in ["desert", "mountain"]:
+				blocked["%d_%d" % [int(round(x / GRID)), int(round(y / GRID))]] = true
+			y += GRID
+		x += GRID
+
+	var cx := bounds.position.x + bounds.size.x * 0.5
+	var start := Vector2(round(cx / GRID) * GRID,
+			round((bounds.position.y + bounds.size.y * 0.15) / GRID) * GRID)
+	var end_y: float = lerpf(start.y, bounds.position.y + bounds.size.y, 0.85)
+
+	var gk := func(pos: Vector2) -> String:
+		return "%d_%d" % [int(round(pos.x / GRID)), int(round(pos.y / GRID))]
+
+	var open_set: Array = []
+	var g_score: Dictionary = {}
+	var closed: Dictionary = {}
+	var sk: String = gk.call(start)
+	g_score[sk] = 0.0
+	open_set.append([maxf(0.0, end_y - start.y) / GRID, start])
+
+	while not open_set.is_empty():
+		var bi := 0
+		for idx in range(1, open_set.size()):
+			if (open_set[idx] as Array)[0] < (open_set[bi] as Array)[0]:
+				bi = idx
+		var entry: Array = open_set[bi]
+		open_set.remove_at(bi)
+		var cur: Vector2 = entry[1]
+		var ck: String = gk.call(cur)
+		if closed.has(ck):
+			continue
+		closed[ck] = true
+		if cur.y >= end_y:
+			# Also verify the path is long enough to support 3 tributaries
+			var path_len: int = closed.size()
+			return path_len >= 12
+
+		for nb in [[Vector2.DOWN, COST_DOWN], [Vector2.LEFT, COST_LATERAL],
+				[Vector2.RIGHT, COST_LATERAL], [Vector2.UP, COST_UP]]:
+			var np: Vector2 = cur + (nb[0] as Vector2) * GRID
+			var nk: String = gk.call(np)
+			if closed.has(nk) or blocked.has(nk):
+				continue
+			if np.x < bounds.position.x - GRID or np.x > bounds.position.x + bounds.size.x + GRID:
+				continue
+			var ng: float = g_score[ck] + (nb[1] as float)
+			if not g_score.has(nk) or ng < g_score[nk]:
+				g_score[nk] = ng
+				open_set.append([ng + maxf(0.0, end_y - np.y) / GRID, np])
+	return false
 
 
 func _build_ui() -> void:
@@ -307,13 +427,85 @@ func _detail_label(parent: Control, text: String, size: int, color: Color) -> vo
 func _on_start_campaign() -> void:
 	if _selected_faction_id < 0 or _map_data == null:
 		return
+	_start_btn.disabled = true
+	_show_loading_screen()
+	await get_tree().process_frame
+	await get_tree().process_frame
 
-	# Initialize game state
+	_set_loading_progress(0.2, "Initializing game state...")
+	await get_tree().process_frame
 	var game_state := GameState.new()
 	game_state.human_faction_id = _selected_faction_id
 	game_state.init_with_map(_map_data)
 
+	_set_loading_progress(0.5, "Building terrain tiles...")
+	await get_tree().process_frame
+	var terrain := MapTerrainGenerator.new()
+	terrain.generate_base_tiles(_map_data)
+
+	_set_loading_progress(0.65, "Generating noise overlays...")
+	await get_tree().process_frame
+	terrain.generate_noise_tiles(_map_data)
+
+	_set_loading_progress(0.75, "Painting biomes...")
+	await get_tree().process_frame
+	terrain.generate_biome_tiles(_map_data)
+
+	_set_loading_progress(0.85, "Scattering trees...")
+	await get_tree().process_frame
+	terrain.generate_trees(_map_data)
+
+	SceneManager.pending_terrain = terrain
+	_set_loading_progress(1.0, "Loading campaign map...")
+	await get_tree().process_frame
+
 	SceneManager.go_to_campaign(game_state, _map_data, _selected_faction_id)
+
+
+var _loading_bar: ProgressBar = null
+var _loading_label: Label = null
+
+func _show_loading_screen() -> void:
+	var overlay := ColorRect.new()
+	overlay.color = Color(0.0, 0.0, 0.0, 0.80)
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var vbox := VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	vbox.add_theme_constant_override("separation", 16)
+	overlay.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "Loading Campaign..."
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 22)
+	title.add_theme_color_override("font_color", Color(0.95, 0.85, 0.45))
+	vbox.add_child(title)
+
+	_loading_bar = ProgressBar.new()
+	_loading_bar.min_value = 0.0
+	_loading_bar.max_value = 1.0
+	_loading_bar.value = 0.0
+	_loading_bar.custom_minimum_size = Vector2(400, 24)
+	_loading_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	vbox.add_child(_loading_bar)
+
+	_loading_label = Label.new()
+	_loading_label.text = "Please wait..."
+	_loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_loading_label.add_theme_font_size_override("font_size", 13)
+	_loading_label.add_theme_color_override("font_color", Color(0.70, 0.70, 0.70))
+	vbox.add_child(_loading_label)
+
+
+func _set_loading_progress(value: float, status: String) -> void:
+	if _loading_bar:
+		_loading_bar.value = value
+	if _loading_label:
+		_loading_label.text = status
 
 
 func _make_portrait(faction: FactionData, height: int) -> Control:

@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dkpnoyrc5mtce"]
 
-[ext_resource type="Script" path="res://Visual/campaign/PlayerMap.gd" id="1_playermap"]
+[ext_resource type="Script" uid="uid://bp1oqf08dm8jo" path="res://Visual/campaign/PlayerMap.gd" id="1_playermap"]
 
-[node name="PlayerMap" type="Node2D"]
+[node name="PlayerMap" type="Node2D" unique_id=1983573177]
 script = ExtResource("1_playermap")

@@ -16,6 +16,9 @@ static var _initialized: bool = false
 static var _silent: bool = false  # when true, all logging is suppressed (used by AI lab)
 static var _log_path: String = "user://kingdom_debug.log"
 static var _replay_path: String = "user://kingdom_replay.jsonl"
+static var _log_buffer: PackedStringArray = PackedStringArray()
+static var _replay_buffer: PackedStringArray = PackedStringArray()
+const _FLUSH_EVERY: int = 20  # flush to disk after this many lines
 
 static func set_silent(silent: bool) -> void:
 	_silent = silent
@@ -25,11 +28,23 @@ static func init(reset_files: bool = false) -> void:
 	if _initialized:
 		return
 	_initialized = true
+	# Flush any buffer from a prior session before wiping
+	flush()
+	_log_buffer.clear()
+	_replay_buffer.clear()
 	if reset_files:
 		_reset_file(_log_path)
 		_reset_file(_replay_path)
 	# qualify to avoid global math log()
 	DebugLogger.log("logger_init", {"reset": reset_files})
+
+static func flush() -> void:
+	if _log_buffer.size() > 0:
+		_append_lines(_log_path, _log_buffer)
+		_log_buffer.clear()
+	if _replay_buffer.size() > 0:
+		_append_lines(_replay_path, _replay_buffer)
+		_replay_buffer.clear()
 
 # Primary static API used across the project (e.g., MapDebugView)
 static func log(message: String, data: Dictionary = {}) -> void:
@@ -48,15 +63,11 @@ static func log(message: String, data: Dictionary = {}) -> void:
 	if data.size() > 0:
 		line += " " + JSON.stringify(data)
 
-	_append_line(_log_path, line)
-
-	# Also write JSONL replay event
-	var evt := {
-		"t": ts,
-		"msg": message,
-		"data": data
-	}
-	_append_line(_replay_path, JSON.stringify(evt))
+	_log_buffer.append(line)
+	var evt := {"t": ts, "msg": message, "data": data}
+	_replay_buffer.append(JSON.stringify(evt))
+	if _log_buffer.size() >= _FLUSH_EVERY:
+		flush()
 
 # Instance-style helpers (used by GameState, which keeps a logger instance)
 func event(name: String, data: Dictionary = {}) -> void:
@@ -85,14 +96,12 @@ static func _reset_file(path: String) -> void:
 		f.store_string("") # truncate/create
 		f.close()
 
-static func _append_line(path: String, line: String) -> void:
+static func _append_lines(path: String, lines: PackedStringArray) -> void:
 	var f := FileAccess.open(path, FileAccess.READ_WRITE)
 	if f == null:
-		# Try create directory implicitly by opening WRITE then append
 		f = FileAccess.open(path, FileAccess.WRITE)
 		if f == null:
 			return
-	# Seek end and append
 	f.seek_end()
-	f.store_string(line + "\n")
+	f.store_string("\n".join(lines) + "\n")
 	f.close()

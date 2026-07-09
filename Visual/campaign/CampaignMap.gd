@@ -19,13 +19,19 @@ const MapDebugViewScene  := preload("res://map_debug_view.tscn")
 const PlayerMapScript    := preload("res://Visual/campaign/PlayerMap.gd")
 const MapHUDScript       := preload("res://Visual/campaign/MapHUD.gd")
 const TooltipScript      := preload("res://Visual/campaign/ProvinceTooltip.gd")
-const ProvincePanelScript:= preload("res://Visual/campaign/ProvincePanel.gd")
+const ProvincePanelScene := preload("res://Visual/campaign/ProvincePanel.tscn")
 const PauseMenuScene     := preload("res://Visual/menus/PauseMenu.tscn")
 const TurnManagerScript  := preload("res://Scripts/game/turn_manager.gd")
 
 const PICK_NONE:     int = 0
 const PICK_ATTACK:   int = 1
 const PICK_TRANSFER: int = 2
+
+const MUSIC_TRACKS: Array = [
+	"res://Audio/music/campaign_map_theme.wav",
+	"res://Audio/music/campaign_map_theme5.wav",
+]
+static var _music_index: int = 0
 
 var _debug_view: Node
 var _player_map: PlayerMap
@@ -53,6 +59,44 @@ func _ready() -> void:
 	_init_tooltip()
 	_init_province_panel()
 	call_deferred("_post_init")
+	call_deferred("_fade_in")
+
+
+func _fade_in() -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 100
+	add_child(layer)
+	var rect := ColorRect.new()
+	rect.color = Color(0.0, 0.0, 0.0, 1.0)
+	rect.position = Vector2.ZERO
+	rect.size = get_viewport().get_visible_rect().size
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(rect)
+	var tween := create_tween()
+	tween.tween_interval(2.0)
+	tween.tween_property(rect, "color:a", 0.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_callback(layer.queue_free)
+
+	# Start campaign map music, cycle through tracks when each finishes
+	var music := AudioStreamPlayer.new()
+	music.name = "CampaignMusic"
+	music.stream = load(MUSIC_TRACKS[_music_index]) as AudioStream
+	_music_index = (_music_index + 1) % MUSIC_TRACKS.size()
+	music.volume_db = -80.0
+	music.autoplay = false
+	add_child(music)
+	music.finished.connect(_on_music_finished.bind(music))
+	music.play()
+	var music_tween := create_tween()
+	music_tween.tween_property(music, "volume_db", 0.0, 3.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+
+
+func _on_music_finished(music: AudioStreamPlayer) -> void:
+	if not is_instance_valid(music):
+		return
+	music.stream = load(MUSIC_TRACKS[_music_index]) as AudioStream
+	_music_index = (_music_index + 1) % MUSIC_TRACKS.size()
+	music.play()
 
 
 # --------------------------------------------------
@@ -94,7 +138,7 @@ func _init_tooltip() -> void:
 
 
 func _init_province_panel() -> void:
-	_province_panel = ProvincePanelScript.new()
+	_province_panel = ProvincePanelScene.instantiate()
 	add_child(_province_panel)
 	_province_panel.closed.connect(func() -> void: _player_map.refresh())
 	_province_panel.leader_selection_changed.connect(func() -> void: _update_action_buttons(_selected_province_id))
@@ -117,6 +161,12 @@ func _post_init() -> void:
 	# Wire win/lose signal
 	if _turn_manager != null and not _turn_manager.is_connected("game_over", _on_game_over):
 		_turn_manager.game_over.connect(_on_game_over)
+
+	DebugLogger.log("campaign_session_start", {
+		"human_faction_id": _human_id,
+		"province_count": _map_data.provinces.size() if _map_data != null else -1,
+		"source": "editor" if _debug_view != null else "faction_select",
+	})
 
 	# Init player map — voronoi cells only available when debug view is present
 	var voronoi: Dictionary = {}
@@ -205,6 +255,7 @@ func _on_end_turn() -> void:
 	if _processing_turn or _turn_manager == null or _game_state == null:
 		return
 	_processing_turn = true
+	DebugLogger.log("player_end_turn", {"month": _game_state.month_index + 1})
 
 	# Let the debug view handle turn execution when it's active (editor mode)
 	if _debug_view != null and _debug_view.visible and _debug_view.has_method("ui_end_turn"):
@@ -310,6 +361,7 @@ func _on_clear_orders_pressed() -> void:
 
 
 func _do_queue_attack(from_id: int, to_id: int) -> void:
+	DebugLogger.log("player_queue_attack", {"from": from_id, "to": to_id})
 	if _game_state == null or _game_state.order_book == null or _map_data == null:
 		return
 	var tgt: ProvinceData = _map_data.provinces[to_id] as ProvinceData
@@ -329,6 +381,7 @@ func _do_queue_attack(from_id: int, to_id: int) -> void:
 
 
 func _do_queue_transfer(from_id: int, to_id: int) -> void:
+	DebugLogger.log("player_queue_transfer", {"from": from_id, "to": to_id})
 	if _game_state == null or _game_state.order_book == null or _map_data == null:
 		return
 	var tgt: ProvinceData = _map_data.provinces[to_id] as ProvinceData
@@ -361,12 +414,17 @@ func set_campaign_visible(v: bool) -> void:
 		var cv = child.get("visible")
 		if cv != null:
 			child.visible = v
+	# Invisible Node2Ds still receive _unhandled_input — disable it so hover
+	# events don't re-show the tooltip while the battle scene is on top.
+	if _player_map != null:
+		_player_map.set_process_unhandled_input(v)
 
 
 # --------------------------------------------------
 # Game over
 # --------------------------------------------------
 func _on_game_over(result: String) -> void:
+	DebugLogger.log("game_over", {"result": result, "month": _game_state.month_index if _game_state != null else -1})
 	if result == "victory":
 		SceneManager.show_victory(_game_state)
 	else:

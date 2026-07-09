@@ -1,0 +1,84 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/ui/recruit_panel.gd" id="1_recruitpanel"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.12, 0.12, 0.15, 0.93)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.38, 0.50, 1.0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_title"]
+bg_color = Color(0.20, 0.20, 0.28, 1.0)
+
+[node name="RecruitPanel" type="Control"]
+offset_right = 300.0
+offset_bottom = 115.0
+mouse_filter = 0
+script = ExtResource("1_recruitpanel")
+
+[node name="BG" type="PanelContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="TitleBar" type="Panel" parent="."]
+anchor_right = 1.0
+offset_bottom = 26.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_title")
+
+[node name="TitleLabel" type="Label" parent="TitleBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 12
+text = "RECRUIT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 30.0
+offset_right = -6.0
+offset_bottom = -6.0
+theme_override_constants/separation = 5
+
+[node name="GoldLabel" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1.0, 0.85, 0.2, 1.0)
+text = "Gold: --"
+horizontal_alignment = 1
+
+[node name="BiomeLabel" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.6, 0.9, 0.7, 1.0)
+text = "Biome: --"
+horizontal_alignment = 1
+
+[node name="RecruitRow" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="TypeOption" type="OptionButton" parent="VBox/RecruitRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RecruitButton" type="Button" parent="VBox/RecruitRow"]
+layout_mode = 2
+text = "Recruit"
+
+[node name="ResizeHandle" type="Control" parent="."]
+custom_minimum_size = Vector2(16, 16)
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_default_cursor_shape = 15
+mouse_filter = 0

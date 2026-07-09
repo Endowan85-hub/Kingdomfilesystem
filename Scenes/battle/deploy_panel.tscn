@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/UI/ui_panel_default.png" id="1_panel"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+content_margin_left = 50.0
+content_margin_top = 40.0
+content_margin_right = 47.0
+content_margin_bottom = 40.0
+texture = ExtResource("1_panel")
+texture_margin_left = 79.0
+texture_margin_top = 64.0
+texture_margin_right = 76.0
+texture_margin_bottom = 64.0
+
+[node name="DeployPanel" type="PanelContainer"]
+z_index = 10
+offset_left = -280.0
+offset_top = -120.0
+offset_right = 280.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+text = "Deployment"
+
+[node name="SubtitleLabel" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+autowrap_mode = 3
+text = "Select a leader, then click your side of the field to place them."
+
+[node name="LeaderButtons" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 10

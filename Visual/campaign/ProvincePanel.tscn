@@ -1,6 +1,86 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b7j0tc7kgye5r"]
 
-[ext_resource type="Script" path="res://Visual/campaign/ProvincePanel.gd" id="1_provincepanel"]
+[ext_resource type="Script" uid="uid://cfhrr8sfvld1" path="res://Visual/campaign/ProvincePanel.gd" id="1_provincepanel"]
+[ext_resource type="Texture2D" uid="uid://8rsn4cxf6fi2" path="res://Art/ui/ui_panel_campaign.png" id="2_campaign_panel"]
+[ext_resource type="PackedScene" uid="uid://did3c8ejo2pc6" path="res://Scripts/ui/leader_panel.tscn" id="3_leaderpanel"]
+[ext_resource type="PackedScene" path="res://Scripts/ui/recruit_panel.tscn" id="4_recruitpanel"]
 
-[node name="ProvincePanel" type="CanvasLayer"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+content_margin_left = 110.0
+content_margin_top = 108.0
+content_margin_right = 102.0
+content_margin_bottom = 109.0
+texture = ExtResource("2_campaign_panel")
+texture_margin_left = 102.0
+texture_margin_top = 100.0
+texture_margin_right = 94.0
+texture_margin_bottom = 101.0
+
+[node name="ProvincePanel" type="CanvasLayer" unique_id=548453727]
+layer = 15
 script = ExtResource("1_provincepanel")
+
+[node name="Panel" type="Panel" parent="." unique_id=137994460]
+top_level = true
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 17.0
+offset_top = 15.0
+offset_right = 713.0
+offset_bottom = -85.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="CloseRow" type="HBoxContainer" parent="Panel" unique_id=403418385]
+layout_mode = 0
+anchor_right = 1.0
+offset_left = 110.0
+offset_top = 108.0
+offset_right = -102.0
+offset_bottom = 148.0
+theme_override_constants/separation = 8
+
+[node name="CloseButton" type="Button" parent="Panel/CloseRow" unique_id=1659796389]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "✕"
+
+[node name="RowSpacer" type="Control" parent="Panel/CloseRow" unique_id=1838605356]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HeaderVBox" type="VBoxContainer" parent="Panel" unique_id=1077093509]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 779.0
+offset_top = 53.0
+offset_right = 567.0
+offset_bottom = 154.0
+grow_horizontal = 2
+theme_override_constants/separation = 4
+
+[node name="LeaderPanel" parent="Panel" unique_id=1492632118 instance=ExtResource("3_leaderpanel")]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 44.0
+offset_right = -110.0
+offset_bottom = -84.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RecruitPanel" parent="Panel" unique_id=890455445 instance=ExtResource("4_recruitpanel")]
+visible = false
+anchors_preset = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 110.0
+offset_top = -239.0
+offset_right = -102.0
+offset_bottom = -109.0

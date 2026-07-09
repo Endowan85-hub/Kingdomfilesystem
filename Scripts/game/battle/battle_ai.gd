@@ -31,4 +31,9 @@ static func take_turn(state, unit):
 			break
 
 	if target:
+		var uid = unit.unit_ref.id if unit.unit_ref != null else ("leader" if unit.leader_ref != null else "?")
+		var tid = target.unit_ref.id if target.unit_ref != null else ("leader" if target.leader_ref != null else "?")
+		DebugLogger.log("battle_ai_action", {"unit": uid, "side": unit.side, "target": tid})
 		BattleResolver.attack(state, unit, target)
+	else:
+		DebugLogger.log("battle_ai_no_target", {"side": unit.side})

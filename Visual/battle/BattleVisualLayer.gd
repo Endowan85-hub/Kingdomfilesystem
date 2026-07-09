@@ -27,7 +27,6 @@ var _setup: Dictionary = {}
 
 # Sub-layers
 var _terrain_layer: BattleTerrainLayer = null
-var _hpbar_draw: _HPBarDraw = null
 
 # HUD nodes
 var _top_bar: PanelContainer = null
@@ -87,7 +86,6 @@ func init_layer(battle_scene, setup: Dictionary) -> void:
 func _ready() -> void:
 	layer = 20
 	_compute_origin()
-	_build_hpbar_draw()
 	_build_top_bar()
 	_build_result_overlay()
 
@@ -97,15 +95,6 @@ func _compute_origin() -> void:
 		float(GRID_ROWS) * TILE_W * 0.5,
 		36.0
 	)
-
-
-# --------------------------------------------------
-# HP Bar draw node
-# --------------------------------------------------
-func _build_hpbar_draw() -> void:
-	_hpbar_draw = _HPBarDraw.new()
-	_hpbar_draw.visual_layer_ref = self
-	add_child(_hpbar_draw)
 
 
 # --------------------------------------------------
@@ -312,77 +301,3 @@ func _process(_delta: float) -> void:
 		var _fort_str: String = "  ·  Fort %d" % _fort if _fort > 0 else ""
 		_round_label.text = "%s  (%s%s)  —  Round %d" % [_province, _biome, _fort_str, _round]
 
-	# Redraw HP bars
-	if _hpbar_draw != null:
-		_hpbar_draw.queue_redraw()
-
-
-
-
-# --------------------------------------------------
-# HP Bar drawing node (inner class)
-# --------------------------------------------------
-class _HPBarDraw extends Node2D:
-	var visual_layer_ref: BattleVisualLayer = null
-
-	func _draw() -> void:
-		if visual_layer_ref == null or visual_layer_ref._battle_scene == null:
-			return
-		var bs = visual_layer_ref._battle_scene
-		var state = bs.get("state")
-		if state == null:
-			return
-
-		var all_units: Array = []
-		var atk_units = state.get("attacker_units")
-		var def_units = state.get("defender_units")
-		if atk_units is Array:
-			all_units.append_array(atk_units)
-		if def_units is Array:
-			all_units.append_array(def_units)
-
-		for unit in all_units:
-			if unit == null or not bool(unit.get("is_alive") if unit.get("is_alive") != null else false):
-				continue
-			var grid_pos = unit.get("grid_pos")
-			if grid_pos == null:
-				continue
-			_draw_hp_bar(unit, grid_pos)
-
-
-	func _draw_hp_bar(unit, _grid_pos: Vector2i) -> void:
-		# Use BattleGrid's unit_screen_pos so position tracks zoom + camera + walking
-		var bs = visual_layer_ref._battle_scene
-		var bg = bs.get("battle_grid") if bs != null else null
-		var center: Vector2
-		if bg != null and bg.has_method("unit_screen_pos"):
-			center = bg.unit_screen_pos(unit)
-		else:
-			var origin := visual_layer_ref._origin
-			center = origin + Vector2(
-				float(_grid_pos.x - _grid_pos.y) * BattleVisualLayer.TILE_W * 0.5,
-				float(_grid_pos.x + _grid_pos.y) * BattleVisualLayer.TILE_H * 0.5 + BattleVisualLayer.TILE_H * 0.5
-			)
-
-		var hp_cur: int = int(unit.get("battle_hp") if unit.get("battle_hp") != null else 0)
-		var hp_max: int = int(unit.get("final_max_hp") if unit.get("final_max_hp") != null else 1)
-		hp_max = max(1, hp_max)
-
-		var bar_w: float = 44.0
-		var bar_h: float = 5.0
-		var bar_x: float = center.x - bar_w * 0.5
-		var bar_y: float = center.y - 30.0  # above the unit circle
-
-		# Background
-		draw_rect(Rect2(bar_x, bar_y, bar_w, bar_h), Color(0.15, 0.05, 0.05, 0.85), true)
-
-		# Fill
-		var pct: float = clamp(float(hp_cur) / float(hp_max), 0.0, 1.0)
-		var fill_color: Color = Color(0.20, 0.75, 0.25) if pct > 0.5 else \
-								Color(0.85, 0.65, 0.10) if pct > 0.25 else \
-								Color(0.90, 0.20, 0.15)
-		if pct > 0.0:
-			draw_rect(Rect2(bar_x, bar_y, bar_w * pct, bar_h), fill_color, true)
-
-		# Border
-		draw_rect(Rect2(bar_x, bar_y, bar_w, bar_h), Color(0.0, 0.0, 0.0, 0.6), false, 0.5)

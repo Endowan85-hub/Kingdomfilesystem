@@ -2,6 +2,36 @@
 
 [ext_resource type="Script" uid="uid://ko5ydavfksh5" path="res://Scenes/battle/battle_scene.gd" id="1_bscene"]
 [ext_resource type="Script" uid="uid://h6a0xvvotewt" path="res://Scenes/battle/battle_grid.gd" id="2_bgrid"]
+[ext_resource type="Texture2D" uid="uid://c3asasvvpxguc" path="res://Art/UI/ui_panel_default.png" id="3_panel"]
+
+[sub_resource type="SystemFont" id="SystemFont_bold"]
+font_names = PackedStringArray("Arial", "Helvetica", "sans-serif")
+bold = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_fill"]
+bg_color = Color(0.8, 0.1, 0.1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_bg"]
+bg_color = Color(0.25, 0.08, 0.08, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_unit_panel"]
+content_margin_left = 50.0
+content_margin_top = 40.0
+content_margin_right = 47.0
+content_margin_bottom = 40.0
+texture = ExtResource("3_panel")
+texture_margin_left = 79.0
+texture_margin_top = 64.0
+texture_margin_right = 76.0
+texture_margin_bottom = 64.0
 
 [node name="BattleScene" type="Node2D" unique_id=316404221]
 script = ExtResource("1_bscene")
@@ -15,8 +45,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.10, 0.12, 0.08, 1)
 mouse_filter = 2
+color = Color(0.1, 0.12, 0.08, 1)
 
 [node name="BattleGrid" type="Node2D" parent="CanvasLayer" unique_id=506807302]
 script = ExtResource("2_bgrid")
@@ -50,16 +80,15 @@ text = "Round 1"
 [node name="InfoLabel" type="Label" parent="CanvasLayer/UI/TopBar/TopHBox" unique_id=1980185059]
 layout_mode = 2
 size_flags_horizontal = 3
-horizontal_alignment = 1
-text = "Select a unit"
 theme_override_font_sizes/font_size = 12
+text = "Select a unit"
+horizontal_alignment = 1
 
 [node name="LogPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=559855086]
 modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.72
-anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 0.25
 offset_top = 36.0
@@ -72,18 +101,18 @@ layout_mode = 2
 bbcode_enabled = true
 
 [node name="LeftUnitPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=900000001]
-visible = false
+modulate = Color(1, 1, 1, 0.65)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.0
 anchor_top = 1.0
-anchor_right = 0.0
 anchor_bottom = 1.0
-offset_right = 380.0
-offset_top = -230.0
-offset_bottom = 0.0
+offset_left = -23.0
+offset_top = -428.0
+offset_right = 536.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_unit_panel")
 
 [node name="LeftHBox" type="HBoxContainer" parent="CanvasLayer/UI/LeftUnitPanel" unique_id=910000030]
 layout_mode = 2
@@ -101,45 +130,55 @@ size_flags_horizontal = 3
 
 [node name="LeftUnitName" type="Label" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox" unique_id=910000004]
 layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = SubResource("SystemFont_bold")
 text = "-"
-theme_override_font_sizes/font_size = 14
+
+[node name="NameSpacer" type="Control" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
 
 [node name="LeftHPRow" type="HBoxContainer" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox" unique_id=910000005]
 layout_mode = 2
 
 [node name="LeftHPLbl" type="Label" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox/LeftHPRow" unique_id=910000006]
 layout_mode = 2
-text = "HP"
 theme_override_font_sizes/font_size = 11
+text = "HP"
 
 [node name="LeftHPBar" type="ProgressBar" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox/LeftHPRow" unique_id=910000007]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-custom_minimum_size = Vector2(0, 16)
-max_value = 100.0
 value = 100.0
 show_percentage = false
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
 
 [node name="StatLabel" type="RichTextLabel" parent="CanvasLayer/UI/LeftUnitPanel/LeftHBox/LeftVBox" unique_id=900000002]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 fit_content = true
+theme_override_colors/default_color = Color(0, 0, 0, 1)
 
 [node name="RightUnitPanel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=910000020]
-visible = false
+modulate = Color(1, 1, 1, 0.65)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -380.0
-offset_top = -230.0
-offset_bottom = 0.0
+offset_left = -603.0
+offset_top = -425.0
+offset_right = 23.0
+offset_bottom = 16.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_unit_panel")
 
 [node name="RightHBox" type="HBoxContainer" parent="CanvasLayer/UI/RightUnitPanel" unique_id=910000040]
 layout_mode = 2
@@ -150,31 +189,39 @@ size_flags_horizontal = 3
 
 [node name="RightUnitName" type="Label" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox" unique_id=910000022]
 layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = SubResource("SystemFont_bold")
 text = "-"
-theme_override_font_sizes/font_size = 14
+
+[node name="NameSpacer" type="Control" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
 
 [node name="RightHPRow" type="HBoxContainer" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox" unique_id=910000023]
 layout_mode = 2
 
 [node name="RightHPLbl" type="Label" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox/RightHPRow" unique_id=910000024]
 layout_mode = 2
-text = "HP"
 theme_override_font_sizes/font_size = 11
+text = "HP"
 
 [node name="RightHPBar" type="ProgressBar" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox/RightHPRow" unique_id=910000025]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-custom_minimum_size = Vector2(0, 16)
-max_value = 100.0
 value = 100.0
 show_percentage = false
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
 
 [node name="RightStatLabel" type="RichTextLabel" parent="CanvasLayer/UI/RightUnitPanel/RightHBox/RightVBox" unique_id=910000026]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 fit_content = true
+theme_override_colors/default_color = Color(0, 0, 0, 1)
 
 [node name="RightPortrait" type="TextureRect" parent="CanvasLayer/UI/RightUnitPanel/RightHBox" unique_id=910000041]
 custom_minimum_size = Vector2(130, 210)

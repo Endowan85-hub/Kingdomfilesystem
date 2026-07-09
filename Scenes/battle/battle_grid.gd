@@ -34,7 +34,7 @@ const GRID_ROWS  : int = 19
 const TILE_W     : int = 128   # full diamond width  (2:1 ratio)
 const TILE_H     : int = 64    # full diamond height
 const TILE_DEPTH : int = 18    # visible side face height
-const CAM_ZOOM   : float = 1.3  # how much to scale the grid
+const CAM_ZOOM   : float = 2.0  # how much to scale the grid
 const CAM_SPEED  : float = 5.0  # camera lerp speed
 const BORDER     : int   = 16    # extra tile rows/cols drawn outside the playable grid
 
@@ -87,7 +87,8 @@ var _prop_placements : Array      = []   # [{cell, tex_idx, flip}]
 var _prop_cell_map   : Dictionary = {}   # Vector2i -> tex_idx, for O(1) passability/LoS lookup
 
 var _attacking : Dictionary = {}
-const ANIM_FRAME_TIME : float = 0.13
+const ANIM_FRAME_TIME      : float = 0.13
+const IDLE_ANIM_FRAME_TIME : float = ANIM_FRAME_TIME * 2.0
 
 signal walk_completed(unit)
 var _walking : Dictionary = {}
@@ -415,6 +416,13 @@ func _unit_attack_anim_key(unit_type: String) -> String:
 			return "bow_shoot"
 	return "sword_slash"
 
+func _leader_attack_anim_key(unit) -> String:
+	var dt: String = str(unit.get("damage_type") if unit.get("damage_type") != null else "slash").to_lower()
+	match dt:
+		"blunt":  return "mace_swing"
+		"pierce": return "spear_thrust"
+	return "sword_slash"
+
 func _cache_sprites() -> void:
 	_sprite_cache.clear()
 	_anim_cache.clear()
@@ -429,7 +437,8 @@ func _cache_sprites() -> void:
 			var path := "res://Art/leaders/%s/sprites/%s_%s.png" % [skey, skey, d]
 			if ResourceLoader.exists(path):
 				_sprite_cache[skey + "_" + d] = load(path) as Texture2D
-		for anim_name in ["sword_slash", "idle", "walk"]:
+		var attack_anim: String = _leader_attack_anim_key(unit)
+		for anim_name in [attack_anim, "idle", "walk"]:
 			for d in dirs:
 				var base_key := "%s_%s_%s" % [skey, anim_name, d]
 				var sheet_path := "res://Art/leaders/%s/sprites/%s_%s_%s_sheet.png" % [skey, skey, anim_name, d]
@@ -516,13 +525,16 @@ func play_attack_anim(unit) -> void:
 	var skey: String = str(unit.get("sprite_key") if unit.get("sprite_key") != null else "")
 	if skey == "":
 		return
-	var facing: String = str(unit.get("facing") if unit.get("facing") != null else "south")
+	var facing: String = str(unit.get("facing") if unit.get("facing") != null else "south-east")
+	var flip_h : bool   = facing == "south-west" or facing == "north-west"
+	var lookup  : String = "south-east" if facing == "south-west" else ("north-east" if facing == "north-west" else facing)
+	var attack_anim: String = _leader_attack_anim_key(unit)
 	var frames: int = 0
-	while _anim_cache.has("%s_sword_slash_%s_%d" % [skey, facing, frames]):
+	while _anim_cache.has("%s_%s_%s_%d" % [skey, attack_anim, lookup, frames]):
 		frames += 1
 	if frames == 0:
 		return
-	_attacking[unit] = {"skey": skey, "frames": frames, "frame_idx": 0, "timer": 0.0, "facing": facing}
+	_attacking[unit] = {"skey": skey, "frames": frames, "frame_idx": 0, "timer": 0.0, "facing": facing, "attack_anim": attack_anim}
 
 
 # ==================================================
@@ -627,41 +639,65 @@ func _draw() -> void:
 			var pw := _cell_top(Vector2i(corner.x,     corner.y + 4)) + Vector2(-TILE_W * 0.5, TILE_H * 0.5)
 			draw_polygon(PackedVector2Array([pt, pe, ps, pw]), pit_white, pit_uvs, _pit_sheet)
 
-	# --- World props: back-to-front, grounded at tile south vertex ---
-	var sorted_props := _prop_placements.duplicate()
-	sorted_props.sort_custom(func(a, b):
-		var da : Vector2i = a["cell"]; var db : Vector2i = b["cell"]
-		return (da.x + da.y) < (db.x + db.y)
-	)
-	for prop in sorted_props:
-		var cell : Vector2i  = prop["cell"]
-		var tex  : Texture2D = _prop_textures[prop["tex_idx"]]
-		var sz   := tex.get_size()
-		# Ground the prop: bottom-center sits at the south vertex of the tile
-		var ground := _cell_top(cell) + Vector2(0.0, TILE_H)
-		var rect   := Rect2(ground - Vector2(sz.x * 0.5, sz.y), sz)
-		draw_texture_rect(tex, rect, false, Color.WHITE)
-
 	# --- Deployment divider (column 9 / 10 boundary) ---
 	if _show_divider:
 		_draw_divider()
 
-	# --- Units: sorted back-to-front by visual Y position ---
-	var all_pairs: Array = []
+	# --- Props + units: single back-to-front pass (painter's algorithm) ---
+	# Sort key = visual Y of each object's ground point so trees occlude units behind them.
+	var draw_items: Array = []
+
+	for prop in _prop_placements:
+		var cell: Vector2i = prop["cell"]
+		var ground_y: float = (_cell_top(cell) + Vector2(0.0, TILE_H)).y
+		draw_items.append({"type": "prop", "key": ground_y, "prop": prop})
+
+	var _is_att: Dictionary = {}
 	for u in _attacker_units:
-		all_pairs.append([u, true])
+		if u != null:
+			_is_att[u] = true
 	for u in _defender_units:
-		all_pairs.append([u, false])
-	all_pairs.sort_custom(func(a, b):
-		return _unit_visual_pos(a[0]).y < _unit_visual_pos(b[0]).y
-	)
-	for pair in all_pairs:
-		var unit = pair[0]
-		var is_att: bool = pair[1]
-		var player_color := Color(0.2, 0.75, 1.0)
-		var enemy_color  := Color(1.0, 0.35, 0.35)
-		var col: Color = player_color if (is_att == (_player_side == "attacker")) else enemy_color
-		_draw_unit(unit, col)
+		if u != null:
+			_is_att[u] = false
+
+	for u in _attacker_units + _defender_units:
+		if u == null:
+			continue
+		draw_items.append({"type": "unit", "key": _unit_visual_pos(u).y, "unit": u})
+
+	draw_items.sort_custom(func(a, b): return a["key"] < b["key"])
+
+	for item in draw_items:
+		if item["type"] == "prop":
+			var prop = item["prop"]
+			var cell: Vector2i  = prop["cell"]
+			var tex : Texture2D = _prop_textures[prop["tex_idx"]]
+			var sz  := tex.get_size()
+			var ground := _cell_top(cell) + Vector2(0.0, TILE_H)
+			draw_texture_rect(tex, Rect2(ground - Vector2(sz.x * 0.5, sz.y), sz), false, Color.WHITE)
+		else:
+			var unit = item["unit"]
+			var is_att: bool = _is_att.get(unit, true)
+			# Selection / active outline drawn just before the unit sprite
+			if unit == _selected_unit:
+				var top   := _cell_top(unit.grid_pos)
+				var east  := top + Vector2( TILE_W * 0.5,  TILE_H * 0.5)
+				var south := top + Vector2(0.0,            TILE_H)
+				var west  := top + Vector2(-TILE_W * 0.5,  TILE_H * 0.5)
+				draw_polyline(PackedVector2Array([top, east, south, west, top]),
+					Color(1.0, 1.0, 0.3, 0.45), 2.5)
+			if unit == _active_unit:
+				var pulse := 0.5 + 0.5 * sin(_flash_time * 6.0)
+				var top   := _cell_top(unit.grid_pos)
+				var east  := top + Vector2( TILE_W * 0.5,  TILE_H * 0.5)
+				var south := top + Vector2(0.0,            TILE_H)
+				var west  := top + Vector2(-TILE_W * 0.5,  TILE_H * 0.5)
+				draw_polyline(PackedVector2Array([top, east, south, west, top]),
+					Color(1.0, 1.0, 1.0, 0.35 * pulse), 2.0)
+			var player_color := Color(0.2, 0.75, 1.0)
+			var enemy_color  := Color(1.0, 0.35, 0.35)
+			var col: Color = player_color if (is_att == (_player_side == "attacker")) else enemy_color
+			_draw_unit(unit, col)
 
 
 
@@ -737,40 +773,50 @@ func _draw_unit(unit, color: Color) -> void:
 	var shadow_radius := 26.0 if unit.is_leader_combatant else 20.0
 	_draw_unit_shadow(foot, shadow_radius)
 
+	# sprite_top_y — top of the drawn sprite; fallback for circle units
+	var sprite_top_y: float = foot.y - 30.0
+
 	# --- Try sprite / animation frames ---
 	var sprite_drawn := false
 	if unit.is_leader_combatant:
 		var skey: String  = str(unit.get("sprite_key") if unit.get("sprite_key") != null else "")
-		var facing: String = str(unit.get("facing")    if unit.get("facing")    != null else "south")
+		var facing: String = str(unit.get("facing")    if unit.get("facing")    != null else "south-east")
+		# SW mirrors SE; NW mirrors NE — only SE and NE need real art files
+		var flip_h  : bool   = facing == "south-west" or facing == "north-west"
+		var lookup  : String = "south-east" if facing == "south-west" else ("north-east" if facing == "north-west" else facing)
 		var tex: Texture2D = null
 
 		if _attacking.has(unit):
 			var anim: Dictionary = _attacking[unit]
-			tex = _anim_cache.get("%s_sword_slash_%s_%d" % [skey, facing, anim["frame_idx"]], null)
+			var atk_anim: String = str(anim.get("attack_anim", "sword_slash"))
+			tex = _anim_cache.get("%s_%s_%s_%d" % [skey, atk_anim, lookup, anim["frame_idx"]], null)
 
 		if tex == null and _walking.has(unit):
 			var wfc := 0
-			while _anim_cache.has("%s_walk_%s_%d" % [skey, facing, wfc]):
+			while _anim_cache.has("%s_walk_%s_%d" % [skey, lookup, wfc]):
 				wfc += 1
 			if wfc > 0:
-				tex = _anim_cache.get("%s_walk_%s_%d" % [skey, facing, int(_flash_time / ANIM_FRAME_TIME) % wfc], null)
+				tex = _anim_cache.get("%s_walk_%s_%d" % [skey, lookup, int(_flash_time / ANIM_FRAME_TIME) % wfc], null)
 
 		if tex == null:
 			var ifc := 0
-			while _anim_cache.has("%s_idle_%s_%d" % [skey, facing, ifc]):
+			while _anim_cache.has("%s_idle_%s_%d" % [skey, lookup, ifc]):
 				ifc += 1
 			if ifc > 0:
-				tex = _anim_cache.get("%s_idle_%s_%d" % [skey, facing, int(_flash_time / ANIM_FRAME_TIME) % ifc], null)
+				tex = _anim_cache.get("%s_idle_%s_%d" % [skey, lookup, int(_flash_time / IDLE_ANIM_FRAME_TIME) % ifc], null)
 
 		if tex == null:
-			tex = _sprite_cache.get(skey + "_" + facing, null)
+			tex = _sprite_cache.get(skey + "_" + lookup, null)
 
 		if tex != null:
 			var sz  := tex.get_size()
-			var dsz := sz * 1.8   # PixelLab 112px custom body → 256x256 normalized canvas; 1.8× = consistent visual size
-			# Feet land at tile center; shift sprite up so feet are grounded on the surface
+			var dsz := sz   # raw size — no scaling
 			var top_left := foot - Vector2(dsz.x * 0.5, dsz.y - TILE_H * 0.65)
-			draw_texture_rect(tex, Rect2(top_left, dsz), false)
+			sprite_top_y = top_left.y
+			if flip_h:
+				draw_texture_rect(tex, Rect2(Vector2(top_left.x + dsz.x, top_left.y), Vector2(-dsz.x, dsz.y)), false)
+			else:
+				draw_texture_rect(tex, Rect2(top_left, dsz), false)
 			sprite_drawn = true
 
 	# ── Non-leader unit sprites ───────────────────────────────────────────────
@@ -779,59 +825,103 @@ func _draw_unit(unit, color: Color) -> void:
 		var uskey  : String = _unit_type_to_sprite_key(utype)
 		if uskey != "":
 			var prefix : String = "unit_%s" % uskey
-			var facing : String = str(unit.get("facing") if unit.get("facing") != null else "south")
-			var tex    : Texture2D = null
+			var facing : String = str(unit.get("facing") if unit.get("facing") != null else "south-east")
+			# SW mirrors SE; NW mirrors NE — only SE and NE need real art files
+			var flip_h  : bool   = facing == "south-west" or facing == "north-west"
+			var lookup  : String = "south-east" if facing == "south-west" else ("north-east" if facing == "north-west" else facing)
+			var tex : Texture2D = null
 
 			if _attacking.has(unit):
 				var anim : Dictionary = _attacking[unit]
 				var atk_anim := _unit_attack_anim_key(utype)
-				tex = _anim_cache.get("%s_%s_%s_%d" % [prefix, atk_anim, facing, anim["frame_idx"]], null)
+				tex = _anim_cache.get("%s_%s_%s_%d" % [prefix, atk_anim, lookup, anim["frame_idx"]], null)
 
 			if tex == null and _walking.has(unit):
 				var wfc := 0
-				while _anim_cache.has("%s_walk_%s_%d" % [prefix, facing, wfc]):
+				while _anim_cache.has("%s_walk_%s_%d" % [prefix, lookup, wfc]):
 					wfc += 1
 				if wfc > 0:
-					tex = _anim_cache.get("%s_walk_%s_%d" % [prefix, facing, int(_flash_time / ANIM_FRAME_TIME) % wfc], null)
+					tex = _anim_cache.get("%s_walk_%s_%d" % [prefix, lookup, int(_flash_time / ANIM_FRAME_TIME) % wfc], null)
 
 			if tex == null:
 				var ifc := 0
-				while _anim_cache.has("%s_idle_%s_%d" % [prefix, facing, ifc]):
+				while _anim_cache.has("%s_idle_%s_%d" % [prefix, lookup, ifc]):
 					ifc += 1
 				if ifc > 0:
-					tex = _anim_cache.get("%s_idle_%s_%d" % [prefix, facing, int(_flash_time / ANIM_FRAME_TIME) % ifc], null)
+					tex = _anim_cache.get("%s_idle_%s_%d" % [prefix, lookup, int(_flash_time / IDLE_ANIM_FRAME_TIME) % ifc], null)
 
 			if tex == null:
-				tex = _sprite_cache.get("%s_%s" % [prefix, facing], null)
+				tex = _sprite_cache.get("%s_%s" % [prefix, lookup], null)
 
 			if tex != null:
 				var sz  := tex.get_size()
-				var dsz := sz * 1.8   # 256x256 normalized canvas, character body ~112px — same scale as leader
+				var dsz := sz   # raw size — no scaling
 				var top_left := foot - Vector2(dsz.x * 0.5, dsz.y - TILE_H * 0.65)
-				draw_texture_rect(tex, Rect2(top_left, dsz), false)
+				sprite_top_y = top_left.y
+				if flip_h:
+					draw_texture_rect(tex, Rect2(Vector2(top_left.x + dsz.x, top_left.y), Vector2(-dsz.x, dsz.y)), false)
+				else:
+					draw_texture_rect(tex, Rect2(top_left, dsz), false)
 				sprite_drawn = true
 
 	if not sprite_drawn:
 		draw_circle(foot, 14.0, color)
 
-	# --- Selected: tile outline highlight (no floating ring) ---
-	if unit == _selected_unit:
-		var top  := _cell_top(unit.grid_pos)
-		var east := top + Vector2( TILE_W * 0.5,  TILE_H * 0.5)
-		var south := top + Vector2(0.0, TILE_H)
-		var west := top + Vector2(-TILE_W * 0.5,  TILE_H * 0.5)
-		draw_polyline(PackedVector2Array([top, east, south, west, top]),
-			Color(1.0, 1.0, 0.3, 0.9), 2.5)
+	_draw_unit_hud(unit, foot, sprite_top_y)
 
-	# --- Active: pulsing tile outline ---
-	if unit == _active_unit:
-		var pulse := 0.5 + 0.5 * sin(_flash_time * 6.0)
-		var top  := _cell_top(unit.grid_pos)
-		var east := top + Vector2( TILE_W * 0.5,  TILE_H * 0.5)
-		var south := top + Vector2(0.0, TILE_H)
-		var west := top + Vector2(-TILE_W * 0.5,  TILE_H * 0.5)
-		draw_polyline(PackedVector2Array([top, east, south, west, top]),
-			Color(1.0, 1.0, 1.0, 0.7 * pulse), 2.0)
+
+func _draw_unit_hud(unit, foot: Vector2, sprite_top_y: float) -> void:
+	var hp_ratio: float = clampf(float(unit.battle_hp) / float(maxi(1, unit.final_max_hp)), 0.0, 1.0)
+
+	var level: int = 1
+	if unit.is_leader_combatant and unit.leader_ref != null and "level" in unit.leader_ref:
+		level = int(unit.leader_ref.level)
+	elif not unit.is_leader_combatant and unit.unit_ref != null and "level" in unit.unit_ref:
+		level = int(unit.unit_ref.level)
+
+	var font      := ThemeDB.fallback_font
+	var font_size := 10
+	var lv_text   := str(level)
+	var lv_w      := font.get_string_size(lv_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	var ascent    := font.get_ascent(font_size)
+
+	const BAR_W   := 36.0
+	const BAR_H   := 5.0
+	const GAP     := 3.0
+	const OUTLINE := 1.0
+
+	var total_w := lv_w + GAP + BAR_W
+	var hud_y   := sprite_top_y - 10.0
+	var hud_x   := foot.x - total_w * 0.5
+
+	# Level number (bold black outline, white for allies / red for enemies)
+	var is_enemy: bool = str(unit.get("side") if unit.get("side") != null else "") != _player_side
+	var lv_color: Color = Color(1.0, 0.25, 0.25) if is_enemy else Color.WHITE
+	var lv_baseline := hud_y + BAR_H * 0.5 + ascent * 0.5
+	var lv_pos := Vector2(hud_x, lv_baseline)
+	draw_string_outline(font, lv_pos, lv_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, 2, Color.BLACK)
+	draw_string(font, lv_pos, lv_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, lv_color)
+
+	# HP bar
+	var bar_x := hud_x + lv_w + GAP
+	var bar_y := hud_y
+
+	# Black outline border
+	draw_rect(Rect2(bar_x - OUTLINE, bar_y - OUTLINE, BAR_W + OUTLINE * 2.0, BAR_H + OUTLINE * 2.0), Color.BLACK)
+
+	# Dark background
+	draw_rect(Rect2(bar_x, bar_y, BAR_W, BAR_H), Color(0.12, 0.12, 0.12))
+
+	# HP fill
+	var fill_w := BAR_W * hp_ratio
+	var hp_color: Color
+	if is_enemy:
+		hp_color = Color(0.9, 0.15, 0.15)
+	else:
+		hp_color = Color(0.2, 0.82, 0.2)
+	if fill_w > 0.0:
+		draw_rect(Rect2(bar_x, bar_y, fill_w, BAR_H), hp_color)
+
 
 
 # Push current position to the cloud shader immediately (no polling lag).
@@ -845,11 +935,36 @@ func _push_cloud_offset() -> void:
 # ==================================================
 # Input
 # ==================================================
+func _unit_at_screen(local_pos: Vector2):
+	# Returns the unit whose sprite bounding box contains local_pos, or null.
+	# Sprites are 48x48, grounded so top = foot.y - 6, bottom = foot.y + 42.
+	# Used so units behind props can still be clicked.
+	var best = null
+	var best_dist := INF
+	for unit in _attacker_units + _defender_units:
+		if unit == null or not unit.is_alive:
+			continue
+		var foot := _unit_visual_pos(unit)
+		var dx := local_pos.x - foot.x
+		var dy := local_pos.y - foot.y
+		if abs(dx) <= 26.0 and dy >= -14.0 and dy <= 44.0:
+			var dist := Vector2(dx, dy).length()
+			if dist < best_dist:
+				best_dist = dist
+				best = unit
+	return best
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	# --- Left click: grid cell selection ---
 	# Uses _unhandled_input so UI elements (popup buttons etc.) consume the event first
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		var cell := _screen_to_cell(to_local(event.position))
+		var local := to_local(event.position)
+		var cell  := _screen_to_cell(local)
+		# Unit sprite hit-test overrides the raw cell so units behind props are selectable.
+		var hit = _unit_at_screen(local)
+		if hit != null:
+			cell = hit.grid_pos
 		if cell.x >= 0 and cell.y >= 0 and cell.x < GRID_COLS and cell.y < GRID_ROWS:
 			if _scene_ref != null:
 				_scene_ref.on_grid_clicked(cell)

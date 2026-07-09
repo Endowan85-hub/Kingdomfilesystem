@@ -70,6 +70,7 @@ var _battle_result: Dictionary = {}
 var _player_side: String = "attacker"  # set from setup
 var _buttons_wired: bool = false
 var _action_popup: PanelContainer = null
+var _facing_popup: PanelContainer  = null   # direction picker shown after a unit acts
 
 # --------------------------------------------------
 # DEPLOYMENT PHASE
@@ -120,6 +121,8 @@ func _process(_delta: float) -> void:
 	# Track the unit every frame so the popup stays next to it during camera drag
 	if _action_popup != null and is_instance_valid(_action_popup) and current_unit != null:
 		_action_popup.position = _calc_popup_screen_pos()
+	if _facing_popup != null and is_instance_valid(_facing_popup) and current_unit != null:
+		_facing_popup.position = _calc_popup_screen_pos()
 
 
 func _calc_popup_screen_pos() -> Vector2:
@@ -144,6 +147,7 @@ func _reposition_action_popup() -> void:
 func _on_walk_completed(_unit) -> void:
 	_is_animating = false
 	_hide_action_popup()
+	_hide_facing_picker()
 
 
 var _setup_dict: Dictionary = {}
@@ -380,52 +384,12 @@ func _build_deploy_panel() -> void:
 	if _deploy_panel != null:
 		_deploy_panel.queue_free()
 
-	var panel := PanelContainer.new()
-	panel.name = "DeployPanel"
-	# Centered on screen — slightly smaller than the 640×560 Scorecard
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.offset_left   = -280.0
-	panel.offset_top    = -120.0
-	panel.offset_right  =  280.0
-	panel.offset_bottom =  120.0
-	panel.z_index = 10
+	var scene := preload("res://Scenes/battle/deploy_panel.tscn")
+	_deploy_panel = scene.instantiate()
+	_deploy_panel.name = "DeployPanel"
+	_deploy_panel.set_anchors_preset(Control.PRESET_CENTER)
 
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.06, 0.08, 0.14, 0.97)
-	style.border_color = Color(0.4, 0.85, 0.5, 1.0)
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(6)
-	style.content_margin_left   = 16.0
-	style.content_margin_right  = 16.0
-	style.content_margin_top    = 14.0
-	style.content_margin_bottom = 14.0
-	panel.add_theme_stylebox_override("panel", style)
-
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 12)
-	panel.add_child(vbox)
-
-	# Title
-	var title := Label.new()
-	title.text = "Deployment"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 18)
-	title.add_theme_color_override("font_color", Color(0.95, 0.85, 0.45))
-	vbox.add_child(title)
-
-	# Subtitle instruction
-	var sub := Label.new()
-	sub.text = "Select a leader, then click your side of the field to place them."
-	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	sub.add_theme_font_size_override("font_size", 11)
-	sub.add_theme_color_override("font_color", Color(0.65, 0.75, 0.65))
-	vbox.add_child(sub)
-
-	# Leader + action buttons row
-	var hbox := HBoxContainer.new()
-	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	hbox.add_theme_constant_override("separation", 10)
-	vbox.add_child(hbox)
+	var hbox: HBoxContainer = _deploy_panel.get_node("VBox/LeaderButtons")
 
 	for ldr_unit in _deploy_leaders_to_place:
 		var ldr_name: String = ldr_unit.get_display_name() if ldr_unit.has_method("get_display_name") else "Leader"
@@ -439,7 +403,6 @@ func _build_deploy_panel() -> void:
 		)
 		hbox.add_child(btn)
 
-	# Auto-deploy button
 	var auto_btn := Button.new()
 	auto_btn.text = "Auto Deploy"
 	auto_btn.add_theme_font_size_override("font_size", 12)
@@ -447,7 +410,6 @@ func _build_deploy_panel() -> void:
 	auto_btn.pressed.connect(_auto_deploy_player)
 	hbox.add_child(auto_btn)
 
-	# Ready button — only enabled once all leaders are placed
 	var ready_btn := Button.new()
 	ready_btn.text = "Ready"
 	ready_btn.name = "ReadyBtn"
@@ -457,15 +419,14 @@ func _build_deploy_panel() -> void:
 	ready_btn.pressed.connect(_finish_deployment)
 	hbox.add_child(ready_btn)
 
-	_deploy_panel = panel
-	$CanvasLayer/UI.add_child(panel)
+	$CanvasLayer/UI.add_child(_deploy_panel)
 
 
 func _on_deploy_leader_selected(leader_unit, btn: Button) -> void:
 	_deploy_selected_leader = leader_unit
 	# Visually highlight selected button
 	if _deploy_panel != null:
-		var hbox = _deploy_panel.get_node("VBox/HBoxContainer") if _deploy_panel.has_node("VBox/HBoxContainer") else null
+		var hbox = _deploy_panel.get_node_or_null("VBox/LeaderButtons")
 		if hbox:
 			for child in hbox.get_children():
 				if child is Button:
@@ -688,20 +649,20 @@ func _run_ai_turn(unit) -> void:
 	var tactic: String = _ai_choose_tactic(unit, snap)
 	DebugLogger.log("event:ai_tactical", {"unit": unit.get_display_name(), "tactic": tactic, "round": state.round})
 
-	# --- Execute tactic ---
+	# --- Execute tactic (async — animations play before continuing) ---
 	match tactic:
 		"protect_leader":
-			_ai_protect_leader(unit, snap)
+			await _ai_protect_leader(unit, snap)
 		"hunt_leader":
-			_ai_attack_target(unit, snap.enemy_leader)
+			await _ai_attack_target(unit, snap.enemy_leader)
 		"thin_ranks":
-			_ai_attack_priority(unit, snap.enemies, false)
+			await _ai_attack_priority(unit, snap.enemies, false)
 		"flank":
-			_ai_flank(unit, snap)
+			await _ai_flank(unit, snap)
 		"finish_weak":
-			_ai_attack_priority(unit, snap.enemies, true)  # lowest HP first
+			await _ai_attack_priority(unit, snap.enemies, true)  # lowest HP first
 		_:
-			_ai_attack_priority(unit, snap.enemies, false)
+			await _ai_attack_priority(unit, snap.enemies, false)
 
 	unit.acted = true
 	call_deferred("_check_battle_end_or_continue")
@@ -868,10 +829,13 @@ func _ai_attack_priority(unit, enemies: Array, lowest_hp_first: bool) -> void:
 		# Try sigil first — offensive sigils are used before normal attack
 		if not _ai_try_use_sigil(unit, enemies):
 			_do_attack(unit, best_target)
+			await get_tree().create_timer(1.3).timeout
 		return
 
 	# No target in range — move toward nearest enemy first, then re-check
-	_ai_move_smart(unit, enemies)
+	var moved: bool = _ai_move_smart(unit, enemies)
+	if moved:
+		await battle_grid.walk_completed
 
 	# After moving, re-check if we can now attack
 	best_target = null
@@ -887,27 +851,34 @@ func _ai_attack_priority(unit, enemies: Array, lowest_hp_first: bool) -> void:
 			best_target = enemy
 	if best_target != null:
 		_do_attack(unit, best_target)
+		await get_tree().create_timer(1.3).timeout
 
 
 func _ai_attack_target(unit, target) -> void:
 	if target == null:
-		_ai_move_smart(unit, _get_enemy_units(unit.side))
+		var moved: bool = _ai_move_smart(unit, _get_enemy_units(unit.side))
+		if moved:
+			await battle_grid.walk_completed
 		return
 	if _ai_can_attack(unit, target):
 		if not _ai_try_use_sigil(unit, [target]):
 			_do_attack(unit, target)
+			await get_tree().create_timer(1.3).timeout
 	else:
-		_ai_move_toward(unit, target.grid_pos)
+		var moved: bool = _ai_move_toward(unit, target.grid_pos)
+		if moved:
+			await battle_grid.walk_completed
 		# After moving, re-check if now in range
 		if _ai_can_attack(unit, target):
 			if not _ai_try_use_sigil(unit, [target]):
 				_do_attack(unit, target)
+				await get_tree().create_timer(1.3).timeout
 
 
 func _ai_protect_leader(unit, snap: Dictionary) -> void:
 	# Move to intercept the closest threatening enemy to our leader
 	if snap.ally_leader == null:
-		_ai_attack_priority(unit, snap.enemies, false)
+		await _ai_attack_priority(unit, snap.enemies, false)
 		return
 	var leader_pos: Vector2i = snap.ally_leader.grid_pos
 	var closest_threat = null
@@ -922,12 +893,16 @@ func _ai_protect_leader(unit, snap: Dictionary) -> void:
 	if closest_threat != null:
 		if _ai_can_attack(unit, closest_threat):
 			_do_attack(unit, closest_threat)
+			await get_tree().create_timer(1.3).timeout
 		else:
 			# Move directly toward the threat to intercept it
-			_ai_move_toward(unit, closest_threat.grid_pos)
+			var moved: bool = _ai_move_toward(unit, closest_threat.grid_pos)
+			if moved:
+				await battle_grid.walk_completed
 			# After moving, attack if now in range
 			if _ai_can_attack(unit, closest_threat):
 				_do_attack(unit, closest_threat)
+				await get_tree().create_timer(1.3).timeout
 
 
 func _ai_flank(unit, snap: Dictionary) -> void:
@@ -957,10 +932,13 @@ func _ai_flank(unit, snap: Dictionary) -> void:
 				best_score = float(los_count)
 				best_pos = cell
 	if best_pos != unit.grid_pos:
+		var from_pos: Vector2i = unit.grid_pos
 		unit.grid_pos = best_pos
 		unit.moved = true
+		battle_grid.start_walk(unit, from_pos, best_pos)
+		await battle_grid.walk_completed
 	# Then attack if possible
-	_ai_attack_priority(unit, enemies, false)
+	await _ai_attack_priority(unit, enemies, false)
 
 
 func _ai_can_attack(unit, target) -> bool:
@@ -999,7 +977,7 @@ func _ai_target_score(unit, target, lowest_hp_first: bool) -> float:
 	return score
 
 
-func _ai_move_smart(unit, enemies: Array) -> void:
+func _ai_move_smart(unit, enemies: Array) -> bool:
 	# Move toward best reachable attack position
 	var nearest = null
 	var nearest_dist: int = 999
@@ -1011,12 +989,13 @@ func _ai_move_smart(unit, enemies: Array) -> void:
 			nearest_dist = d
 			nearest = enemy
 	if nearest != null:
-		_ai_move_toward(unit, nearest.grid_pos)
+		return _ai_move_toward(unit, nearest.grid_pos)
+	return false
 
 
-func _ai_move_toward(unit, target_pos: Vector2i) -> void:
+func _ai_move_toward(unit, target_pos: Vector2i) -> bool:
 	if unit.moved:
-		return
+		return false
 	var best_pos: Vector2i = unit.grid_pos
 	var best_dist: int = _distance(unit.grid_pos, target_pos)
 	# Prefer landing adjacent to target (distance 1) over just getting closer
@@ -1040,8 +1019,12 @@ func _ai_move_toward(unit, target_pos: Vector2i) -> void:
 				best_dist = d
 				best_pos = cell
 	if best_pos != unit.grid_pos:
+		var from_pos: Vector2i = unit.grid_pos
 		unit.grid_pos = best_pos
 		unit.moved = true
+		battle_grid.start_walk(unit, from_pos, best_pos)
+		return true
+	return false
 
 
 func _get_ally_units(side: String) -> Array:
@@ -1088,7 +1071,7 @@ func _on_defend_pressed() -> void:
 	action_mode = "none"
 	_hide_action_popup()
 	_append_log("%s defends." % _unit_name(current_unit))
-	_check_battle_end_or_continue()
+	_show_facing_picker(current_unit)
 
 
 func _on_skill_pressed() -> void:
@@ -1116,41 +1099,26 @@ func _open_skill_picker(skills: Array[String]) -> void:
 	if old != null:
 		old.queue_free()
 
-	var picker := PanelContainer.new()
+	var scene := preload("res://Scenes/battle/skill_picker.tscn")
+	var picker: PanelContainer = scene.instantiate()
 	picker.name = "SkillPicker"
-	picker.custom_minimum_size = Vector2(240, 0)
 
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.10, 0.12, 0.18, 0.97)
-	style.border_color = Color(0.6, 0.5, 0.9, 1.0)
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(4)
-	picker.add_theme_stylebox_override("panel", style)
-
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 4)
-	picker.add_child(vbox)
-
-	var hdr := Label.new()
+	var hdr: Label = picker.get_node("VBoxContainer/Header")
 	var _sp: int = int(current_unit.current_sp)
 	var _max_sp: int = int(current_unit.max_sp) if "max_sp" in current_unit else 10
 	hdr.text = "Sigils  (SP: %d/%d)" % [_sp, _max_sp]
-	hdr.add_theme_font_size_override("font_size", 11)
-	hdr.add_theme_color_override("font_color", Color(0.85, 0.7, 1.0))
-	vbox.add_child(hdr)
 
+	var skill_list: VBoxContainer = picker.get_node("VBoxContainer/SkillList")
 	for skill_id in skills:
 		var display_name: String = SkillLibraryScript.get_skill_display_name(skill_id)
 		var desc: String = SkillLibraryScript.get_skill_description(skill_id)
 		var cost: int = SkillLibraryScript.get_skill_sp_cost(skill_id, current_unit)
 		var full_action: bool = SkillLibraryScript.is_full_action(skill_id, current_unit)
-		var _cur_sp: int = int(current_unit.current_sp)
-		var can_use: bool = _cur_sp >= cost and not current_unit.disrupted
+		var can_use: bool = int(current_unit.current_sp) >= cost and not current_unit.disrupted
 
 		var row := VBoxContainer.new()
 		var btn := Button.new()
-		var action_tag: String = "  [FULL]" if full_action else ""
-		btn.text = "%s  (%d SP)%s" % [display_name, cost, action_tag]
+		btn.text = "%s  (%d SP)%s" % [display_name, cost, "  [FULL]" if full_action else ""]
 		btn.add_theme_font_size_override("font_size", 11)
 		btn.disabled = not can_use
 
@@ -1169,16 +1137,12 @@ func _open_skill_picker(skills: Array[String]) -> void:
 			)
 		row.add_child(btn)
 		row.add_child(desc_lbl)
-		vbox.add_child(row)
+		skill_list.add_child(row)
 
-	var cancel := Button.new()
-	cancel.text = "Cancel"
-	cancel.add_theme_font_size_override("font_size", 10)
+	var cancel: Button = picker.get_node("VBoxContainer/CancelButton")
 	cancel.pressed.connect(func() -> void: picker.queue_free())
-	vbox.add_child(cancel)
 
-	var _canvas := $CanvasLayer
-	_canvas.add_child(picker)
+	$CanvasLayer.add_child(picker)
 	picker.position = Vector2(500, 150)
 
 
@@ -1301,14 +1265,14 @@ func _execute_skill(skill_name: String, user, target) -> void:
 	current_unit.acted = true
 	action_mode = "none"
 	_pending_skill = ""
-	_check_battle_end_or_continue()
+	_show_facing_picker(current_unit)
 
 
 func _on_item_pressed() -> void:
 	if not _is_player_turn() or current_unit == null or current_unit.acted:
 		return
 	_use_item(current_unit)
-	_check_battle_end_or_continue()
+	_show_facing_picker(current_unit)
 
 
 func _use_item(unit) -> void:
@@ -1349,7 +1313,7 @@ func _on_skip_pressed() -> void:
 	action_mode = "none"
 	_hide_action_popup()
 	_append_log("%s skips." % _unit_name(current_unit))
-	_check_battle_end_or_continue()
+	_show_facing_picker(current_unit)
 
 
 func _on_retreat_pressed() -> void:
@@ -1535,7 +1499,7 @@ func on_grid_clicked(cell: Vector2i) -> void:
 			current_unit.acted = true
 			action_mode = "none"
 			battle_grid.set_attack_range_cells([])
-			_check_battle_end_or_continue()
+			_show_facing_picker(current_unit)
 		elif in_range and not los_ok:
 			info_label.text = "Blocked — no line of sight."
 		else:
@@ -1885,17 +1849,15 @@ func _distance(a: Vector2i, b: Vector2i) -> int:
 
 
 func _facing_from_move(from: Vector2i, to: Vector2i) -> String:
-	var dx: int = sign(to.x - from.x)
-	var dy: int = sign(to.y - from.y)
-	if dx == 1  and dy == 0:  return "east"
-	if dx == -1 and dy == 0:  return "west"
-	if dx == 0  and dy == 1:  return "south"
-	if dx == 0  and dy == -1: return "north"
-	if dx == 1  and dy == 1:  return "south-east"
-	if dx == 1  and dy == -1: return "north-east"
-	if dx == -1 and dy == 1:  return "south-west"
-	if dx == -1 and dy == -1: return "north-west"
-	return "south"
+	var dx: int = to.x - from.x
+	var dy: int = to.y - from.y
+	# Snap to 4 isometric diagonal directions.
+	# Grid east (dx>0) = screen lower-right = SE
+	# Grid south (dy>0) = screen lower-left = SW
+	# Ties go to the x-axis (SE/NW preferred)
+	if abs(dx) >= abs(dy):
+		return "south-east" if dx > 0 else "north-west"
+	return "south-west" if dy > 0 else "north-east"
 
 
 func _find_first_alive(units: Array):
@@ -1955,9 +1917,8 @@ func _show_stat_panel(unit) -> void:
 		_clear_unit_panel_left()
 		return
 	# Name + color
-	var name_color: Color = Color(0.35, 0.90, 1.0) if unit.side == _player_side else Color(1.0, 0.40, 0.40)
 	_left_unit_name.text = _unit_name(unit)
-	_left_unit_name.add_theme_color_override("font_color", name_color)
+	_left_unit_name.add_theme_color_override("font_color", Color(0, 0, 0, 1))
 	# Portrait — use "determined" variant as default for player leaders
 	var skey: String = str(unit.get("sprite_key") if unit.get("sprite_key") != null else "")
 	if skey != "":
@@ -2020,9 +1981,8 @@ func _show_enemy_panel(unit) -> void:
 	if unit == null:
 		_clear_unit_panel_right()
 		return
-	var name_color: Color = Color(0.35, 0.90, 1.0) if unit.side == _player_side else Color(1.0, 0.40, 0.40)
 	_right_unit_name.text = _unit_name(unit)
-	_right_unit_name.add_theme_color_override("font_color", name_color)
+	_right_unit_name.add_theme_color_override("font_color", Color(0, 0, 0, 1))
 	# Portrait — load for leaders if available, null for non-leaders
 	var skey: String = str(unit.get("sprite_key") if unit.get("sprite_key") != null else "")
 	if skey != "" and bool(unit.is_leader_combatant):
@@ -2189,6 +2149,46 @@ func _update_button_state() -> void:
 		skill_button.disabled = skill_off
 
 
+func _hide_facing_picker() -> void:
+	if _facing_popup != null and is_instance_valid(_facing_popup):
+		_facing_popup.queue_free()
+	_facing_popup = null
+
+
+func _show_facing_picker(unit) -> void:
+	_hide_facing_picker()
+	if unit == null:
+		_check_battle_end_or_continue()
+		return
+
+	var scene := preload("res://Scenes/battle/facing_picker.tscn")
+	_facing_popup = scene.instantiate()
+
+	const DIR_BUTTONS := [
+		["north-west", "NWButton"],
+		["north-east", "NEButton"],
+		["south-west", "SWButton"],
+		["south-east", "SEButton"],
+	]
+	for entry in DIR_BUTTONS:
+		var captured_dir: String = entry[0]
+		var btn: Button = _facing_popup.get_node("VBoxContainer/GridMargin/DirectionGrid/" + entry[1])
+		if str(unit.get("facing")) == captured_dir:
+			btn.modulate = Color(0.4, 0.9, 1.0)
+		btn.pressed.connect(func() -> void:
+			unit.facing = captured_dir
+			battle_grid.queue_redraw()
+			_hide_facing_picker()
+			_check_battle_end_or_continue()
+		)
+
+	_facing_popup.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_facing_popup.grow_horizontal = Control.GROW_DIRECTION_END
+	_facing_popup.grow_vertical   = Control.GROW_DIRECTION_END
+	$CanvasLayer/UI.add_child(_facing_popup)
+	_facing_popup.position = _calc_popup_screen_pos()
+
+
 func _hide_action_popup() -> void:
 	if _action_popup != null and is_instance_valid(_action_popup):
 		_action_popup.queue_free()
@@ -2208,34 +2208,30 @@ func _show_action_popup(unit) -> void:
 		_update_button_state()
 		return
 	_hide_action_popup()
+	_hide_facing_picker()
 	if unit == null or not _is_player_turn() or unit != current_unit:
 		return
 
-	_action_popup = PanelContainer.new()
-	_action_popup.z_index = 20
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.06, 0.08, 0.15, 0.96)
-	style.border_color = Color(0.45, 0.65, 1.0, 1.0)
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(5)
-	style.content_margin_left   = 10.0
-	style.content_margin_right  = 10.0
-	style.content_margin_top    = 8.0
-	style.content_margin_bottom = 8.0
-	_action_popup.add_theme_stylebox_override("panel", style)
+	var scene := preload("res://Scenes/battle/action_popup.tscn")
+	_action_popup = scene.instantiate()
 
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 5)
-	_action_popup.add_child(vbox)
+	move_button    = _action_popup.get_node("VBoxContainer/MoveButton")
+	attack_button  = _action_popup.get_node("VBoxContainer/AttackButton")
+	defend_button  = _action_popup.get_node("VBoxContainer/DefendButton")
+	skill_button   = _action_popup.get_node("VBoxContainer/SkillButton")
+	item_button    = _action_popup.get_node("VBoxContainer/ItemButton")
+	skip_button    = _action_popup.get_node("VBoxContainer/SkipButton")
+	retreat_button = _action_popup.get_node("VBoxContainer/RetreatButton")
 
-	var active: bool = not bool(unit.acted)
-
-	move_button   = _make_popup_btn("Move",   unit.moved or unit.acted)
-	attack_button = _make_popup_btn("Attack", unit.acted)
-	defend_button = _make_popup_btn("Defend", unit.acted)
+	# Disable buttons based on unit state
+	move_button.disabled   = bool(unit.moved) or bool(unit.acted)
+	attack_button.disabled = bool(unit.acted)
+	defend_button.disabled = bool(unit.acted)
+	skip_button.disabled   = bool(unit.acted)
+	retreat_button.disabled = bool(unit.acted)
 
 	var skill_off := true
-	if active and not unit.sigil_disabled:
+	if not bool(unit.acted) and not bool(unit.get("sigil_disabled")):
 		var skills: Array[String] = SkillLibraryScript.get_unit_skills(unit)
 		if not skills.is_empty():
 			var sp: int = int(unit.current_sp)
@@ -2244,10 +2240,7 @@ func _show_action_popup(unit) -> void:
 				var c: int = SkillLibraryScript.get_skill_sp_cost(sid, unit)
 				if c < min_cost: min_cost = c
 			skill_off = sp < min_cost
-	skill_button = _make_popup_btn("Skill", skill_off)
-
-	item_button = _make_popup_btn("Item", false)
-	skip_button = _make_popup_btn("Skip", unit.acted)
+	skill_button.disabled = skill_off
 
 	move_button.pressed.connect(_on_move_pressed)
 	attack_button.pressed.connect(_on_attack_pressed)
@@ -2256,33 +2249,15 @@ func _show_action_popup(unit) -> void:
 	item_button.pressed.connect(_on_item_pressed)
 	skip_button.pressed.connect(_on_skip_pressed)
 
-	vbox.add_child(move_button)
-	vbox.add_child(attack_button)
-	vbox.add_child(defend_button)
-	vbox.add_child(skill_button)
-	vbox.add_child(item_button)
-	vbox.add_child(skip_button)
-
 	# Retreat — leaders only
 	if bool(unit.is_leader_combatant):
-		retreat_button = _make_popup_btn("Retreat", unit.acted)
+		retreat_button.visible = true
 		retreat_button.pressed.connect(_on_retreat_pressed)
-		vbox.add_child(retreat_button)
 
 	_action_popup.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	_action_popup.grow_horizontal = Control.GROW_DIRECTION_END
-	_action_popup.grow_vertical   = Control.GROW_DIRECTION_END
 	$CanvasLayer/UI.add_child(_action_popup)
 	_action_popup.position = _calc_popup_screen_pos()
 
-
-func _make_popup_btn(label: String, disabled: bool) -> Button:
-	var btn := Button.new()
-	btn.text = label
-	btn.disabled = disabled
-	btn.custom_minimum_size = Vector2(130, 32)
-	btn.add_theme_font_size_override("font_size", 13)
-	return btn
 
 
 func _unit_name(unit) -> String:

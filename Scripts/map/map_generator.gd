@@ -27,7 +27,9 @@ func generate_map(settings: MapSettings) -> MapData:
 		mountains = _generate_mountain_polyline(settings, rng)
 
 	_apply_geography_with_chokepoints(settings, provinces, routes, river, mountains, rng)
+	ProvinceNameLibrary.assign_names(provinces, rng)
 
+	map_data.map_seed = rng.seed
 	map_data.provinces = provinces
 	map_data.routes = routes
 	map_data.adjacency = _build_adjacency(routes)
@@ -37,6 +39,21 @@ func generate_map(settings: MapSettings) -> MapData:
 
 	_evaluate_provinces(settings, map_data)
 	_create_factions_and_assign_owners(map_data, rng)
+
+	# Summarise biome spread for diagnostics
+	var biome_counts: Dictionary = {}
+	for prov in map_data.provinces:
+		var b: String = str((prov as ProvinceData).biome)
+		biome_counts[b] = biome_counts.get(b, 0) + 1
+	DebugLogger.log("map_generated", {
+		"province_count": map_data.provinces.size(),
+		"route_count": map_data.routes.size(),
+		"seed": rng.seed,
+		"map_size": str(settings.map_size),
+		"biomes": biome_counts,
+		"has_river": map_data.river_polyline.size() > 0,
+		"has_mountains": map_data.mountain_polyline.size() > 0,
+	})
 
 	return map_data
 

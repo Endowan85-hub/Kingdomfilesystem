@@ -22,7 +22,7 @@ var game_state: GameState = null
 var human_faction_id: int = 0
 var _province_id: int = -1
 
-var _panel: PanelContainer
+var _panel: Panel
 var _header_vbox: VBoxContainer
 var _leader_panel: LeaderPanel = null
 var _recruit_panel: RecruitPanel = null
@@ -36,64 +36,22 @@ func _ready() -> void:
 
 
 func _build_shell() -> void:
-	_panel = PanelContainer.new()
-	_panel.anchor_left   = 1.0
-	_panel.anchor_right  = 1.0
-	_panel.anchor_top    = 0.0
-	_panel.anchor_bottom = 1.0
-	_panel.offset_left   = -520
-	_panel.offset_right  = 0
+	_panel = $Panel
+	_header_vbox = $Panel/HeaderVBox
 
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.06, 0.05, 0.10, 0.97)
-	style.border_color = Color(0.35, 0.30, 0.18)
-	style.set_border_width_all(1)
-	_panel.add_theme_stylebox_override("panel", style)
-	add_child(_panel)
+	$Panel/CloseRow/CloseButton.pressed.connect(_on_close)
 
-	var root_vbox := VBoxContainer.new()
-	root_vbox.add_theme_constant_override("separation", 0)
-	root_vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_panel.add_child(root_vbox)
-
-	# Close row
-	var close_row := HBoxContainer.new()
-	close_row.add_theme_constant_override("separation", 8)
-	root_vbox.add_child(close_row)
-
-	var close_btn := Button.new()
-	close_btn.text = "✕"
-	close_btn.add_theme_font_size_override("font_size", 14)
-	close_btn.custom_minimum_size = Vector2(36, 36)
-	close_btn.pressed.connect(_on_close)
-	close_row.add_child(close_btn)
-
-	var row_spacer := Control.new()
-	row_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	close_row.add_child(row_spacer)
-
-	# Province info header (rebuilt per open())
-	_header_vbox = VBoxContainer.new()
-	_header_vbox.add_theme_constant_override("separation", 4)
-	root_vbox.add_child(_header_vbox)
-
-	# LeaderPanel — full army/items/store/sigils tabs
-	_leader_panel = LeaderPanel.new()
-	_leader_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	# LeaderPanel and RecruitPanel are instanced in the .tscn — just wire callbacks
+	_leader_panel = $Panel/LeaderPanel
 	_leader_panel.toggle_callback = func(lid: int) -> void: _toggle_leader(lid)
 	_leader_panel.selected_ids_callback = func() -> Array: return _selected_leader_ids.duplicate()
 	_leader_panel.order_text_callback = func(lid: int) -> String: return _get_order_text(lid)
 	_leader_panel.dismiss_callback = func(lid: int) -> void: _dismiss_leader(lid)
 	_leader_panel.heal_unit_callback = func(uid: int, pid: int) -> bool: return _heal_unit(uid, pid)
 	_leader_panel.heal_cost_callback = func(uid: int) -> int: return _heal_cost(uid)
-	root_vbox.add_child(_leader_panel)
 
-	# RecruitPanel — shown only for own provinces; self acts as view proxy
-	_recruit_panel = RecruitPanel.new()
+	_recruit_panel = $Panel/RecruitPanel
 	_recruit_panel.set_view(self)
-	_recruit_panel.custom_minimum_size = Vector2(0, 130)
-	_recruit_panel.visible = false
-	root_vbox.add_child(_recruit_panel)
 
 
 # --------------------------------------------------

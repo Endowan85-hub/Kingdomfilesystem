@@ -24,6 +24,7 @@ var _glow_timers  : Array[float]    = []
 
 
 func _ready() -> void:
+	DebugLogger.init(true)  # fresh log every launch
 	_build_ui()
 
 

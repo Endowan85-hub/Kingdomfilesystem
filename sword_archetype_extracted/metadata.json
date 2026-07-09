@@ -1,0 +1,95 @@
+{
+  "character": {
+    "id": "2e396222-2dc8-4452-9c47-1656596995f2",
+    "name": "Sword Archetype Body",
+    "prompt": "Medieval light infantry soldier body, wearing a simple padded gambeson tunic, plain trousers and leather boots, no weapon, no shield, arms relaxed at sides, generic foot soldier build",
+    "size": {
+      "width": 160,
+      "height": 160
+    },
+    "template_id": "mannequin",
+    "directions": 4,
+    "view": "low top-down",
+    "created_at": "2026-04-28T10:42:24.06998+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "west": "rotations/west.png",
+      "east": "rotations/east.png",
+      "north": "rotations/north.png"
+    },
+    "animations": {
+      "animating-0096953a": {
+        "north": [
+          "animations/animating-0096953a/north/frame_000.png",
+          "animations/animating-0096953a/north/frame_001.png",
+          "animations/animating-0096953a/north/frame_002.png",
+          "animations/animating-0096953a/north/frame_003.png"
+        ],
+        "south": [
+          "animations/animating-0096953a/south/frame_000.png",
+          "animations/animating-0096953a/south/frame_001.png",
+          "animations/animating-0096953a/south/frame_002.png",
+          "animations/animating-0096953a/south/frame_003.png"
+        ],
+        "east": [
+          "animations/animating-0096953a/east/frame_000.png",
+          "animations/animating-0096953a/east/frame_001.png",
+          "animations/animating-0096953a/east/frame_002.png",
+          "animations/animating-0096953a/east/frame_003.png"
+        ],
+        "west": [
+          "animations/animating-0096953a/west/frame_000.png",
+          "animations/animating-0096953a/west/frame_001.png",
+          "animations/animating-0096953a/west/frame_002.png",
+          "animations/animating-0096953a/west/frame_003.png"
+        ]
+      },
+      "animating-b9573530": {
+        "south": [
+          "animations/animating-b9573530/south/frame_000.png",
+          "animations/animating-b9573530/south/frame_001.png",
+          "animations/animating-b9573530/south/frame_002.png",
+          "animations/animating-b9573530/south/frame_003.png",
+          "animations/animating-b9573530/south/frame_004.png",
+          "animations/animating-b9573530/south/frame_005.png",
+          "animations/animating-b9573530/south/frame_006.png",
+          "animations/animating-b9573530/south/frame_007.png"
+        ],
+        "north": [
+          "animations/animating-b9573530/north/frame_000.png",
+          "animations/animating-b9573530/north/frame_001.png",
+          "animations/animating-b9573530/north/frame_002.png",
+          "animations/animating-b9573530/north/frame_003.png",
+          "animations/animating-b9573530/north/frame_004.png",
+          "animations/animating-b9573530/north/frame_005.png",
+          "animations/animating-b9573530/north/frame_006.png",
+          "animations/animating-b9573530/north/frame_007.png"
+        ],
+        "west": [
+          "animations/animating-b9573530/west/frame_000.png",
+          "animations/animating-b9573530/west/frame_001.png",
+          "animations/animating-b9573530/west/frame_002.png",
+          "animations/animating-b9573530/west/frame_003.png",
+          "animations/animating-b9573530/west/frame_004.png",
+          "animations/animating-b9573530/west/frame_005.png",
+          "animations/animating-b9573530/west/frame_006.png",
+          "animations/animating-b9573530/west/frame_007.png"
+        ],
+        "east": [
+          "animations/animating-b9573530/east/frame_000.png",
+          "animations/animating-b9573530/east/frame_001.png",
+          "animations/animating-b9573530/east/frame_002.png",
+          "animations/animating-b9573530/east/frame_003.png",
+          "animations/animating-b9573530/east/frame_004.png",
+          "animations/animating-b9573530/east/frame_005.png",
+          "animations/animating-b9573530/east/frame_006.png",
+          "animations/animating-b9573530/east/frame_007.png"
+        ]
+      }
+    }
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-28T10:53:17.584374"
+}

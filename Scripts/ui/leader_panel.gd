@@ -87,96 +87,32 @@ func _ready() -> void:
 
 func _build_ui() -> void:
 	custom_minimum_size = Vector2(MIN_WIDTH, MIN_HEIGHT)
-	size = Vector2(340, 420)
 
-	_panel = PanelContainer.new()
-	_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_panel)
+	_panel         = $Panel
+	_title_bar     = $Panel/VBox/TitleBar
+	_title_label   = $Panel/VBox/TitleBar/TitleLabel
+	_heal_button   = $Panel/VBox/TitleBar/HealButton
+	_tab_bar       = $Panel/VBox/TabBar
+	_scroll        = $Panel/VBox/Scroll
+	_leader_rows   = $Panel/VBox/Scroll/LeaderRows
+	_resize_handle = $ResizeHandle
 
-	var vbox := VBoxContainer.new()
-	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_panel.add_child(vbox)
-
-	_title_bar = Panel.new()
-	_title_bar.custom_minimum_size = Vector2(0, 28)
-	_title_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vbox.add_child(_title_bar)
-
-	_title_label = Label.new()
-	_title_label.text = "Army Panel"
-	_title_label.position = Vector2(8, 0)
-	_title_label.size = Vector2(180, 28)
-	_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_title_bar.add_child(_title_label)
-
-	_heal_button = Button.new()
-	_heal_button.text = "Heal: OFF"
-	_heal_button.custom_minimum_size = Vector2(92, 24)
-	_heal_button.position = Vector2(190, 2)
-	_heal_button.toggle_mode = true
-	_heal_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	_heal_button.pressed.connect(func() -> void:
 		set_heal_mode(_heal_button.button_pressed)
 	)
-	_title_bar.add_child(_heal_button)
 
-	# Tab bar — Army / Items / Store
-	_tab_bar = HBoxContainer.new()
-	_tab_bar.custom_minimum_size = Vector2(0, 26)
-	_tab_bar.add_theme_constant_override("separation", 2)
-	vbox.add_child(_tab_bar)
-	for tab_name in ["army", "items", "store", "sigils"]:
-		var tab_btn := Button.new()
-		tab_btn.text = tab_name.capitalize()
-		tab_btn.toggle_mode = true
-		tab_btn.button_pressed = (tab_name == "army")
-		tab_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		tab_btn.add_theme_font_size_override("font_size", 11)
-		tab_btn.mouse_filter = Control.MOUSE_FILTER_STOP
-		var captured_tab: String = tab_name
-		tab_btn.pressed.connect(func() -> void:
+	var tab_names := ["army", "items", "store", "sigils"]
+	var tab_nodes := ["ArmyTab", "ItemsTab", "StoreTab", "SigilsTab"]
+	for i in tab_names.size():
+		var captured_tab: String = tab_names[i]
+		var btn: Button = _tab_bar.get_node(tab_nodes[i])
+		btn.pressed.connect(func() -> void:
 			_switch_tab(captured_tab)
 		)
-		_tab_bar.add_child(tab_btn)
-
-	_scroll = ScrollContainer.new()
-	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_scroll.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vbox.add_child(_scroll)
-
-	_leader_rows = VBoxContainer.new()
-	_leader_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_leader_rows.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_scroll.add_child(_leader_rows)
-
-	_resize_handle = Control.new()
-	_resize_handle.custom_minimum_size = Vector2(HANDLE_SIZE, HANDLE_SIZE)
-	_resize_handle.size = Vector2(HANDLE_SIZE, HANDLE_SIZE)
-	_resize_handle.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
-	add_child(_resize_handle)
-	_reposition_handle()
-
-	var title_style := StyleBoxFlat.new()
-	title_style.bg_color = Color(0.18, 0.18, 0.22, 1.0)
-	_title_bar.add_theme_stylebox_override("panel", title_style)
-
-	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.12, 0.12, 0.15, 0.92)
-	panel_style.border_width_left = 1
-	panel_style.border_width_right = 1
-	panel_style.border_width_top = 1
-	panel_style.border_width_bottom = 1
-	panel_style.border_color = Color(0.35, 0.35, 0.45, 1.0)
-	_panel.add_theme_stylebox_override("panel", panel_style)
 
 	_resize_handle.draw.connect(_draw_handle)
 	_resize_handle.queue_redraw()
+	_reposition_handle()
 
 
 func _draw_handle() -> void:

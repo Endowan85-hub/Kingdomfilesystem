@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://cw72s00mc0jce"]
+
+[ext_resource type="Texture2D" uid="uid://c3asasvvpxguc" path="res://Art/ui/ui_panel_default.png" id="1_panel"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+texture = ExtResource("1_panel")
+texture_margin_left = 79.0
+texture_margin_top = 64.0
+texture_margin_right = 76.0
+texture_margin_bottom = 64.0
+
+[node name="FacingPicker" type="PanelContainer" unique_id=1521468400]
+z_index = 20
+offset_left = -21.0
+offset_top = -15.0
+offset_right = 138.0
+offset_bottom = 138.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1081774282]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=1030860694]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Choose Facing"
+horizontal_alignment = 1
+
+[node name="GridMargin" type="MarginContainer" parent="VBoxContainer" unique_id=441787210]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 13
+
+[node name="DirectionGrid" type="GridContainer" parent="VBoxContainer/GridMargin" unique_id=1722539418]
+layout_mode = 2
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 3
+columns = 2
+
+[node name="NWButton" type="Button" parent="VBoxContainer/GridMargin/DirectionGrid" unique_id=650417827]
+custom_minimum_size = Vector2(36, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "↖"
+
+[node name="NEButton" type="Button" parent="VBoxContainer/GridMargin/DirectionGrid" unique_id=1461481413]
+custom_minimum_size = Vector2(36, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "↗"
+
+[node name="SWButton" type="Button" parent="VBoxContainer/GridMargin/DirectionGrid" unique_id=1010667089]
+custom_minimum_size = Vector2(36, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "↙"
+
+[node name="SEButton" type="Button" parent="VBoxContainer/GridMargin/DirectionGrid" unique_id=876373191]
+custom_minimum_size = Vector2(36, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "↘"

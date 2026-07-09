@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://did3c8ejo2pc6"]
+
+[ext_resource type="Script" uid="uid://ibd3pi5xlyk0" path="res://Scripts/ui/leader_panel.gd" id="1_leaderpanel"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.12, 0.12, 0.15, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.35, 0.45, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_title"]
+bg_color = Color(0.18, 0.18, 0.22, 1)
+
+[node name="LeaderPanel" type="Control" unique_id=592874716]
+custom_minimum_size = Vector2(280, 120)
+layout_mode = 3
+anchors_preset = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 340.0
+offset_bottom = 420.0
+script = ExtResource("1_leaderpanel")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=235173355]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 62.0
+offset_bottom = 51.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=1684894423]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TitleBar" type="Panel" parent="Panel/VBox" unique_id=1034271426]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_title")
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox/TitleBar" unique_id=1262815090]
+layout_mode = 0
+offset_left = 8.0
+offset_right = 188.0
+offset_bottom = 28.0
+text = "Army Panel"
+vertical_alignment = 1
+
+[node name="HealButton" type="Button" parent="Panel/VBox/TitleBar" unique_id=309908705]
+custom_minimum_size = Vector2(92, 24)
+layout_mode = 0
+offset_left = 190.0
+offset_top = 2.0
+offset_right = 282.0
+offset_bottom = 26.0
+toggle_mode = true
+text = "Heal: OFF"
+
+[node name="TabBar" type="HBoxContainer" parent="Panel/VBox" unique_id=943457520]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ArmyTab" type="Button" parent="Panel/VBox/TabBar" unique_id=133690287]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+toggle_mode = true
+button_pressed = true
+text = "Army"
+
+[node name="ItemsTab" type="Button" parent="Panel/VBox/TabBar" unique_id=65212241]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+toggle_mode = true
+text = "Items"
+
+[node name="StoreTab" type="Button" parent="Panel/VBox/TabBar" unique_id=2014448206]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+toggle_mode = true
+text = "Store"
+
+[node name="SigilsTab" type="Button" parent="Panel/VBox/TabBar" unique_id=234291977]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+toggle_mode = true
+text = "Sigils"
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/VBox" unique_id=727863348]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+horizontal_scroll_mode = 2
+
+[node name="LeaderRows" type="VBoxContainer" parent="Panel/VBox/Scroll" unique_id=2080799605]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="ResizeHandle" type="Control" parent="." unique_id=476143684]
+custom_minimum_size = Vector2(16, 16)
+anchors_preset = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_default_cursor_shape = 15

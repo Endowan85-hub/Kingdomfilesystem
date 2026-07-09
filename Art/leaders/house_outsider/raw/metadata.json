@@ -1,0 +1,282 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "da577daa-7f45-4f17-86b5-59f6df03159b",
+        "name": "house_outsider",
+        "prompt": "imposing tribal warlord with long dark hair and heavy beard, thick fur-lined collar over amber and brown riding leathers, no formal armor, gold torc necklace, wielding a heavy curved sword",
+        "size": {
+          "width": 188,
+          "height": 188
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T13:07:24.646512+00:00"
+      },
+      "folder": "house_outsider",
+      "frames": {
+        "rotations": {
+          "south": "house_outsider/rotations/south.png",
+          "south-east": "house_outsider/rotations/south-east.png",
+          "east": "house_outsider/rotations/east.png",
+          "north-east": "house_outsider/rotations/north-east.png",
+          "north": "house_outsider/rotations/north.png",
+          "north-west": "house_outsider/rotations/north-west.png",
+          "west": "house_outsider/rotations/west.png",
+          "south-west": "house_outsider/rotations/south-west.png"
+        },
+        "animations": {
+          "raising_a_weapon_into_a_guarding_defensive_stance": {
+            "south": [
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_000.png",
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_001.png",
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_002.png",
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_003.png",
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_004.png",
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_005.png",
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_006.png",
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_007.png",
+              "house_outsider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_008.png"
+            ]
+          },
+          "falling_backward": {
+            "east": [
+              "house_outsider/animations/falling_backward/east/frame_000.png",
+              "house_outsider/animations/falling_backward/east/frame_001.png",
+              "house_outsider/animations/falling_backward/east/frame_002.png",
+              "house_outsider/animations/falling_backward/east/frame_003.png",
+              "house_outsider/animations/falling_backward/east/frame_004.png",
+              "house_outsider/animations/falling_backward/east/frame_005.png",
+              "house_outsider/animations/falling_backward/east/frame_006.png"
+            ],
+            "north-east": [
+              "house_outsider/animations/falling_backward/north-east/frame_000.png",
+              "house_outsider/animations/falling_backward/north-east/frame_001.png",
+              "house_outsider/animations/falling_backward/north-east/frame_002.png",
+              "house_outsider/animations/falling_backward/north-east/frame_003.png",
+              "house_outsider/animations/falling_backward/north-east/frame_004.png",
+              "house_outsider/animations/falling_backward/north-east/frame_005.png",
+              "house_outsider/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "south-west": [
+              "house_outsider/animations/falling_backward/south-west/frame_000.png",
+              "house_outsider/animations/falling_backward/south-west/frame_001.png",
+              "house_outsider/animations/falling_backward/south-west/frame_002.png",
+              "house_outsider/animations/falling_backward/south-west/frame_003.png",
+              "house_outsider/animations/falling_backward/south-west/frame_004.png",
+              "house_outsider/animations/falling_backward/south-west/frame_005.png",
+              "house_outsider/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "north": [
+              "house_outsider/animations/falling_backward/north/frame_000.png",
+              "house_outsider/animations/falling_backward/north/frame_001.png",
+              "house_outsider/animations/falling_backward/north/frame_002.png",
+              "house_outsider/animations/falling_backward/north/frame_003.png",
+              "house_outsider/animations/falling_backward/north/frame_004.png",
+              "house_outsider/animations/falling_backward/north/frame_005.png",
+              "house_outsider/animations/falling_backward/north/frame_006.png"
+            ],
+            "south-east": [
+              "house_outsider/animations/falling_backward/south-east/frame_000.png",
+              "house_outsider/animations/falling_backward/south-east/frame_001.png",
+              "house_outsider/animations/falling_backward/south-east/frame_002.png",
+              "house_outsider/animations/falling_backward/south-east/frame_003.png",
+              "house_outsider/animations/falling_backward/south-east/frame_004.png",
+              "house_outsider/animations/falling_backward/south-east/frame_005.png",
+              "house_outsider/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "south": [
+              "house_outsider/animations/falling_backward/south/frame_000.png",
+              "house_outsider/animations/falling_backward/south/frame_001.png",
+              "house_outsider/animations/falling_backward/south/frame_002.png",
+              "house_outsider/animations/falling_backward/south/frame_003.png",
+              "house_outsider/animations/falling_backward/south/frame_004.png",
+              "house_outsider/animations/falling_backward/south/frame_005.png",
+              "house_outsider/animations/falling_backward/south/frame_006.png"
+            ],
+            "north-west": [
+              "house_outsider/animations/falling_backward/north-west/frame_000.png",
+              "house_outsider/animations/falling_backward/north-west/frame_001.png",
+              "house_outsider/animations/falling_backward/north-west/frame_002.png",
+              "house_outsider/animations/falling_backward/north-west/frame_003.png",
+              "house_outsider/animations/falling_backward/north-west/frame_004.png",
+              "house_outsider/animations/falling_backward/north-west/frame_005.png",
+              "house_outsider/animations/falling_backward/north-west/frame_006.png"
+            ]
+          },
+          "animating": {
+            "east": [
+              "house_outsider/animations/animating/east/frame_000.png",
+              "house_outsider/animations/animating/east/frame_001.png",
+              "house_outsider/animations/animating/east/frame_002.png",
+              "house_outsider/animations/animating/east/frame_003.png",
+              "house_outsider/animations/animating/east/frame_004.png",
+              "house_outsider/animations/animating/east/frame_005.png",
+              "house_outsider/animations/animating/east/frame_006.png",
+              "house_outsider/animations/animating/east/frame_007.png"
+            ],
+            "south-east": [
+              "house_outsider/animations/animating/south-east/frame_000.png",
+              "house_outsider/animations/animating/south-east/frame_001.png",
+              "house_outsider/animations/animating/south-east/frame_002.png",
+              "house_outsider/animations/animating/south-east/frame_003.png",
+              "house_outsider/animations/animating/south-east/frame_004.png",
+              "house_outsider/animations/animating/south-east/frame_005.png",
+              "house_outsider/animations/animating/south-east/frame_006.png",
+              "house_outsider/animations/animating/south-east/frame_007.png"
+            ],
+            "west": [
+              "house_outsider/animations/animating/west/frame_000.png",
+              "house_outsider/animations/animating/west/frame_001.png",
+              "house_outsider/animations/animating/west/frame_002.png",
+              "house_outsider/animations/animating/west/frame_003.png",
+              "house_outsider/animations/animating/west/frame_004.png",
+              "house_outsider/animations/animating/west/frame_005.png",
+              "house_outsider/animations/animating/west/frame_006.png",
+              "house_outsider/animations/animating/west/frame_007.png"
+            ],
+            "south-west": [
+              "house_outsider/animations/animating/south-west/frame_000.png",
+              "house_outsider/animations/animating/south-west/frame_001.png",
+              "house_outsider/animations/animating/south-west/frame_002.png",
+              "house_outsider/animations/animating/south-west/frame_003.png",
+              "house_outsider/animations/animating/south-west/frame_004.png",
+              "house_outsider/animations/animating/south-west/frame_005.png",
+              "house_outsider/animations/animating/south-west/frame_006.png",
+              "house_outsider/animations/animating/south-west/frame_007.png"
+            ],
+            "north": [
+              "house_outsider/animations/animating/north/frame_000.png",
+              "house_outsider/animations/animating/north/frame_001.png",
+              "house_outsider/animations/animating/north/frame_002.png",
+              "house_outsider/animations/animating/north/frame_003.png",
+              "house_outsider/animations/animating/north/frame_004.png",
+              "house_outsider/animations/animating/north/frame_005.png",
+              "house_outsider/animations/animating/north/frame_006.png",
+              "house_outsider/animations/animating/north/frame_007.png"
+            ],
+            "north-west": [
+              "house_outsider/animations/animating/north-west/frame_000.png",
+              "house_outsider/animations/animating/north-west/frame_001.png",
+              "house_outsider/animations/animating/north-west/frame_002.png",
+              "house_outsider/animations/animating/north-west/frame_003.png",
+              "house_outsider/animations/animating/north-west/frame_004.png",
+              "house_outsider/animations/animating/north-west/frame_005.png",
+              "house_outsider/animations/animating/north-west/frame_006.png",
+              "house_outsider/animations/animating/north-west/frame_007.png"
+            ],
+            "south": [
+              "house_outsider/animations/animating/south/frame_000.png",
+              "house_outsider/animations/animating/south/frame_001.png",
+              "house_outsider/animations/animating/south/frame_002.png",
+              "house_outsider/animations/animating/south/frame_003.png",
+              "house_outsider/animations/animating/south/frame_004.png",
+              "house_outsider/animations/animating/south/frame_005.png",
+              "house_outsider/animations/animating/south/frame_006.png",
+              "house_outsider/animations/animating/south/frame_007.png"
+            ],
+            "north-east": [
+              "house_outsider/animations/animating/north-east/frame_000.png",
+              "house_outsider/animations/animating/north-east/frame_001.png",
+              "house_outsider/animations/animating/north-east/frame_002.png",
+              "house_outsider/animations/animating/north-east/frame_003.png",
+              "house_outsider/animations/animating/north-east/frame_004.png",
+              "house_outsider/animations/animating/north-east/frame_005.png",
+              "house_outsider/animations/animating/north-east/frame_006.png",
+              "house_outsider/animations/animating/north-east/frame_007.png"
+            ]
+          },
+          "slashing_forward_with_a_sword_in_a_powerful_horizo": {
+            "south": [
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_000.png",
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_001.png",
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_002.png",
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_003.png",
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_004.png",
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_005.png",
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_006.png",
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_007.png",
+              "house_outsider/animations/slashing_forward_with_a_sword_in_a_powerful_horizo/south/frame_008.png"
+            ]
+          },
+          "staggering_backward_from_a_hit_head_snapping_to_th": {
+            "south": [
+              "house_outsider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_000.png",
+              "house_outsider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_001.png",
+              "house_outsider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_002.png",
+              "house_outsider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_003.png",
+              "house_outsider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_004.png",
+              "house_outsider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_005.png",
+              "house_outsider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_006.png"
+            ]
+          },
+          "animating-ab274ee6": {
+            "south-west": [
+              "house_outsider/animations/animating-ab274ee6/south-west/frame_000.png",
+              "house_outsider/animations/animating-ab274ee6/south-west/frame_001.png",
+              "house_outsider/animations/animating-ab274ee6/south-west/frame_002.png",
+              "house_outsider/animations/animating-ab274ee6/south-west/frame_003.png"
+            ],
+            "east": [
+              "house_outsider/animations/animating-ab274ee6/east/frame_000.png",
+              "house_outsider/animations/animating-ab274ee6/east/frame_001.png",
+              "house_outsider/animations/animating-ab274ee6/east/frame_002.png",
+              "house_outsider/animations/animating-ab274ee6/east/frame_003.png"
+            ],
+            "south": [
+              "house_outsider/animations/animating-ab274ee6/south/frame_000.png",
+              "house_outsider/animations/animating-ab274ee6/south/frame_001.png",
+              "house_outsider/animations/animating-ab274ee6/south/frame_002.png",
+              "house_outsider/animations/animating-ab274ee6/south/frame_003.png"
+            ],
+            "west": [
+              "house_outsider/animations/animating-ab274ee6/west/frame_000.png",
+              "house_outsider/animations/animating-ab274ee6/west/frame_001.png",
+              "house_outsider/animations/animating-ab274ee6/west/frame_002.png",
+              "house_outsider/animations/animating-ab274ee6/west/frame_003.png"
+            ],
+            "north-east": [
+              "house_outsider/animations/animating-ab274ee6/north-east/frame_000.png",
+              "house_outsider/animations/animating-ab274ee6/north-east/frame_001.png",
+              "house_outsider/animations/animating-ab274ee6/north-east/frame_002.png",
+              "house_outsider/animations/animating-ab274ee6/north-east/frame_003.png"
+            ],
+            "north-west": [
+              "house_outsider/animations/animating-ab274ee6/north-west/frame_000.png",
+              "house_outsider/animations/animating-ab274ee6/north-west/frame_001.png",
+              "house_outsider/animations/animating-ab274ee6/north-west/frame_002.png",
+              "house_outsider/animations/animating-ab274ee6/north-west/frame_003.png"
+            ],
+            "south-east": [
+              "house_outsider/animations/animating-ab274ee6/south-east/frame_000.png",
+              "house_outsider/animations/animating-ab274ee6/south-east/frame_001.png",
+              "house_outsider/animations/animating-ab274ee6/south-east/frame_002.png",
+              "house_outsider/animations/animating-ab274ee6/south-east/frame_003.png"
+            ],
+            "north": [
+              "house_outsider/animations/animating-ab274ee6/north/frame_000.png",
+              "house_outsider/animations/animating-ab274ee6/north/frame_001.png",
+              "house_outsider/animations/animating-ab274ee6/north/frame_002.png",
+              "house_outsider/animations/animating-ab274ee6/north/frame_003.png"
+            ]
+          },
+          "falling_backward-e7eb568a": {
+            "west": [
+              "house_outsider/animations/falling_backward-e7eb568a/west/frame_000.png",
+              "house_outsider/animations/falling_backward-e7eb568a/west/frame_001.png",
+              "house_outsider/animations/falling_backward-e7eb568a/west/frame_002.png",
+              "house_outsider/animations/falling_backward-e7eb568a/west/frame_003.png",
+              "house_outsider/animations/falling_backward-e7eb568a/west/frame_004.png",
+              "house_outsider/animations/falling_backward-e7eb568a/west/frame_005.png",
+              "house_outsider/animations/falling_backward-e7eb568a/west/frame_006.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:43:56.400779"
+}

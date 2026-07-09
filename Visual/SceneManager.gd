@@ -24,7 +24,12 @@ var pending_game_state: GameState = null
 var pending_map_data: MapData = null
 var pending_human_faction_id: int = 0
 var pending_province_count: int = 20
+var pending_terrain: MapTerrainGenerator = null
 
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_EXIT_TREE:
+		DebugLogger.flush()
 
 func go_to_main_menu() -> void:
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)

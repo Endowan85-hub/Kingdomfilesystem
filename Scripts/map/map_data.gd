@@ -2,6 +2,7 @@ extends Resource
 class_name MapData
 
 @export var map_name: String = "Generated Map"
+@export var map_seed: int = 0
 
 @export var provinces: Array = [] # Array[ProvinceData]
 @export var routes: Array = []    # Array[RouteData]
