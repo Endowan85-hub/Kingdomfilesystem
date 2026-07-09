@@ -1,0 +1,282 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "c8c7045d-973f-4036-a2e0-850c8ea25630",
+        "name": "Light Rider",
+        "prompt": "A lightly armored cavalry scout on horseback, wearing basic leather armor and a simple iron helm. Carries a short sword and a round wooden shield. Tier 1 unit with extremely basic armor and weapons \u2014 no elaborate gear, just worn leather and simple iron.",
+        "size": {
+          "width": 196,
+          "height": 196
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T12:26:04.264624+00:00"
+      },
+      "folder": "Light_Rider",
+      "frames": {
+        "rotations": {
+          "south": "Light_Rider/rotations/south.png",
+          "south-east": "Light_Rider/rotations/south-east.png",
+          "east": "Light_Rider/rotations/east.png",
+          "north-east": "Light_Rider/rotations/north-east.png",
+          "north": "Light_Rider/rotations/north.png",
+          "north-west": "Light_Rider/rotations/north-west.png",
+          "west": "Light_Rider/rotations/west.png",
+          "south-west": "Light_Rider/rotations/south-west.png"
+        },
+        "animations": {
+          "animating": {
+            "south-west": [
+              "Light_Rider/animations/animating/south-west/frame_000.png",
+              "Light_Rider/animations/animating/south-west/frame_001.png",
+              "Light_Rider/animations/animating/south-west/frame_002.png",
+              "Light_Rider/animations/animating/south-west/frame_003.png",
+              "Light_Rider/animations/animating/south-west/frame_004.png",
+              "Light_Rider/animations/animating/south-west/frame_005.png",
+              "Light_Rider/animations/animating/south-west/frame_006.png",
+              "Light_Rider/animations/animating/south-west/frame_007.png"
+            ]
+          },
+          "slashing_a_sword_forward_while_mounted_on_horsebac": {
+            "south": [
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_000.png",
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_001.png",
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_002.png",
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_003.png",
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_004.png",
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_005.png",
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_006.png",
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_007.png",
+              "Light_Rider/animations/slashing_a_sword_forward_while_mounted_on_horsebac/south/frame_008.png"
+            ]
+          },
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Light_Rider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Light_Rider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Light_Rider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Light_Rider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Light_Rider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Light_Rider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Light_Rider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "animating-6141a2ce": {
+            "north-west": [
+              "Light_Rider/animations/animating-6141a2ce/north-west/frame_000.png",
+              "Light_Rider/animations/animating-6141a2ce/north-west/frame_001.png",
+              "Light_Rider/animations/animating-6141a2ce/north-west/frame_002.png",
+              "Light_Rider/animations/animating-6141a2ce/north-west/frame_003.png",
+              "Light_Rider/animations/animating-6141a2ce/north-west/frame_004.png",
+              "Light_Rider/animations/animating-6141a2ce/north-west/frame_005.png",
+              "Light_Rider/animations/animating-6141a2ce/north-west/frame_006.png",
+              "Light_Rider/animations/animating-6141a2ce/north-west/frame_007.png"
+            ],
+            "north-east": [
+              "Light_Rider/animations/animating-6141a2ce/north-east/frame_000.png",
+              "Light_Rider/animations/animating-6141a2ce/north-east/frame_001.png",
+              "Light_Rider/animations/animating-6141a2ce/north-east/frame_002.png",
+              "Light_Rider/animations/animating-6141a2ce/north-east/frame_003.png",
+              "Light_Rider/animations/animating-6141a2ce/north-east/frame_004.png",
+              "Light_Rider/animations/animating-6141a2ce/north-east/frame_005.png",
+              "Light_Rider/animations/animating-6141a2ce/north-east/frame_006.png",
+              "Light_Rider/animations/animating-6141a2ce/north-east/frame_007.png"
+            ],
+            "east": [
+              "Light_Rider/animations/animating-6141a2ce/east/frame_000.png",
+              "Light_Rider/animations/animating-6141a2ce/east/frame_001.png",
+              "Light_Rider/animations/animating-6141a2ce/east/frame_002.png",
+              "Light_Rider/animations/animating-6141a2ce/east/frame_003.png",
+              "Light_Rider/animations/animating-6141a2ce/east/frame_004.png",
+              "Light_Rider/animations/animating-6141a2ce/east/frame_005.png",
+              "Light_Rider/animations/animating-6141a2ce/east/frame_006.png",
+              "Light_Rider/animations/animating-6141a2ce/east/frame_007.png"
+            ],
+            "west": [
+              "Light_Rider/animations/animating-6141a2ce/west/frame_000.png",
+              "Light_Rider/animations/animating-6141a2ce/west/frame_001.png",
+              "Light_Rider/animations/animating-6141a2ce/west/frame_002.png",
+              "Light_Rider/animations/animating-6141a2ce/west/frame_003.png",
+              "Light_Rider/animations/animating-6141a2ce/west/frame_004.png",
+              "Light_Rider/animations/animating-6141a2ce/west/frame_005.png",
+              "Light_Rider/animations/animating-6141a2ce/west/frame_006.png",
+              "Light_Rider/animations/animating-6141a2ce/west/frame_007.png"
+            ],
+            "north": [
+              "Light_Rider/animations/animating-6141a2ce/north/frame_000.png",
+              "Light_Rider/animations/animating-6141a2ce/north/frame_001.png",
+              "Light_Rider/animations/animating-6141a2ce/north/frame_002.png",
+              "Light_Rider/animations/animating-6141a2ce/north/frame_003.png",
+              "Light_Rider/animations/animating-6141a2ce/north/frame_004.png",
+              "Light_Rider/animations/animating-6141a2ce/north/frame_005.png",
+              "Light_Rider/animations/animating-6141a2ce/north/frame_006.png",
+              "Light_Rider/animations/animating-6141a2ce/north/frame_007.png"
+            ],
+            "south-east": [
+              "Light_Rider/animations/animating-6141a2ce/south-east/frame_000.png",
+              "Light_Rider/animations/animating-6141a2ce/south-east/frame_001.png",
+              "Light_Rider/animations/animating-6141a2ce/south-east/frame_002.png",
+              "Light_Rider/animations/animating-6141a2ce/south-east/frame_003.png",
+              "Light_Rider/animations/animating-6141a2ce/south-east/frame_004.png",
+              "Light_Rider/animations/animating-6141a2ce/south-east/frame_005.png",
+              "Light_Rider/animations/animating-6141a2ce/south-east/frame_006.png",
+              "Light_Rider/animations/animating-6141a2ce/south-east/frame_007.png"
+            ],
+            "south": [
+              "Light_Rider/animations/animating-6141a2ce/south/frame_000.png",
+              "Light_Rider/animations/animating-6141a2ce/south/frame_001.png",
+              "Light_Rider/animations/animating-6141a2ce/south/frame_002.png",
+              "Light_Rider/animations/animating-6141a2ce/south/frame_003.png",
+              "Light_Rider/animations/animating-6141a2ce/south/frame_004.png",
+              "Light_Rider/animations/animating-6141a2ce/south/frame_005.png",
+              "Light_Rider/animations/animating-6141a2ce/south/frame_006.png",
+              "Light_Rider/animations/animating-6141a2ce/south/frame_007.png"
+            ]
+          },
+          "falling_backward": {
+            "west": [
+              "Light_Rider/animations/falling_backward/west/frame_000.png",
+              "Light_Rider/animations/falling_backward/west/frame_001.png",
+              "Light_Rider/animations/falling_backward/west/frame_002.png",
+              "Light_Rider/animations/falling_backward/west/frame_003.png",
+              "Light_Rider/animations/falling_backward/west/frame_004.png",
+              "Light_Rider/animations/falling_backward/west/frame_005.png",
+              "Light_Rider/animations/falling_backward/west/frame_006.png"
+            ],
+            "south-west": [
+              "Light_Rider/animations/falling_backward/south-west/frame_000.png",
+              "Light_Rider/animations/falling_backward/south-west/frame_001.png",
+              "Light_Rider/animations/falling_backward/south-west/frame_002.png",
+              "Light_Rider/animations/falling_backward/south-west/frame_003.png",
+              "Light_Rider/animations/falling_backward/south-west/frame_004.png",
+              "Light_Rider/animations/falling_backward/south-west/frame_005.png",
+              "Light_Rider/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "south": [
+              "Light_Rider/animations/falling_backward/south/frame_000.png",
+              "Light_Rider/animations/falling_backward/south/frame_001.png",
+              "Light_Rider/animations/falling_backward/south/frame_002.png",
+              "Light_Rider/animations/falling_backward/south/frame_003.png",
+              "Light_Rider/animations/falling_backward/south/frame_004.png",
+              "Light_Rider/animations/falling_backward/south/frame_005.png",
+              "Light_Rider/animations/falling_backward/south/frame_006.png"
+            ],
+            "north-east": [
+              "Light_Rider/animations/falling_backward/north-east/frame_000.png",
+              "Light_Rider/animations/falling_backward/north-east/frame_001.png",
+              "Light_Rider/animations/falling_backward/north-east/frame_002.png",
+              "Light_Rider/animations/falling_backward/north-east/frame_003.png",
+              "Light_Rider/animations/falling_backward/north-east/frame_004.png",
+              "Light_Rider/animations/falling_backward/north-east/frame_005.png",
+              "Light_Rider/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "north-west": [
+              "Light_Rider/animations/falling_backward/north-west/frame_000.png",
+              "Light_Rider/animations/falling_backward/north-west/frame_001.png",
+              "Light_Rider/animations/falling_backward/north-west/frame_002.png",
+              "Light_Rider/animations/falling_backward/north-west/frame_003.png",
+              "Light_Rider/animations/falling_backward/north-west/frame_004.png",
+              "Light_Rider/animations/falling_backward/north-west/frame_005.png",
+              "Light_Rider/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "east": [
+              "Light_Rider/animations/falling_backward/east/frame_000.png",
+              "Light_Rider/animations/falling_backward/east/frame_001.png",
+              "Light_Rider/animations/falling_backward/east/frame_002.png",
+              "Light_Rider/animations/falling_backward/east/frame_003.png",
+              "Light_Rider/animations/falling_backward/east/frame_004.png",
+              "Light_Rider/animations/falling_backward/east/frame_005.png",
+              "Light_Rider/animations/falling_backward/east/frame_006.png"
+            ],
+            "north": [
+              "Light_Rider/animations/falling_backward/north/frame_000.png",
+              "Light_Rider/animations/falling_backward/north/frame_001.png",
+              "Light_Rider/animations/falling_backward/north/frame_002.png",
+              "Light_Rider/animations/falling_backward/north/frame_003.png",
+              "Light_Rider/animations/falling_backward/north/frame_004.png",
+              "Light_Rider/animations/falling_backward/north/frame_005.png",
+              "Light_Rider/animations/falling_backward/north/frame_006.png"
+            ],
+            "south-east": [
+              "Light_Rider/animations/falling_backward/south-east/frame_000.png",
+              "Light_Rider/animations/falling_backward/south-east/frame_001.png",
+              "Light_Rider/animations/falling_backward/south-east/frame_002.png",
+              "Light_Rider/animations/falling_backward/south-east/frame_003.png",
+              "Light_Rider/animations/falling_backward/south-east/frame_004.png",
+              "Light_Rider/animations/falling_backward/south-east/frame_005.png",
+              "Light_Rider/animations/falling_backward/south-east/frame_006.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png",
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_005.png",
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_006.png",
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_007.png",
+              "Light_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_008.png"
+            ]
+          },
+          "animating-b01014da": {
+            "south-east": [
+              "Light_Rider/animations/animating-b01014da/south-east/frame_000.png",
+              "Light_Rider/animations/animating-b01014da/south-east/frame_001.png",
+              "Light_Rider/animations/animating-b01014da/south-east/frame_002.png",
+              "Light_Rider/animations/animating-b01014da/south-east/frame_003.png"
+            ],
+            "north": [
+              "Light_Rider/animations/animating-b01014da/north/frame_000.png",
+              "Light_Rider/animations/animating-b01014da/north/frame_001.png",
+              "Light_Rider/animations/animating-b01014da/north/frame_002.png",
+              "Light_Rider/animations/animating-b01014da/north/frame_003.png"
+            ],
+            "east": [
+              "Light_Rider/animations/animating-b01014da/east/frame_000.png",
+              "Light_Rider/animations/animating-b01014da/east/frame_001.png",
+              "Light_Rider/animations/animating-b01014da/east/frame_002.png",
+              "Light_Rider/animations/animating-b01014da/east/frame_003.png"
+            ],
+            "south": [
+              "Light_Rider/animations/animating-b01014da/south/frame_000.png",
+              "Light_Rider/animations/animating-b01014da/south/frame_001.png",
+              "Light_Rider/animations/animating-b01014da/south/frame_002.png",
+              "Light_Rider/animations/animating-b01014da/south/frame_003.png"
+            ],
+            "south-west": [
+              "Light_Rider/animations/animating-b01014da/south-west/frame_000.png",
+              "Light_Rider/animations/animating-b01014da/south-west/frame_001.png",
+              "Light_Rider/animations/animating-b01014da/south-west/frame_002.png",
+              "Light_Rider/animations/animating-b01014da/south-west/frame_003.png"
+            ],
+            "north-east": [
+              "Light_Rider/animations/animating-b01014da/north-east/frame_000.png",
+              "Light_Rider/animations/animating-b01014da/north-east/frame_001.png",
+              "Light_Rider/animations/animating-b01014da/north-east/frame_002.png",
+              "Light_Rider/animations/animating-b01014da/north-east/frame_003.png"
+            ],
+            "north-west": [
+              "Light_Rider/animations/animating-b01014da/north-west/frame_000.png",
+              "Light_Rider/animations/animating-b01014da/north-west/frame_001.png",
+              "Light_Rider/animations/animating-b01014da/north-west/frame_002.png",
+              "Light_Rider/animations/animating-b01014da/north-west/frame_003.png"
+            ],
+            "west": [
+              "Light_Rider/animations/animating-b01014da/west/frame_000.png",
+              "Light_Rider/animations/animating-b01014da/west/frame_001.png",
+              "Light_Rider/animations/animating-b01014da/west/frame_002.png",
+              "Light_Rider/animations/animating-b01014da/west/frame_003.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:50:30.825525"
+}

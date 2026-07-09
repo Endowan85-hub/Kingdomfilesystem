@@ -1,0 +1,200 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "58eeabb8-64a9-42d6-a168-2844a7692f79",
+        "name": "Forest Rider",
+        "prompt": "A tier 1 forest scout mounted on a plain brown horse, wearing basic green and brown leather armor. Carries a simple wooden lance. Minimal gear, no ornate details, conscript-level equipment.",
+        "size": {
+          "width": 168,
+          "height": 168
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T00:05:17.705152+00:00"
+      },
+      "folder": "Forest_Rider",
+      "frames": {
+        "rotations": {
+          "south": "Forest_Rider/rotations/south.png",
+          "south-east": "Forest_Rider/rotations/south-east.png",
+          "east": "Forest_Rider/rotations/east.png",
+          "north-east": "Forest_Rider/rotations/north-east.png",
+          "north": "Forest_Rider/rotations/north.png",
+          "north-west": "Forest_Rider/rotations/north-west.png",
+          "west": "Forest_Rider/rotations/west.png",
+          "south-west": "Forest_Rider/rotations/south-west.png"
+        },
+        "animations": {
+          "animating": {
+            "north-east": [
+              "Forest_Rider/animations/animating/north-east/frame_000.png",
+              "Forest_Rider/animations/animating/north-east/frame_001.png",
+              "Forest_Rider/animations/animating/north-east/frame_002.png",
+              "Forest_Rider/animations/animating/north-east/frame_003.png"
+            ],
+            "north-west": [
+              "Forest_Rider/animations/animating/north-west/frame_000.png",
+              "Forest_Rider/animations/animating/north-west/frame_001.png",
+              "Forest_Rider/animations/animating/north-west/frame_002.png",
+              "Forest_Rider/animations/animating/north-west/frame_003.png"
+            ],
+            "west": [
+              "Forest_Rider/animations/animating/west/frame_000.png",
+              "Forest_Rider/animations/animating/west/frame_001.png",
+              "Forest_Rider/animations/animating/west/frame_002.png",
+              "Forest_Rider/animations/animating/west/frame_003.png"
+            ],
+            "south": [
+              "Forest_Rider/animations/animating/south/frame_000.png",
+              "Forest_Rider/animations/animating/south/frame_001.png",
+              "Forest_Rider/animations/animating/south/frame_002.png",
+              "Forest_Rider/animations/animating/south/frame_003.png"
+            ],
+            "south-east": [
+              "Forest_Rider/animations/animating/south-east/frame_000.png",
+              "Forest_Rider/animations/animating/south-east/frame_001.png",
+              "Forest_Rider/animations/animating/south-east/frame_002.png",
+              "Forest_Rider/animations/animating/south-east/frame_003.png"
+            ],
+            "south-west": [
+              "Forest_Rider/animations/animating/south-west/frame_000.png",
+              "Forest_Rider/animations/animating/south-west/frame_001.png",
+              "Forest_Rider/animations/animating/south-west/frame_002.png",
+              "Forest_Rider/animations/animating/south-west/frame_003.png"
+            ],
+            "north": [
+              "Forest_Rider/animations/animating/north/frame_000.png",
+              "Forest_Rider/animations/animating/north/frame_001.png",
+              "Forest_Rider/animations/animating/north/frame_002.png",
+              "Forest_Rider/animations/animating/north/frame_003.png"
+            ],
+            "east": [
+              "Forest_Rider/animations/animating/east/frame_000.png",
+              "Forest_Rider/animations/animating/east/frame_001.png",
+              "Forest_Rider/animations/animating/east/frame_002.png",
+              "Forest_Rider/animations/animating/east/frame_003.png"
+            ]
+          },
+          "raising_a_weapon_into_a_guarding_defensive_stance": {
+            "south": [
+              "Forest_Rider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_000.png",
+              "Forest_Rider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_001.png",
+              "Forest_Rider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_002.png",
+              "Forest_Rider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_003.png",
+              "Forest_Rider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_004.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Forest_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Forest_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Forest_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Forest_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Forest_Rider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png"
+            ]
+          },
+          "animating-ac57fa0c": {
+            "south-east": [
+              "Forest_Rider/animations/animating-ac57fa0c/south-east/frame_000.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-east/frame_001.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-east/frame_002.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-east/frame_003.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-east/frame_004.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-east/frame_005.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-east/frame_006.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-east/frame_007.png"
+            ],
+            "south-west": [
+              "Forest_Rider/animations/animating-ac57fa0c/south-west/frame_000.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-west/frame_001.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-west/frame_002.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-west/frame_003.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-west/frame_004.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-west/frame_005.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-west/frame_006.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south-west/frame_007.png"
+            ],
+            "east": [
+              "Forest_Rider/animations/animating-ac57fa0c/east/frame_000.png",
+              "Forest_Rider/animations/animating-ac57fa0c/east/frame_001.png",
+              "Forest_Rider/animations/animating-ac57fa0c/east/frame_002.png",
+              "Forest_Rider/animations/animating-ac57fa0c/east/frame_003.png",
+              "Forest_Rider/animations/animating-ac57fa0c/east/frame_004.png",
+              "Forest_Rider/animations/animating-ac57fa0c/east/frame_005.png",
+              "Forest_Rider/animations/animating-ac57fa0c/east/frame_006.png",
+              "Forest_Rider/animations/animating-ac57fa0c/east/frame_007.png"
+            ],
+            "north-east": [
+              "Forest_Rider/animations/animating-ac57fa0c/north-east/frame_000.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-east/frame_001.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-east/frame_002.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-east/frame_003.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-east/frame_004.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-east/frame_005.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-east/frame_006.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-east/frame_007.png"
+            ],
+            "north-west": [
+              "Forest_Rider/animations/animating-ac57fa0c/north-west/frame_000.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-west/frame_001.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-west/frame_002.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-west/frame_003.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-west/frame_004.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-west/frame_005.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-west/frame_006.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north-west/frame_007.png"
+            ],
+            "west": [
+              "Forest_Rider/animations/animating-ac57fa0c/west/frame_000.png",
+              "Forest_Rider/animations/animating-ac57fa0c/west/frame_001.png",
+              "Forest_Rider/animations/animating-ac57fa0c/west/frame_002.png",
+              "Forest_Rider/animations/animating-ac57fa0c/west/frame_003.png",
+              "Forest_Rider/animations/animating-ac57fa0c/west/frame_004.png",
+              "Forest_Rider/animations/animating-ac57fa0c/west/frame_005.png",
+              "Forest_Rider/animations/animating-ac57fa0c/west/frame_006.png",
+              "Forest_Rider/animations/animating-ac57fa0c/west/frame_007.png"
+            ],
+            "north": [
+              "Forest_Rider/animations/animating-ac57fa0c/north/frame_000.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north/frame_001.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north/frame_002.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north/frame_003.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north/frame_004.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north/frame_005.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north/frame_006.png",
+              "Forest_Rider/animations/animating-ac57fa0c/north/frame_007.png"
+            ],
+            "south": [
+              "Forest_Rider/animations/animating-ac57fa0c/south/frame_000.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south/frame_001.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south/frame_002.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south/frame_003.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south/frame_004.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south/frame_005.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south/frame_006.png",
+              "Forest_Rider/animations/animating-ac57fa0c/south/frame_007.png"
+            ]
+          },
+          "thrusting_a_lance_forward_while_mounted_on_horseba": {
+            "south": [
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_000.png",
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_001.png",
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_002.png",
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_003.png",
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_004.png",
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_005.png",
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_006.png",
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_007.png",
+              "Forest_Rider/animations/thrusting_a_lance_forward_while_mounted_on_horseba/south/frame_008.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:52:18.665438"
+}

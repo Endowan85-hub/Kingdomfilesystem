@@ -1,0 +1,275 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "029d2ffe-bea5-4526-ac38-b9b42bc78d2a",
+        "name": "Marine",
+        "prompt": "A tier 1 coastal marine in basic navy blue and grey leather armor, carrying a simple cutlass and a plain round shield. No ornate details, conscript-level equipment.",
+        "size": {
+          "width": 116,
+          "height": 116
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T04:20:14.655718+00:00"
+      },
+      "folder": "Marine",
+      "frames": {
+        "rotations": {
+          "south": "Marine/rotations/south.png",
+          "south-east": "Marine/rotations/south-east.png",
+          "east": "Marine/rotations/east.png",
+          "north-east": "Marine/rotations/north-east.png",
+          "north": "Marine/rotations/north.png",
+          "north-west": "Marine/rotations/north-west.png",
+          "west": "Marine/rotations/west.png",
+          "south-west": "Marine/rotations/south-west.png"
+        },
+        "animations": {
+          "animating": {
+            "east": [
+              "Marine/animations/animating/east/frame_000.png",
+              "Marine/animations/animating/east/frame_001.png",
+              "Marine/animations/animating/east/frame_002.png",
+              "Marine/animations/animating/east/frame_003.png",
+              "Marine/animations/animating/east/frame_004.png",
+              "Marine/animations/animating/east/frame_005.png",
+              "Marine/animations/animating/east/frame_006.png",
+              "Marine/animations/animating/east/frame_007.png"
+            ],
+            "north": [
+              "Marine/animations/animating/north/frame_000.png",
+              "Marine/animations/animating/north/frame_001.png",
+              "Marine/animations/animating/north/frame_002.png",
+              "Marine/animations/animating/north/frame_003.png",
+              "Marine/animations/animating/north/frame_004.png",
+              "Marine/animations/animating/north/frame_005.png",
+              "Marine/animations/animating/north/frame_006.png",
+              "Marine/animations/animating/north/frame_007.png"
+            ],
+            "west": [
+              "Marine/animations/animating/west/frame_000.png",
+              "Marine/animations/animating/west/frame_001.png",
+              "Marine/animations/animating/west/frame_002.png",
+              "Marine/animations/animating/west/frame_003.png",
+              "Marine/animations/animating/west/frame_004.png",
+              "Marine/animations/animating/west/frame_005.png",
+              "Marine/animations/animating/west/frame_006.png",
+              "Marine/animations/animating/west/frame_007.png"
+            ],
+            "south": [
+              "Marine/animations/animating/south/frame_000.png",
+              "Marine/animations/animating/south/frame_001.png",
+              "Marine/animations/animating/south/frame_002.png",
+              "Marine/animations/animating/south/frame_003.png",
+              "Marine/animations/animating/south/frame_004.png",
+              "Marine/animations/animating/south/frame_005.png",
+              "Marine/animations/animating/south/frame_006.png",
+              "Marine/animations/animating/south/frame_007.png"
+            ],
+            "north-west": [
+              "Marine/animations/animating/north-west/frame_000.png",
+              "Marine/animations/animating/north-west/frame_001.png",
+              "Marine/animations/animating/north-west/frame_002.png",
+              "Marine/animations/animating/north-west/frame_003.png",
+              "Marine/animations/animating/north-west/frame_004.png",
+              "Marine/animations/animating/north-west/frame_005.png",
+              "Marine/animations/animating/north-west/frame_006.png",
+              "Marine/animations/animating/north-west/frame_007.png"
+            ],
+            "south-west": [
+              "Marine/animations/animating/south-west/frame_000.png",
+              "Marine/animations/animating/south-west/frame_001.png",
+              "Marine/animations/animating/south-west/frame_002.png",
+              "Marine/animations/animating/south-west/frame_003.png",
+              "Marine/animations/animating/south-west/frame_004.png",
+              "Marine/animations/animating/south-west/frame_005.png",
+              "Marine/animations/animating/south-west/frame_006.png",
+              "Marine/animations/animating/south-west/frame_007.png"
+            ],
+            "south-east": [
+              "Marine/animations/animating/south-east/frame_000.png",
+              "Marine/animations/animating/south-east/frame_001.png",
+              "Marine/animations/animating/south-east/frame_002.png",
+              "Marine/animations/animating/south-east/frame_003.png",
+              "Marine/animations/animating/south-east/frame_004.png",
+              "Marine/animations/animating/south-east/frame_005.png",
+              "Marine/animations/animating/south-east/frame_006.png",
+              "Marine/animations/animating/south-east/frame_007.png"
+            ],
+            "north-east": [
+              "Marine/animations/animating/north-east/frame_000.png",
+              "Marine/animations/animating/north-east/frame_001.png",
+              "Marine/animations/animating/north-east/frame_002.png",
+              "Marine/animations/animating/north-east/frame_003.png",
+              "Marine/animations/animating/north-east/frame_004.png",
+              "Marine/animations/animating/north-east/frame_005.png",
+              "Marine/animations/animating/north-east/frame_006.png",
+              "Marine/animations/animating/north-east/frame_007.png"
+            ]
+          },
+          "animating-39c7841e": {
+            "west": [
+              "Marine/animations/animating-39c7841e/west/frame_000.png",
+              "Marine/animations/animating-39c7841e/west/frame_001.png",
+              "Marine/animations/animating-39c7841e/west/frame_002.png",
+              "Marine/animations/animating-39c7841e/west/frame_003.png"
+            ],
+            "north-west": [
+              "Marine/animations/animating-39c7841e/north-west/frame_000.png",
+              "Marine/animations/animating-39c7841e/north-west/frame_001.png",
+              "Marine/animations/animating-39c7841e/north-west/frame_002.png",
+              "Marine/animations/animating-39c7841e/north-west/frame_003.png"
+            ],
+            "south-east": [
+              "Marine/animations/animating-39c7841e/south-east/frame_000.png",
+              "Marine/animations/animating-39c7841e/south-east/frame_001.png",
+              "Marine/animations/animating-39c7841e/south-east/frame_002.png",
+              "Marine/animations/animating-39c7841e/south-east/frame_003.png"
+            ],
+            "south-west": [
+              "Marine/animations/animating-39c7841e/south-west/frame_000.png",
+              "Marine/animations/animating-39c7841e/south-west/frame_001.png",
+              "Marine/animations/animating-39c7841e/south-west/frame_002.png",
+              "Marine/animations/animating-39c7841e/south-west/frame_003.png"
+            ],
+            "north": [
+              "Marine/animations/animating-39c7841e/north/frame_000.png",
+              "Marine/animations/animating-39c7841e/north/frame_001.png",
+              "Marine/animations/animating-39c7841e/north/frame_002.png",
+              "Marine/animations/animating-39c7841e/north/frame_003.png"
+            ],
+            "east": [
+              "Marine/animations/animating-39c7841e/east/frame_000.png",
+              "Marine/animations/animating-39c7841e/east/frame_001.png",
+              "Marine/animations/animating-39c7841e/east/frame_002.png",
+              "Marine/animations/animating-39c7841e/east/frame_003.png"
+            ],
+            "north-east": [
+              "Marine/animations/animating-39c7841e/north-east/frame_000.png",
+              "Marine/animations/animating-39c7841e/north-east/frame_001.png",
+              "Marine/animations/animating-39c7841e/north-east/frame_002.png",
+              "Marine/animations/animating-39c7841e/north-east/frame_003.png"
+            ],
+            "south": [
+              "Marine/animations/animating-39c7841e/south/frame_000.png",
+              "Marine/animations/animating-39c7841e/south/frame_001.png",
+              "Marine/animations/animating-39c7841e/south/frame_002.png",
+              "Marine/animations/animating-39c7841e/south/frame_003.png"
+            ]
+          },
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Marine/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Marine/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Marine/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Marine/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Marine/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Marine/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Marine/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "falling_backward": {
+            "west": [
+              "Marine/animations/falling_backward/west/frame_000.png",
+              "Marine/animations/falling_backward/west/frame_001.png",
+              "Marine/animations/falling_backward/west/frame_002.png",
+              "Marine/animations/falling_backward/west/frame_003.png",
+              "Marine/animations/falling_backward/west/frame_004.png",
+              "Marine/animations/falling_backward/west/frame_005.png"
+            ],
+            "south-west": [
+              "Marine/animations/falling_backward/south-west/frame_000.png",
+              "Marine/animations/falling_backward/south-west/frame_001.png",
+              "Marine/animations/falling_backward/south-west/frame_002.png",
+              "Marine/animations/falling_backward/south-west/frame_003.png",
+              "Marine/animations/falling_backward/south-west/frame_004.png",
+              "Marine/animations/falling_backward/south-west/frame_005.png",
+              "Marine/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "north-east": [
+              "Marine/animations/falling_backward/north-east/frame_000.png",
+              "Marine/animations/falling_backward/north-east/frame_001.png",
+              "Marine/animations/falling_backward/north-east/frame_002.png",
+              "Marine/animations/falling_backward/north-east/frame_003.png",
+              "Marine/animations/falling_backward/north-east/frame_004.png",
+              "Marine/animations/falling_backward/north-east/frame_005.png",
+              "Marine/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "north-west": [
+              "Marine/animations/falling_backward/north-west/frame_000.png",
+              "Marine/animations/falling_backward/north-west/frame_001.png",
+              "Marine/animations/falling_backward/north-west/frame_002.png",
+              "Marine/animations/falling_backward/north-west/frame_003.png",
+              "Marine/animations/falling_backward/north-west/frame_004.png",
+              "Marine/animations/falling_backward/north-west/frame_005.png",
+              "Marine/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "south": [
+              "Marine/animations/falling_backward/south/frame_000.png",
+              "Marine/animations/falling_backward/south/frame_001.png",
+              "Marine/animations/falling_backward/south/frame_002.png",
+              "Marine/animations/falling_backward/south/frame_003.png",
+              "Marine/animations/falling_backward/south/frame_004.png",
+              "Marine/animations/falling_backward/south/frame_005.png",
+              "Marine/animations/falling_backward/south/frame_006.png"
+            ],
+            "east": [
+              "Marine/animations/falling_backward/east/frame_000.png",
+              "Marine/animations/falling_backward/east/frame_001.png",
+              "Marine/animations/falling_backward/east/frame_002.png",
+              "Marine/animations/falling_backward/east/frame_003.png",
+              "Marine/animations/falling_backward/east/frame_004.png",
+              "Marine/animations/falling_backward/east/frame_005.png",
+              "Marine/animations/falling_backward/east/frame_006.png"
+            ],
+            "south-east": [
+              "Marine/animations/falling_backward/south-east/frame_000.png",
+              "Marine/animations/falling_backward/south-east/frame_001.png",
+              "Marine/animations/falling_backward/south-east/frame_002.png",
+              "Marine/animations/falling_backward/south-east/frame_003.png",
+              "Marine/animations/falling_backward/south-east/frame_004.png",
+              "Marine/animations/falling_backward/south-east/frame_005.png",
+              "Marine/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "north": [
+              "Marine/animations/falling_backward/north/frame_000.png",
+              "Marine/animations/falling_backward/north/frame_001.png",
+              "Marine/animations/falling_backward/north/frame_002.png",
+              "Marine/animations/falling_backward/north/frame_003.png",
+              "Marine/animations/falling_backward/north/frame_004.png",
+              "Marine/animations/falling_backward/north/frame_005.png",
+              "Marine/animations/falling_backward/north/frame_006.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Marine/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Marine/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Marine/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Marine/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Marine/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png"
+            ]
+          },
+          "slashing_a_cutlass_in_a_quick_horizontal_cut": {
+            "south": [
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_000.png",
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_001.png",
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_002.png",
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_003.png",
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_004.png",
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_005.png",
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_006.png",
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_007.png",
+              "Marine/animations/slashing_a_cutlass_in_a_quick_horizontal_cut/south/frame_008.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:43:19.949177"
+}

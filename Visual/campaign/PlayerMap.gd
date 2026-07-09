@@ -62,7 +62,14 @@ var _dark_atlas_tex: Texture2D = null
 var _dark_tile_data: Array = []
 var _dark_mesh: ArrayMesh = null
 
+var _swamp_atlas_tex: Texture2D = null
+var _swamp_tile_data: Array = []
+var _swamp_ie_tex: Texture2D = null
+var _swamp_ie_data: Array = []
+
 var _tree_textures: Array = []   # Array of Texture2D
+var _dead_tree_start_idx: int = 0
+var _tundra_tree_start_idx: int = 0
 var _grass_overlay_tex: Texture2D = null
 var _province_lvl1_tex: Texture2D = null
 var _province_lvl2_tex: Texture2D = null
@@ -80,21 +87,28 @@ var _river_overlay: Node2D = null
 var _river_grid_path: Array = []         # main river path
 var _river_branch_paths: Array = []      # tributary paths
 var _river_wind_uv: Vector2 = Vector2.ZERO
+var _river_smooth_main: Array = []       # cached Chaikin-smoothed main path
+var _river_smooth_branches: Array = []   # cached Chaikin-smoothed tributary paths
 
 var _tree_positions: Array = []         # raw from terrain generator
 var _drawable_trees: Array = []         # pre-filtered, coast trees removed
-const TREE_WORLD_SIZE: float = 130.0  # half-width/height in world units
+const TREE_WORLD_SIZE: float = 16.0  # half-width/height in world units
 
 # Weather: GPU shader-driven cloud shadows + sun light wash
 const CloudShadowShader := preload("res://Visual/campaign/CloudShadow.gdshader")
+const SwampFogShader    := preload("res://Visual/campaign/SwampFog.gdshader")
 var _weather_overlay: ColorRect = null
 var _sun_time: float = 0.0
-const SUN_CYCLE_SECONDS: float = 600.0  # full east-to-west sweep duration
+var _swamp_fog_overlay: Node2D = null
+var _sun_world_pos: Vector2 = Vector2.ZERO
+const SUN_CYCLE_SECONDS: float = 300.0  # full east-to-west sweep duration
 
 
 
 var _hover_id: int = -1
 var _selected_id: int = -1
+var _border_bounce_start: float = -1.0  # time the one-shot bounce began
+const BORDER_BOUNCE_DURATION: float = 0.7
 
 # Pick mode -- set by CampaignMap when attack/transfer is active
 var _pick_mode: int = 0   # 0=none 1=attack 2=transfer
@@ -167,6 +181,10 @@ func _process(delta: float) -> void:
 
 	_update_weather(delta)
 	_river_wind_uv += Vector2(0.005, 0.0017) * delta
+	if _swamp_fog_overlay != null:
+		_swamp_fog_overlay.set("zoom",   _zoom)
+		_swamp_fog_overlay.set("origin", _origin)
+		_swamp_fog_overlay.queue_redraw()
 	dirty = true
 
 	# Smooth camera lerp (click-to-center)
@@ -241,6 +259,35 @@ func _build_voronoi(data: MapData) -> void:
 			if poly.size() < 3:
 				break
 		_voronoi_cells[int(a.id)] = poly
+
+
+func _grid_key(pos: Vector2, grid: float) -> String:
+	return "%d_%d" % [int(round(pos.x / grid)), int(round(pos.y / grid))]
+
+
+func _precompute_desert_cells(bounds: Rect2, grid: float) -> Dictionary:
+	var cells: Dictionary = {}
+	var x := bounds.position.x - grid
+	while x <= bounds.position.x + bounds.size.x + grid:
+		var y := bounds.position.y - grid
+		while y <= bounds.position.y + bounds.size.y + grid:
+			if _biome_at_pos(Vector2(x, y)) in ["desert", "mountain"]:
+				cells[_grid_key(Vector2(x, y), grid)] = true
+			y += grid
+		x += grid
+	return cells
+
+
+func _biome_at_pos(pos: Vector2) -> String:
+	var best_biome := ""
+	var best_dist := 1.0e18
+	for item in map_data.provinces:
+		var p: ProvinceData = item as ProvinceData
+		var d := pos.distance_squared_to(p.center)
+		if d < best_dist:
+			best_dist = d
+			best_biome = p.biome
+	return best_biome
 
 
 func _map_bounds(data: MapData) -> Rect2:
@@ -417,6 +464,7 @@ func _unhandled_input(event: InputEvent) -> void:
 						var pid: int = _pick_province(mb.position)
 						if pid >= 0:
 							_selected_id = pid
+							_border_bounce_start = Time.get_ticks_msec() / 1000.0
 							province_clicked.emit(pid)
 							_center_on_province(pid)
 							queue_redraw()
@@ -456,6 +504,7 @@ func _draw() -> void:
 	_draw_background()
 	_draw_cells()
 	_draw_grass_overlays()
+	_draw_swamp_pits()
 	_draw_rivers()
 	_draw_cell_borders()
 	_draw_routes()
@@ -514,6 +563,15 @@ func _draw_background() -> void:
 
 
 func _draw_cell_borders() -> void:
+	# One-shot bounce: sin arch over BORDER_BOUNCE_DURATION seconds, then settle at base width.
+	var now: float = Time.get_ticks_msec() / 1000.0
+	var elapsed: float = now - _border_bounce_start
+	var bounce: float
+	if _border_bounce_start >= 0.0 and elapsed < BORDER_BOUNCE_DURATION:
+		bounce = 7.0 + sin(elapsed / BORDER_BOUNCE_DURATION * PI) * 8.0
+	else:
+		bounce = 7.0
+
 	for item in map_data.provinces:
 		var p: ProvinceData = item as ProvinceData
 		var pid: int = int(p.id)
@@ -526,12 +584,21 @@ func _draw_cell_borders() -> void:
 		for v in world_pts:
 			pts.append(_to_screen(v))
 		var is_selected: bool = pid == _selected_id
-		var is_hover: bool = pid == _hover_id
-		draw_polyline(pts, BORDER_DARK, BORDER_W_BASE, true)
+		var is_hover: bool    = pid == _hover_id
 		if is_selected:
-			draw_polyline(pts, Color(1.0, 0.88, 0.30, 1.0), 2.5, true)
-		elif is_hover:
-			draw_polyline(pts, Color(1.0, 1.0, 1.0, 0.80), 1.8, true)
+			var owner_id: int = int(p.owner_id)
+			# Neon: max saturation + brightness on faction hue; gray for neutral.
+			var neon_c: Color
+			if owner_id < 0:
+				neon_c = Color(0.6, 0.6, 0.6, 0.5)
+			else:
+				var base_c: Color = _faction_color(owner_id)
+				neon_c = Color.from_hsv(base_c.h, 1.0, 1.0, 0.5)
+			# Close the polygon by appending the first point.
+			var closed_pts := pts.duplicate()
+			if closed_pts.size() > 0:
+				closed_pts.append(closed_pts[0])
+			draw_polyline(closed_pts, neon_c, bounce, true)
 		if _pick_mode != 0:
 			var owner_id: int = int(p.owner_id)
 			var is_human: bool = owner_id == human_faction_id
@@ -588,7 +655,14 @@ func _load_terrain_from_scene_manager() -> void:
 	_dark_tile_data = terrain.dark_tile_data
 	_tree_textures = terrain.tree_textures
 	_tree_positions = terrain.tree_positions
+	_dead_tree_start_idx = terrain.dead_tree_start_idx
+	_tundra_tree_start_idx = terrain.tundra_tree_start_idx
 	_filter_coast_trees()
+	_swamp_atlas_tex = terrain.swamp_atlas
+	_swamp_tile_data = terrain.swamp_tile_data
+	_swamp_ie_tex    = terrain.swamp_ie_atlas
+	_swamp_ie_data   = terrain.swamp_ie_data
+	_init_swamp_fog()
 	_grass_overlay_tex = load("res://Art/map/terrain/grass.png") as Texture2D
 	_province_lvl1_tex = load("res://Art/map/terrain/province_lvl1.png") as Texture2D
 	_province_lvl2_tex = load("res://Art/map/terrain/province_lvl2.png") as Texture2D
@@ -613,6 +687,8 @@ func _load_terrain_from_scene_manager() -> void:
 	_build_route_paths()
 	_load_river_tiles()
 	_build_river_path()
+	_filter_river_trees()
+	_scatter_river_trees()
 
 
 func _load_biome_texs(biome: String, names: Array) -> Array:
@@ -721,16 +797,28 @@ func _build_river_path() -> void:
 		round(cx / grid) * grid,
 		round((bounds.position.y + bounds.size.y * 0.15) / grid) * grid)
 
-	# South coast: lowest Y on continent polygon
+	# South terminus: 85% of the way from headwater to the continent's southern edge,
+	# so the river ends well inside the landmass rather than poking into the ocean.
 	var south_pt := headwater
 	for pt in _continent_poly:
 		if (pt as Vector2).y > south_pt.y:
 			south_pt = pt
-	var end_y: float = round(south_pt.y / grid) * grid
+	var end_y: float = round(
+		lerp(headwater.y, south_pt.y, 0.85) / grid) * grid
+
+	# Pre-compute desert cells before any pathfinding
+	var desert_cells: Dictionary = _precompute_desert_cells(bounds, grid)
+	DebugLogger.log("river_build_start", {
+		"headwater": str(headwater), "end_y": end_y,
+		"blocked_cell_count": desert_cells.size(),
+		"bounds": str(bounds)})
 
 	var junction_fracs: Array = [0.25, 0.5, 0.75]
 	var junction_indices: Array = []
-	_river_grid_path = _build_branch(headwater, end_y, rng, bounds, grid, true, junction_fracs, junction_indices)
+	_river_grid_path = _build_branch(headwater, end_y, rng, bounds, grid, desert_cells, junction_fracs, junction_indices)
+	DebugLogger.log("river_main_path", {
+		"path_size": _river_grid_path.size(),
+		"junction_indices": junction_indices})
 	_add_tiles_from_path(_river_grid_path, true)
 
 	# --- Tributaries: branch from junction outward NE or NW toward boundary ---
@@ -741,16 +829,75 @@ func _build_river_path() -> void:
 		occupied[key] = true
 
 	var num_tribs := 3
+	if junction_indices.size() < num_tribs:
+		push_warning("PlayerMap: not enough junction_indices (%d), skipping tributaries" % junction_indices.size())
+		return
 	for t in num_tribs:
 		var join_idx: int = junction_indices[t]
-		var join_pt: Vector2 = _river_grid_path[join_idx]
 		var side := 1.0 if t % 2 == 0 else -1.0
 		var outward := Vector2.RIGHT if side > 0 else Vector2.LEFT
-		var raw: Array = _build_tributary_meander(join_pt, outward, grid, rng, bounds, occupied)
+		# Validate junction: need at least 2 clear outward steps.
+		# Search nearby river points; if none work, flip to the opposite side.
+		var path_len: int = _river_grid_path.size()
+		var search_radius: int = maxi(1, path_len / 4)
+
+		var _junction_has_clearance := func(idx: int, dir: Vector2) -> bool:
+			var p: Vector2 = _river_grid_path[idx]
+			for step in [1, 2, 3, 4]:
+				var sp: Vector2 = p + dir * grid * step
+				if desert_cells.has(_grid_key(sp, grid)):
+					return false
+				if occupied.has(Vector2(round(sp.x / grid), round(sp.y / grid))):
+					return false
+			return true
+
+		var found_valid := false
+		for delta in range(0, search_radius):
+			for offset in ([0, delta, -delta] if delta > 0 else [0]):
+				var ci: int = clampi(join_idx + offset, 1, path_len - 2)
+				if _junction_has_clearance.call(ci, outward):
+					join_idx = ci
+					found_valid = true
+					break
+			if found_valid:
+				break
+		# If still no clearance, try flipping to the opposite side
+		if not found_valid:
+			var flipped := -outward
+			for delta in range(0, search_radius):
+				for offset in ([0, delta, -delta] if delta > 0 else [0]):
+					var ci: int = clampi(join_idx + offset, 1, path_len - 2)
+					if _junction_has_clearance.call(ci, flipped):
+						join_idx = ci
+						outward = flipped
+						side = -side
+						found_valid = true
+						break
+				if found_valid:
+					break
+
+		var join_pt: Vector2 = _river_grid_path[join_idx]
+		DebugLogger.log("river_tributary_junction", {
+			"trib": t, "join_idx": join_idx, "join_pt": str(join_pt),
+			"outward": str(outward), "found_valid": found_valid})
+		var raw: Array = _build_tributary_meander(join_pt, outward, grid, rng, bounds, occupied, desert_cells)
+		DebugLogger.log("river_tributary_result", {"trib": t, "raw_size": raw.size()})
+		# If trib is too short, flip to the opposite side and rebuild
+		if raw.size() <= 20:  # flip if fewer than 20 steps
+			var flipped_out := -outward
+			var flipped_side := -side
+			var raw_flip: Array = _build_tributary_meander(join_pt, flipped_out, grid, rng, bounds, occupied, desert_cells)
+			DebugLogger.log("river_tributary_flip", {
+				"trib": t, "original_size": raw.size(), "flipped_size": raw_flip.size()})
+			if raw_flip.size() > raw.size():
+				raw = raw_flip
+				outward = flipped_out
+				side = flipped_side
 		if raw.size() < 2:
+			DebugLogger.log("river_tributary_skipped", {"trib": t, "reason": "raw_size < 2"})
 			continue
 		var trib_slice: Array = raw.slice(0, raw.size() - 1)
-		_add_tiles_from_path(trib_slice, false, {}, 1)
+		_add_tiles_from_path(trib_slice, false, {}, 1, true)
 		var t_tile_idx := 7 if side > 0 else 8
 		_replace_tile_at_pos(join_pt, t_tile_idx)
 		# Add this tributary's positions to occupied so later ones don't cross it
@@ -759,44 +906,145 @@ func _build_river_path() -> void:
 			occupied[key] = true
 		_river_branch_paths.append(raw)
 
+	# Cache smoothed paths once so _draw never re-runs Chaikin
+	_river_smooth_main = _chaikin_smooth(_river_grid_path, 3)
+	_river_smooth_branches.clear()
+	for branch in _river_branch_paths:
+		_river_smooth_branches.append(_chaikin_smooth(branch, 3))
+	DebugLogger.log("river_smooth_cached", {
+		"parallax_tex_loaded": _river_parallax_tex != null,
+		"smooth_main_size": _river_smooth_main.size(),
+		"smooth_branch_count": _river_smooth_branches.size(),
+	})
+
+
+func _chaikin_smooth(path: Array, passes: int) -> Array:
+	var smooth: Array = path.duplicate()
+	for _p in passes:
+		var s2: Array = [smooth[0]]
+		for i in range(smooth.size() - 1):
+			var a: Vector2 = smooth[i]; var b: Vector2 = smooth[i + 1]
+			s2.append(a.lerp(b, 0.25)); s2.append(a.lerp(b, 0.75))
+		s2.append(smooth[smooth.size() - 1])
+		smooth = s2
+	return smooth
+
 
 func _build_branch(start: Vector2, end_y: float, rng: RandomNumberGenerator,
-		bounds: Rect2, grid: float, is_main: bool,
+		bounds: Rect2, grid: float, desert_cells: Dictionary = {},
 		junction_fracs: Array = [], junction_indices: Array = []) -> Array:
-	var path: Array = [start]
-	var cur := start
-	var last_dir := Vector2.DOWN
-	var h_streak := 0
-	var max_h := 4 if is_main else 3
-	# Estimate total steps to pre-compute which step indices must be vertical
-	var est_steps: int = int((end_y - start.y) / grid) + 1
-	var locked: Dictionary = {}
-	var pending_fracs: Array = junction_fracs.duplicate()
-	for frac in pending_fracs:
-		var ji: int = int(est_steps * frac)
-		locked[ji - 1] = true
-		locked[ji]     = true
-		locked[ji + 1] = true
-		junction_indices.append(ji)
-	while cur.y < end_y:
-		var step_idx: int = path.size()  # index this step will land at
-		var force_down: bool = locked.has(step_idx)
-		var choices: Array = [Vector2.DOWN, Vector2.DOWN, Vector2.DOWN]
-		if not force_down and h_streak < max_h:
-			var margin := grid * 2.0
-			if cur.x > bounds.position.x + margin:
-				choices.append(Vector2.LEFT)
-				choices.append(Vector2.LEFT)
-			if cur.x < bounds.position.x + bounds.size.x - margin:
-				choices.append(Vector2.RIGHT)
-				choices.append(Vector2.RIGHT)
-		var next_dir: Vector2 = Vector2.DOWN if force_down else choices[rng.randi() % choices.size()]
-		if not force_down and next_dir == -last_dir:
-			next_dir = Vector2.DOWN
-		h_streak = h_streak + 1 if next_dir.x != 0 else 0
-		cur += next_dir * grid
-		path.append(cur)
-		last_dir = next_dir
+
+	# --- A* pathfinding ---
+	# Costs: DOWN cheap, lateral moderate, UP expensive.
+	# Small per-seed noise on lateral costs gives natural variety without loops.
+	const COST_DOWN    := 1.0
+	const COST_UP      := 12.0
+	var   cost_lateral := 2.5 + rng.randf() * 1.5   # 2.5–4.0, varies per seed
+
+	# open_set entries: [f, g, pos]  — sorted by f (lowest first)
+	var open_set: Array  = []
+	var g_score: Dictionary = {}   # grid_key -> float
+	var came_from: Dictionary = {} # grid_key -> Vector2
+	var closed: Dictionary  = {}
+
+	var sk := _grid_key(start, grid)
+	g_score[sk] = 0.0
+	open_set.append([maxf(0.0, end_y - start.y) / grid, 0.0, start])
+
+	var goal := start
+	var found := false
+
+	while not open_set.is_empty():
+		# Pop lowest-f entry (linear scan is fine — grid is ~50×50 at most)
+		var bi := 0
+		for idx in range(1, open_set.size()):
+			if (open_set[idx] as Array)[0] < (open_set[bi] as Array)[0]:
+				bi = idx
+		var entry: Array = open_set[bi]
+		open_set.remove_at(bi)
+
+		var cur: Vector2 = entry[2]
+		var ck := _grid_key(cur, grid)
+		if closed.has(ck):
+			continue
+		closed[ck] = true
+
+		if cur.y >= end_y:
+			goal = cur
+			found = true
+			break
+
+		var neighbors: Array = [
+			[Vector2.DOWN,  COST_DOWN],
+			[Vector2.LEFT,  cost_lateral],
+			[Vector2.RIGHT, cost_lateral],
+			[Vector2.UP,    COST_UP],
+		]
+		for nb in neighbors:
+			var dir: Vector2 = nb[0]
+			var cost: float  = nb[1]
+			var np: Vector2  = cur + dir * grid
+			var nk := _grid_key(np, grid)
+			if closed.has(nk) or desert_cells.has(nk):
+				continue
+			# Must stay inside the continent polygon
+			if _continent_poly.size() >= 3 and not Geometry2D.is_point_in_polygon(np, _continent_poly):
+				continue
+			# Keep within map bounds
+			if np.x < bounds.position.x - grid or np.x > bounds.position.x + bounds.size.x + grid:
+				continue
+			var ng: float = g_score[ck] + cost
+			if not g_score.has(nk) or ng < g_score[nk]:
+				g_score[nk] = ng
+				came_from[nk] = cur
+				var h: float = maxf(0.0, end_y - np.y) / grid
+				open_set.append([ng + h, ng, np])
+
+	# Reconstruct path from came_from chain
+	var path: Array = []
+	if found:
+		var pos := goal
+		while came_from.has(_grid_key(pos, grid)):
+			path.push_front(pos)
+			pos = came_from[_grid_key(pos, grid)]
+		path.push_front(pos)
+	else:
+		DebugLogger.log("river_astar_no_route", {"start": str(start), "end_y": end_y})
+		path = [start]  # fallback — no route found
+
+	# --- Junction selection (by path-index fraction, evenly spaced) ---
+	if path.size() < 6 or junction_fracs.is_empty():
+		return path
+	var min_sep: int = maxi(3, path.size() / 8)
+	var path_max: int = path.size() - 3  # guaranteed >= 3 since path.size() >= 6
+	for frac in junction_fracs:
+		var target_idx: int = clampi(int(path.size() * frac), 2, path_max)
+		var best_idx: int = -1
+		var search_w: int = maxi(1, mini(mini(target_idx - 2, path_max - target_idx), path.size() / 6))
+		for delta in range(0, search_w + 1):
+			for offset in ([0, delta, -delta] if delta > 0 else [0]):
+				var ci2: int = clampi(target_idx + offset, 2, path_max)
+				var too_close := false
+				for prev in junction_indices:
+					if absi(ci2 - prev) < min_sep:
+						too_close = true
+						break
+				if too_close:
+					continue
+				var px: float = (path[ci2 - 1] as Vector2).x
+				var cx2: float = (path[ci2] as Vector2).x
+				var nx: float = (path[ci2 + 1] as Vector2).x
+				if absf(px - cx2) < 1.0 and absf(nx - cx2) < 1.0:
+					best_idx = ci2
+					break
+			if best_idx >= 0:
+				break
+		if best_idx < 0:
+			best_idx = target_idx
+			for prev in junction_indices:
+				if absi(best_idx - prev) < min_sep:
+					best_idx = clampi(prev + min_sep, 2, path_max)
+		junction_indices.append(best_idx)
 	return path
 
 
@@ -837,29 +1085,29 @@ func _build_tributary(start: Vector2, join: Vector2, grid: float,
 
 
 func _build_tributary_meander(junction: Vector2, outward: Vector2, grid: float,
-		rng: RandomNumberGenerator, bounds: Rect2, occupied: Dictionary = {}) -> Array:
+		rng: RandomNumberGenerator, bounds: Rect2, occupied: Dictionary = {}, desert_cells: Dictionary = {}) -> Array:
 	var first_step := junction + outward * grid
 	var path: Array = [junction, first_step]
 	var cur := first_step
 	var last_dir := outward
-	var h_streak := 1
 	for _s in 35:
+		# outward 3x, UP 2x, DOWN 1x — all always in pool so trib can navigate around any obstacle
+		var all_dirs: Array = [outward, outward, outward, Vector2.UP, Vector2.UP, Vector2.DOWN]
 		var candidates: Array = []
-		# Outward (east/west) and up (north) are the valid directions
-		for dir in [outward, outward, Vector2.UP, Vector2.UP]:
+		for dir in all_dirs:
 			if dir == -last_dir:
 				continue
-			var next_pos: Vector2 = cur + (dir as Vector2) * grid
-			var key := Vector2(round(next_pos.x / grid), round(next_pos.y / grid))
-			if occupied.has(key):
+			var np: Vector2 = cur + (dir as Vector2) * grid
+			if occupied.has(Vector2(round(np.x / grid), round(np.y / grid))):
 				continue
-			if not Geometry2D.is_point_in_polygon(next_pos, _continent_poly):
+			if not Geometry2D.is_point_in_polygon(np, _continent_poly):
+				continue
+			if desert_cells.has(_grid_key(np, grid)):
 				continue
 			candidates.append(dir)
 		if candidates.is_empty():
 			break
 		var next_dir: Vector2 = candidates[rng.randi() % candidates.size()]
-		h_streak = h_streak + 1 if next_dir.x != 0 else 0
 		cur += next_dir * grid
 		path.append(cur)
 		last_dir = next_dir
@@ -875,7 +1123,7 @@ func _replace_tile_at_pos(pos: Vector2, tile_idx: int, is_main: bool = false) ->
 	_river_path_tiles.append({"pos": pos, "tile": tile_idx, "main": is_main})
 
 
-func _add_tiles_from_path(path: Array, is_main: bool = false, forced_tiles: Dictionary = {}, skip_first: int = 0) -> void:
+func _add_tiles_from_path(path: Array, is_main: bool = false, forced_tiles: Dictionary = {}, skip_first: int = 0, taper: bool = false) -> void:
 	for i in path.size():
 		var from_dir := Vector2.ZERO
 		var to_dir := Vector2.ZERO
@@ -886,7 +1134,10 @@ func _add_tiles_from_path(path: Array, is_main: bool = false, forced_tiles: Dict
 		if i < skip_first:
 			continue
 		var tile_idx: int = forced_tiles[i] if forced_tiles.has(i) else _select_river_tile(from_dir, to_dir)
-		_river_path_tiles.append({"pos": path[i], "tile": tile_idx, "main": is_main})
+		var entry := {"pos": path[i], "tile": tile_idx, "main": is_main}
+		if taper:
+			entry["taper_step"] = i - skip_first
+		_river_path_tiles.append(entry)
 
 
 func _select_river_tile(from_dir: Vector2, to_dir: Vector2) -> int:
@@ -913,9 +1164,9 @@ func _draw_rivers() -> void:
 		return
 
 	# --- Pass 1: parallax water fill polygon for all branches ---
-	var all_paths: Array = [_river_grid_path] + _river_branch_paths
-	for branch in all_paths:
-		_draw_river_parallax_strip(branch)
+	_draw_river_parallax_strip(_river_smooth_main, false)
+	for i in _river_smooth_branches.size():
+		_draw_river_parallax_strip(_river_smooth_branches[i], true)
 
 	# --- Pass 2: tile sprites — main river N→S first, then tributaries ---
 	var tile_sz := RIVER_TILE_WORLD * _zoom * 1.12
@@ -928,7 +1179,7 @@ func _draw_rivers() -> void:
 		else:
 			trib_tiles.append(entry)
 	main_tiles.sort_custom(func(a, b): return (a["pos"] as Vector2).y < (b["pos"] as Vector2).y)
-	for entry in main_tiles + trib_tiles:
+	for entry in main_tiles:
 		var tile_idx: int = entry["tile"]
 		if tile_idx < 0 or tile_idx >= _river_tiles.size():
 			continue
@@ -936,27 +1187,32 @@ func _draw_rivers() -> void:
 		if tex == null:
 			continue
 		var sp: Vector2 = _to_screen(entry["pos"])
-		draw_texture_rect(tex, Rect2(sp.x - half, sp.y - half, tile_sz, tile_sz), false)
+		var draw_w := tile_sz
+		var draw_h := tile_sz
+		if entry.has("taper_step"):
+			var step: int = entry["taper_step"]
+			var t := clampf(float(step) / 35.0, 0.0, 1.0)
+			var narrow := lerpf(tile_sz, 1.0, t)
+			if tile_idx == 0 or tile_idx == 1:  # horizontal — shrink height only
+				draw_h = narrow
+			elif tile_idx == 2 or tile_idx == 3:  # vertical — shrink width only
+				draw_w = narrow
+			else:  # corners — skip, bank drawn by parallax strip
+				continue
+		draw_texture_rect(tex, Rect2(sp.x - draw_w * 0.5, sp.y - draw_h * 0.5, draw_w, draw_h), false)
 
 
-func _draw_river_parallax_strip(path: Array) -> void:
-	if _river_parallax_tex == null or path.size() < 2:
+func _draw_river_parallax_strip(smooth: Array, taper: bool = false) -> void:
+	if _river_parallax_tex == null or smooth.size() < 2:
 		return
 	var tex_sz := _river_parallax_tex.get_size()
-	var water_w := RIVER_TILE_WORLD * 0.22
-	# Chaikin smoothing
-	var smooth: Array = path.duplicate()
-	for _pass in 3:
-		var s2: Array = [smooth[0]]
-		for i in range(smooth.size() - 1):
-			var a: Vector2 = smooth[i]; var b: Vector2 = smooth[i + 1]
-			s2.append(a.lerp(b, 0.25)); s2.append(a.lerp(b, 0.75))
-		s2.append(smooth[smooth.size() - 1])
-		smooth = s2
+	var base_water_w := RIVER_TILE_WORLD * 0.22
 	var left_pts := PackedVector2Array()
 	var right_pts := PackedVector2Array()
 	var left_uvs := PackedVector2Array()
 	var right_uvs := PackedVector2Array()
+	var left_perps: Array = []
+	var right_perps: Array = []
 	var n := smooth.size()
 	for i in n:
 		var pt: Vector2 = smooth[i]
@@ -964,16 +1220,73 @@ func _draw_river_parallax_strip(path: Array) -> void:
 		if i < n - 1: dir = (smooth[i + 1] - pt).normalized()
 		elif i > 0:   dir = (pt - smooth[i - 1]).normalized()
 		var perp := Vector2(-dir.y, dir.x)
+		var water_w := base_water_w
+		if taper:
+			var t := clampf(float(i) / float(n - 1), 0.0, 1.0)
+			water_w = lerpf(base_water_w, 0.5, t)
 		var lw := pt - perp * water_w; var rw := pt + perp * water_w
 		left_pts.append(_to_screen(lw)); right_pts.append(_to_screen(rw))
 		left_uvs.append(lw / tex_sz + _river_wind_uv)
 		right_uvs.append(rw / tex_sz + _river_wind_uv)
-	var poly := PackedVector2Array(); var uvs := PackedVector2Array()
-	for i in left_pts.size():
-		poly.append(left_pts[i]); uvs.append(left_uvs[i])
-	for i in range(right_pts.size() - 1, -1, -1):
-		poly.append(right_pts[i]); uvs.append(right_uvs[i])
-	draw_polygon(poly, PackedColorArray(), uvs, _river_parallax_tex)
+		left_perps.append(-perp)   # outward from left edge
+		right_perps.append(perp)   # outward from right edge
+	# Draw in chunks of 30 points to prevent self-intersection holes without per-quad overhead
+	var chunk := 30
+	var total := left_pts.size()
+	var ci := 0
+	while ci < total - 1:
+		var end := mini(ci + chunk, total)
+		var poly := PackedVector2Array()
+		var uvs2 := PackedVector2Array()
+		for j in range(ci, end):
+			poly.append(left_pts[j]); uvs2.append(left_uvs[j])
+		for j in range(end - 1, ci - 1, -1):
+			poly.append(right_pts[j]); uvs2.append(right_uvs[j])
+		draw_polygon(poly, PackedColorArray(), uvs2, _river_parallax_tex)
+		ci += chunk - 1  # overlap by 1 so chunks connect seamlessly
+
+	if not taper:
+		return
+	# Find the smoothed index ~1 tile from the junction before starting bank lines
+	var bank_start_idx := 0
+	var dist_accum := 0.0
+	for i in range(1, smooth.size()):
+		dist_accum += (smooth[i] as Vector2).distance_to(smooth[i - 1] as Vector2)
+		if dist_accum >= RIVER_TILE_WORLD * 0.25:
+			bank_start_idx = i
+			break
+	# Draw 3-layer custom bank for tributary paths
+	var bank_colors: Array = [
+		Color("#13646b"),  # innermost (4px, closest to water)
+		Color("#58989a"),  # inner
+		Color("#3c261a"),  # inner-mid
+		Color("#5c4027"),  # middle
+		Color("#6e5134"),  # outer
+	]
+	var bank_widths: Array  = [4.0, 2.0, 2.0, 2.0, 6.0]
+	var bank_offsets: Array = [0.0, 4.0, 6.0, 8.0, 10.0]
+	var total_bank_pts := left_pts.size() - bank_start_idx
+	var num_chunks := 8
+	for side in 2:
+		var edge_pts: PackedVector2Array = left_pts if side == 0 else right_pts
+		var perps: Array = left_perps if side == 0 else right_perps
+		for layer in bank_colors.size():
+			var offset: float = bank_offsets[layer]
+			var line_w: float = bank_widths[layer]
+			for bk in num_chunks:
+				var t_start := float(bk) / float(num_chunks)
+				var t_end := float(bk + 1) / float(num_chunks)
+				var idx_start := bank_start_idx + int(t_start * total_bank_pts)
+				var idx_end: int = mini(bank_start_idx + int(t_end * total_bank_pts) + 1, edge_pts.size())
+				if idx_end <= idx_start + 1:
+					continue
+				var alpha := lerpf(1.0, 0.0, (t_start + t_end) * 0.5)
+				var col: Color = bank_colors[layer]
+				col.a = alpha
+				var band := PackedVector2Array()
+				for i in range(idx_start, idx_end):
+					band.append((edge_pts[i] as Vector2) + (perps[i] as Vector2) * offset)
+				draw_polyline(band, col, line_w)
 
 
 func _build_terrain_mesh() -> void:
@@ -1012,7 +1325,50 @@ func _triangulate_tiles(tile_data: Array) -> ArrayMesh:
 
 
 const TREE_DRAW_COAST_BUFFER: float = 60.0
-const TREE_PROVINCE_BUFFER: float = 150.0
+const TREE_PROVINCE_BUFFER: float = 40.0
+
+func _init_swamp_fog() -> void:
+	if map_data == null:
+		return
+	# Collect world-space polygons for all swamp provinces.
+	var polys: Array = []
+	for item in map_data.provinces:
+		var p := item as ProvinceData
+		if p == null or p.biome != "swamp":
+			continue
+		var pid: int = int(p.id)
+		if _clipped_cells.has(pid):
+			polys.append(_clipped_cells[pid] as PackedVector2Array)
+	if polys.is_empty():
+		return
+
+	if _swamp_fog_overlay == null:
+		_swamp_fog_overlay = load("res://Visual/campaign/SwampFogOverlay.gd").new()
+		var mat := ShaderMaterial.new()
+		mat.shader = SwampFogShader
+
+		var noise := FastNoiseLite.new()
+		noise.seed = 7331
+		noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+		noise.fractal_type = FastNoiseLite.FRACTAL_FBM
+		noise.fractal_octaves = 4
+		noise.frequency = 0.008
+
+		var noise_tex := NoiseTexture2D.new()
+		noise_tex.seamless = true
+		noise_tex.width = 512
+		noise_tex.height = 512
+		noise_tex.noise = noise
+
+		mat.set_shader_parameter("noise_tex", noise_tex)
+		_swamp_fog_overlay.material = mat
+		add_child(_swamp_fog_overlay)
+
+	var fog := _swamp_fog_overlay as Node2D
+	fog.set("swamp_polys", polys)
+	fog.set("zoom",   _zoom)
+	fog.set("origin", _origin)
+
 
 func _init_weather() -> void:
 	if _weather_overlay == null:
@@ -1078,9 +1434,90 @@ func _update_weather(delta: float) -> void:
 		var west_x: float = bounds.position.x - margin
 		var sun_x: float = lerp(east_x, west_x, t)
 		var sun_y: float = bounds.position.y + bounds.size.y * 0.5
-		mat.set_shader_parameter("sun_world_pos", Vector2(sun_x, sun_y))
+		_sun_world_pos = Vector2(sun_x, sun_y)
+		mat.set_shader_parameter("sun_world_pos", _sun_world_pos)
 
 
+
+
+const RIVER_TREE_BAND_OFFSET: float = 2.0   # units beyond river buffer where band starts
+const RIVER_TREE_BAND_WIDTH: float  = 28.0  # band width — dense riparian zone
+const RIVER_TREE_SPACING: float     = 10.0  # tight spacing for fertile bank look
+
+func _scatter_river_trees() -> void:
+	if _tree_textures.is_empty():
+		return
+	var all_pts: Array = []
+	for pt in _river_grid_path:
+		all_pts.append(pt as Vector2)
+	for branch in _river_branch_paths:
+		for pt in branch:
+			all_pts.append(pt as Vector2)
+	if all_pts.is_empty():
+		return
+	var check_pts: Array = all_pts
+
+	var band_min: float = TREE_RIVER_BUFFER + RIVER_TREE_BAND_OFFSET
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 88771234
+
+	# Spatial grid of already-placed trees for spacing checks
+	var placed_grid: Dictionary = {}
+	var scell := RIVER_TREE_SPACING
+	for entry in _drawable_trees:
+		var p: Vector2 = entry["pos"]
+		placed_grid[Vector2i(int(p.x / scell), int(p.y / scell))] = true
+
+	var new_trees: Array = []
+	for pt in all_pts:
+		for _attempt in range(40):
+			var angle: float = rng.randf() * TAU
+			# Bias toward the inner edge of the band (closer to water)
+			var t: float = pow(rng.randf(), 2.0)
+			var dist: float = band_min + t * RIVER_TREE_BAND_WIDTH
+			var candidate: Vector2 = pt + Vector2(cos(angle), sin(angle)) * dist
+
+			# Reject if still inside the river — use a larger threshold than the
+			# filter buffer to cover gaps between sparse grid path points.
+			var in_river := false
+			for rpt in check_pts:
+				if candidate.distance_to(rpt as Vector2) < TREE_RIVER_BUFFER + 8.0:
+					in_river = true
+					break
+			if in_river:
+				continue
+
+			# Spacing check against existing trees
+			var sgk := Vector2i(int(candidate.x / scell), int(candidate.y / scell))
+			var too_close := false
+			for dx in [-1, 0, 1]:
+				for dy in [-1, 0, 1]:
+					if placed_grid.has(Vector2i(sgk.x + dx, sgk.y + dy)):
+						too_close = true
+						break
+				if too_close:
+					break
+			if too_close:
+				continue
+
+			# Pick tex_idx based on biome at candidate position
+			var biome: String = _biome_at_pos(candidate)
+			var tex_idx: int
+			match biome:
+				"swamp":
+					var range_size := _tundra_tree_start_idx - _dead_tree_start_idx
+					tex_idx = _dead_tree_start_idx + (rng.randi() % maxi(range_size, 1))
+				"tundra":
+					var range_size := _tree_textures.size() - _tundra_tree_start_idx
+					tex_idx = _tundra_tree_start_idx + (rng.randi() % maxi(range_size, 1))
+				_:
+					tex_idx = rng.randi() % maxi(_dead_tree_start_idx, 1)
+
+			placed_grid[sgk] = true
+			new_trees.append({"pos": candidate, "tex_idx": tex_idx, "flip": rng.randi() % 2 == 1})
+
+	_drawable_trees.append_array(new_trees)
+	DebugLogger.log("river_trees_placed", {"count": new_trees.size()})
 
 
 func _filter_coast_trees() -> void:
@@ -1115,6 +1552,58 @@ func _filter_coast_trees() -> void:
 				break
 		if min_d >= TREE_DRAW_COAST_BUFFER:
 			_drawable_trees.append(entry)
+
+const TREE_RIVER_BUFFER: float = 30.0  # no trees within this distance of river/trib paths
+
+func _filter_river_trees() -> void:
+	if _drawable_trees.is_empty():
+		return
+	# Build a spatial grid from river grid points for O(1) proximity checks
+	var cell_size := TREE_RIVER_BUFFER
+	var river_grid: Dictionary = {}
+	for pt in _river_grid_path:
+		var gk := Vector2i(int((pt as Vector2).x / cell_size), int((pt as Vector2).y / cell_size))
+		river_grid[gk] = true
+	for branch in _river_branch_paths:
+		for pt in branch:
+			var gk := Vector2i(int((pt as Vector2).x / cell_size), int((pt as Vector2).y / cell_size))
+			river_grid[gk] = true
+	if river_grid.is_empty():
+		return
+	var filtered: Array = []
+	for entry in _drawable_trees:
+		var pos: Vector2 = entry["pos"]
+		var gk := Vector2i(int(pos.x / cell_size), int(pos.y / cell_size))
+		var too_close := false
+		for dx in [-1, 0, 1]:
+			for dy in [-1, 0, 1]:
+				if river_grid.has(Vector2i(gk.x + dx, gk.y + dy)):
+					too_close = true
+					break
+			if too_close:
+				break
+		if not too_close:
+			filtered.append(entry)
+	_drawable_trees = filtered
+
+func _draw_swamp_pits() -> void:
+	if _swamp_atlas_tex != null:
+		for entry in _swamp_tile_data:
+			var wr: Rect2 = entry["world_rect"]
+			var sr: Rect2 = entry["src_rect"]
+			var tl := _to_screen(wr.position)
+			var br := _to_screen(wr.end)
+			var mod: Color = entry.get("modulate", Color.WHITE)
+			draw_texture_rect_region(_swamp_atlas_tex, Rect2(tl, br - tl), sr, mod)
+	# Inner concave corner overlay — drawn on top of regular swamp tiles
+	if _swamp_ie_tex != null:
+		for entry in _swamp_ie_data:
+			var wr: Rect2 = entry["world_rect"]
+			var sr: Rect2 = entry["src_rect"]
+			var tl := _to_screen(wr.position)
+			var br := _to_screen(wr.end)
+			draw_texture_rect_region(_swamp_ie_tex, Rect2(tl, br - tl), sr)
+
 
 func _draw_trees() -> void:
 	if _tree_textures.is_empty() or _drawable_trees.is_empty():
@@ -1167,12 +1656,9 @@ func _draw_cells() -> void:
 		# Province fill -- faction/biome tint over the grass base
 		draw_colored_polygon(pts, fill_c)
 
-		# --- Border: thick dark base, then thin highlight for selected/hover ---
-		draw_polyline(pts, BORDER_DARK, BORDER_W_BASE, true)
-		if is_selected:
-			draw_polyline(pts, Color(1.0, 0.88, 0.30, 1.0), 2.5, true)
-		elif is_hover:
-			draw_polyline(pts, Color(1.0, 1.0, 1.0, 0.80), 1.8, true)
+		# Borders only appear on the selected province.
+		if is_hover and not is_selected:
+			draw_polyline(pts, Color(1.0, 1.0, 1.0, 0.30), 1.5, true)
 
 		# --- Pick mode highlights (overlaid on top of base border) ---
 		if _pick_mode != 0:
@@ -1270,8 +1756,31 @@ func _draw_nodes() -> void:
 			var sz: float = 128.0 * _zoom * 0.3
 			var half: float = sz * 0.5
 			var flip: bool = (pid * 2654435761) % 3 == 0
-			var rect := Rect2(pos.x - half, pos.y - sz, sz, sz) if not flip else Rect2(pos.x + half, pos.y - sz, -sz, sz)
-			draw_texture_rect(province_tex, rect, false, Color(1.0, 0.96, 0.88, 0.88))
+			var rect := Rect2(pos.x - half, pos.y - half, sz, sz)
+			# Shadow: right edge pinned at sprite right. morning_stretch grows it left;
+			# afternoon_stretch grows it right.
+			var sun_t: float = fmod(_sun_time / SUN_CYCLE_SECONDS, 1.0)
+			var afternoon_stretch: float = clampf((sun_t - 0.5) * 2.0, 0.0, 1.0)
+			var morning_stretch: float  = clampf((0.5 - sun_t) * 2.0, 0.0, 1.0)
+			var sun_height: float = 1.0 - clampf(
+					absf(_sun_world_pos.x - p.center.x) / maxf(_map_bounds_rect.size.x, 1.0), 0.0, 1.0)
+			var base_rx: float = lerpf(half * 1.45, half * 1.20, sun_height)
+			var shad_rx: float = base_rx * lerpf(1.0, 1.6, morning_stretch) * lerpf(1.0, 2.2, afternoon_stretch)
+			var shad_ry: float = lerpf(half * 0.55, half * 0.35, sun_height)
+			# Right edge always at pos.x + half. As shad_rx grows in the morning, the
+			# left side stretches further left automatically. Evening also pushes center right.
+			var h_shift: float = (half - shad_rx) + afternoon_stretch * half * 1.8
+			var shad_pts := PackedVector2Array()
+			for si in 20:
+				var a: float = float(si) / 20.0 * TAU
+				shad_pts.append(Vector2(pos.x + h_shift + cos(a) * shad_rx,
+						pos.y + half * 0.45 + sin(a) * shad_ry))
+			draw_colored_polygon(shad_pts, Color(0.0, 0.0, 0.0, 0.55))
+			if flip:
+				draw_set_transform_matrix(Transform2D(Vector2(-1, 0), Vector2(0, 1), Vector2(pos.x * 2.0, 0.0)))
+			draw_texture_rect(province_tex, rect, false, Color(1.0, 1.0, 1.0, 1.0))
+			if flip:
+				draw_set_transform_matrix(Transform2D.IDENTITY)
 
 		# Leader presence dot (white pip if leaders are here)
 		if game_state != null and not is_neutral:

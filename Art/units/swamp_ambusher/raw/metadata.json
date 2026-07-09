@@ -1,0 +1,280 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "65a42cd7-4bed-4c96-8cfe-09f8b64c2e50",
+        "name": "Swamp Ambusher",
+        "prompt": "A tier 1 swamp ambusher in basic dark green and black leather armor with a simple hood, wielding a plain hunting knife. Minimal gear, no ornate details, conscript-level equipment.",
+        "size": {
+          "width": 112,
+          "height": 112
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T04:02:18.201752+00:00"
+      },
+      "folder": "Swamp_Ambusher",
+      "frames": {
+        "rotations": {
+          "south": "Swamp_Ambusher/rotations/south.png",
+          "south-east": "Swamp_Ambusher/rotations/south-east.png",
+          "east": "Swamp_Ambusher/rotations/east.png",
+          "north-east": "Swamp_Ambusher/rotations/north-east.png",
+          "north": "Swamp_Ambusher/rotations/north.png",
+          "north-west": "Swamp_Ambusher/rotations/north-west.png",
+          "west": "Swamp_Ambusher/rotations/west.png",
+          "south-west": "Swamp_Ambusher/rotations/south-west.png"
+        },
+        "animations": {
+          "falling_backward": {
+            "south": [
+              "Swamp_Ambusher/animations/falling_backward/south/frame_000.png",
+              "Swamp_Ambusher/animations/falling_backward/south/frame_001.png",
+              "Swamp_Ambusher/animations/falling_backward/south/frame_002.png",
+              "Swamp_Ambusher/animations/falling_backward/south/frame_003.png",
+              "Swamp_Ambusher/animations/falling_backward/south/frame_004.png",
+              "Swamp_Ambusher/animations/falling_backward/south/frame_005.png",
+              "Swamp_Ambusher/animations/falling_backward/south/frame_006.png"
+            ],
+            "south-west": [
+              "Swamp_Ambusher/animations/falling_backward/south-west/frame_000.png",
+              "Swamp_Ambusher/animations/falling_backward/south-west/frame_001.png",
+              "Swamp_Ambusher/animations/falling_backward/south-west/frame_002.png",
+              "Swamp_Ambusher/animations/falling_backward/south-west/frame_003.png",
+              "Swamp_Ambusher/animations/falling_backward/south-west/frame_004.png",
+              "Swamp_Ambusher/animations/falling_backward/south-west/frame_005.png",
+              "Swamp_Ambusher/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "south-east": [
+              "Swamp_Ambusher/animations/falling_backward/south-east/frame_000.png",
+              "Swamp_Ambusher/animations/falling_backward/south-east/frame_001.png",
+              "Swamp_Ambusher/animations/falling_backward/south-east/frame_002.png",
+              "Swamp_Ambusher/animations/falling_backward/south-east/frame_003.png",
+              "Swamp_Ambusher/animations/falling_backward/south-east/frame_004.png",
+              "Swamp_Ambusher/animations/falling_backward/south-east/frame_005.png",
+              "Swamp_Ambusher/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "north-west": [
+              "Swamp_Ambusher/animations/falling_backward/north-west/frame_000.png",
+              "Swamp_Ambusher/animations/falling_backward/north-west/frame_001.png",
+              "Swamp_Ambusher/animations/falling_backward/north-west/frame_002.png",
+              "Swamp_Ambusher/animations/falling_backward/north-west/frame_003.png",
+              "Swamp_Ambusher/animations/falling_backward/north-west/frame_004.png",
+              "Swamp_Ambusher/animations/falling_backward/north-west/frame_005.png",
+              "Swamp_Ambusher/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "north-east": [
+              "Swamp_Ambusher/animations/falling_backward/north-east/frame_000.png",
+              "Swamp_Ambusher/animations/falling_backward/north-east/frame_001.png",
+              "Swamp_Ambusher/animations/falling_backward/north-east/frame_002.png",
+              "Swamp_Ambusher/animations/falling_backward/north-east/frame_003.png",
+              "Swamp_Ambusher/animations/falling_backward/north-east/frame_004.png",
+              "Swamp_Ambusher/animations/falling_backward/north-east/frame_005.png",
+              "Swamp_Ambusher/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "north": [
+              "Swamp_Ambusher/animations/falling_backward/north/frame_000.png",
+              "Swamp_Ambusher/animations/falling_backward/north/frame_001.png",
+              "Swamp_Ambusher/animations/falling_backward/north/frame_002.png",
+              "Swamp_Ambusher/animations/falling_backward/north/frame_003.png",
+              "Swamp_Ambusher/animations/falling_backward/north/frame_004.png",
+              "Swamp_Ambusher/animations/falling_backward/north/frame_005.png",
+              "Swamp_Ambusher/animations/falling_backward/north/frame_006.png"
+            ],
+            "east": [
+              "Swamp_Ambusher/animations/falling_backward/east/frame_000.png",
+              "Swamp_Ambusher/animations/falling_backward/east/frame_001.png",
+              "Swamp_Ambusher/animations/falling_backward/east/frame_002.png",
+              "Swamp_Ambusher/animations/falling_backward/east/frame_003.png",
+              "Swamp_Ambusher/animations/falling_backward/east/frame_004.png",
+              "Swamp_Ambusher/animations/falling_backward/east/frame_005.png",
+              "Swamp_Ambusher/animations/falling_backward/east/frame_006.png"
+            ],
+            "west": [
+              "Swamp_Ambusher/animations/falling_backward/west/frame_000.png",
+              "Swamp_Ambusher/animations/falling_backward/west/frame_001.png",
+              "Swamp_Ambusher/animations/falling_backward/west/frame_002.png",
+              "Swamp_Ambusher/animations/falling_backward/west/frame_003.png",
+              "Swamp_Ambusher/animations/falling_backward/west/frame_004.png",
+              "Swamp_Ambusher/animations/falling_backward/west/frame_005.png",
+              "Swamp_Ambusher/animations/falling_backward/west/frame_006.png"
+            ]
+          },
+          "animating": {
+            "south-east": [
+              "Swamp_Ambusher/animations/animating/south-east/frame_000.png",
+              "Swamp_Ambusher/animations/animating/south-east/frame_001.png",
+              "Swamp_Ambusher/animations/animating/south-east/frame_002.png",
+              "Swamp_Ambusher/animations/animating/south-east/frame_003.png"
+            ],
+            "south-west": [
+              "Swamp_Ambusher/animations/animating/south-west/frame_000.png",
+              "Swamp_Ambusher/animations/animating/south-west/frame_001.png",
+              "Swamp_Ambusher/animations/animating/south-west/frame_002.png",
+              "Swamp_Ambusher/animations/animating/south-west/frame_003.png"
+            ],
+            "west": [
+              "Swamp_Ambusher/animations/animating/west/frame_000.png",
+              "Swamp_Ambusher/animations/animating/west/frame_001.png",
+              "Swamp_Ambusher/animations/animating/west/frame_002.png",
+              "Swamp_Ambusher/animations/animating/west/frame_003.png"
+            ],
+            "east": [
+              "Swamp_Ambusher/animations/animating/east/frame_000.png",
+              "Swamp_Ambusher/animations/animating/east/frame_001.png",
+              "Swamp_Ambusher/animations/animating/east/frame_002.png",
+              "Swamp_Ambusher/animations/animating/east/frame_003.png"
+            ],
+            "north": [
+              "Swamp_Ambusher/animations/animating/north/frame_000.png",
+              "Swamp_Ambusher/animations/animating/north/frame_001.png",
+              "Swamp_Ambusher/animations/animating/north/frame_002.png",
+              "Swamp_Ambusher/animations/animating/north/frame_003.png"
+            ],
+            "north-west": [
+              "Swamp_Ambusher/animations/animating/north-west/frame_000.png",
+              "Swamp_Ambusher/animations/animating/north-west/frame_001.png",
+              "Swamp_Ambusher/animations/animating/north-west/frame_002.png",
+              "Swamp_Ambusher/animations/animating/north-west/frame_003.png"
+            ],
+            "north-east": [
+              "Swamp_Ambusher/animations/animating/north-east/frame_000.png",
+              "Swamp_Ambusher/animations/animating/north-east/frame_001.png",
+              "Swamp_Ambusher/animations/animating/north-east/frame_002.png",
+              "Swamp_Ambusher/animations/animating/north-east/frame_003.png"
+            ],
+            "south": [
+              "Swamp_Ambusher/animations/animating/south/frame_000.png",
+              "Swamp_Ambusher/animations/animating/south/frame_001.png",
+              "Swamp_Ambusher/animations/animating/south/frame_002.png",
+              "Swamp_Ambusher/animations/animating/south/frame_003.png"
+            ]
+          },
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Swamp_Ambusher/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Swamp_Ambusher/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Swamp_Ambusher/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Swamp_Ambusher/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Swamp_Ambusher/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Swamp_Ambusher/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Swamp_Ambusher/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "lunging_forward_with_a_fast_dagger_stab": {
+            "south": [
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_000.png",
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_001.png",
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_002.png",
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_003.png",
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_004.png",
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_005.png",
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_006.png",
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_007.png",
+              "Swamp_Ambusher/animations/lunging_forward_with_a_fast_dagger_stab/south/frame_008.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png",
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_005.png",
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_006.png",
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_007.png",
+              "Swamp_Ambusher/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_008.png"
+            ]
+          },
+          "animating-b739f0c9": {
+            "east": [
+              "Swamp_Ambusher/animations/animating-b739f0c9/east/frame_000.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/east/frame_001.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/east/frame_002.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/east/frame_003.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/east/frame_004.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/east/frame_005.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/east/frame_006.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/east/frame_007.png"
+            ],
+            "north-east": [
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-east/frame_000.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-east/frame_001.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-east/frame_002.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-east/frame_003.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-east/frame_004.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-east/frame_005.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-east/frame_006.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-east/frame_007.png"
+            ],
+            "south": [
+              "Swamp_Ambusher/animations/animating-b739f0c9/south/frame_000.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south/frame_001.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south/frame_002.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south/frame_003.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south/frame_004.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south/frame_005.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south/frame_006.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south/frame_007.png"
+            ],
+            "north-west": [
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-west/frame_000.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-west/frame_001.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-west/frame_002.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-west/frame_003.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-west/frame_004.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-west/frame_005.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-west/frame_006.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north-west/frame_007.png"
+            ],
+            "north": [
+              "Swamp_Ambusher/animations/animating-b739f0c9/north/frame_000.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north/frame_001.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north/frame_002.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north/frame_003.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north/frame_004.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north/frame_005.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north/frame_006.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/north/frame_007.png"
+            ],
+            "south-east": [
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-east/frame_000.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-east/frame_001.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-east/frame_002.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-east/frame_003.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-east/frame_004.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-east/frame_005.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-east/frame_006.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-east/frame_007.png"
+            ],
+            "south-west": [
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-west/frame_000.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-west/frame_001.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-west/frame_002.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-west/frame_003.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-west/frame_004.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-west/frame_005.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-west/frame_006.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/south-west/frame_007.png"
+            ],
+            "west": [
+              "Swamp_Ambusher/animations/animating-b739f0c9/west/frame_000.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/west/frame_001.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/west/frame_002.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/west/frame_003.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/west/frame_004.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/west/frame_005.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/west/frame_006.png",
+              "Swamp_Ambusher/animations/animating-b739f0c9/west/frame_007.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:43:12.841751"
+}

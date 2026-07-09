@@ -1,0 +1,282 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "e2443d78-fc37-4277-8a4b-61c7f3daa435",
+        "name": "Forest Skirmisher",
+        "prompt": "A tier 1 forest skirmisher in basic worn leather armor, dark green and brown rough clothing. Carries a simple short sword and a small battered shield. Minimal gear, no ornate details, conscript-level equipment.",
+        "size": {
+          "width": 116,
+          "height": 116
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-26T23:42:16.915451+00:00"
+      },
+      "folder": "Forest_Skirmisher",
+      "frames": {
+        "rotations": {
+          "south": "Forest_Skirmisher/rotations/south.png",
+          "south-east": "Forest_Skirmisher/rotations/south-east.png",
+          "east": "Forest_Skirmisher/rotations/east.png",
+          "north-east": "Forest_Skirmisher/rotations/north-east.png",
+          "north": "Forest_Skirmisher/rotations/north.png",
+          "north-west": "Forest_Skirmisher/rotations/north-west.png",
+          "west": "Forest_Skirmisher/rotations/west.png",
+          "south-west": "Forest_Skirmisher/rotations/south-west.png"
+        },
+        "animations": {
+          "animating": {
+            "north": [
+              "Forest_Skirmisher/animations/animating/north/frame_000.png",
+              "Forest_Skirmisher/animations/animating/north/frame_001.png",
+              "Forest_Skirmisher/animations/animating/north/frame_002.png",
+              "Forest_Skirmisher/animations/animating/north/frame_003.png",
+              "Forest_Skirmisher/animations/animating/north/frame_004.png",
+              "Forest_Skirmisher/animations/animating/north/frame_005.png",
+              "Forest_Skirmisher/animations/animating/north/frame_006.png",
+              "Forest_Skirmisher/animations/animating/north/frame_007.png"
+            ]
+          },
+          "staggering_backward_from_a_hit_head_snapping_to_th": {
+            "south": [
+              "Forest_Skirmisher/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_000.png",
+              "Forest_Skirmisher/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_001.png",
+              "Forest_Skirmisher/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_002.png",
+              "Forest_Skirmisher/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_003.png",
+              "Forest_Skirmisher/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_004.png",
+              "Forest_Skirmisher/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_005.png",
+              "Forest_Skirmisher/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_006.png"
+            ]
+          },
+          "swinging_a_short_sword_in_a_quick_horizontal_slash": {
+            "south": [
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_000.png",
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_001.png",
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_002.png",
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_003.png",
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_004.png",
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_005.png",
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_006.png",
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_007.png",
+              "Forest_Skirmisher/animations/swinging_a_short_sword_in_a_quick_horizontal_slash/south/frame_008.png"
+            ]
+          },
+          "animating-6ef9f299": {
+            "south-west": [
+              "Forest_Skirmisher/animations/animating-6ef9f299/south-west/frame_000.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south-west/frame_001.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south-west/frame_002.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south-west/frame_003.png"
+            ],
+            "west": [
+              "Forest_Skirmisher/animations/animating-6ef9f299/west/frame_000.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/west/frame_001.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/west/frame_002.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/west/frame_003.png"
+            ],
+            "south": [
+              "Forest_Skirmisher/animations/animating-6ef9f299/south/frame_000.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south/frame_001.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south/frame_002.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south/frame_003.png"
+            ],
+            "south-east": [
+              "Forest_Skirmisher/animations/animating-6ef9f299/south-east/frame_000.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south-east/frame_001.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south-east/frame_002.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/south-east/frame_003.png"
+            ],
+            "east": [
+              "Forest_Skirmisher/animations/animating-6ef9f299/east/frame_000.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/east/frame_001.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/east/frame_002.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/east/frame_003.png"
+            ],
+            "north-east": [
+              "Forest_Skirmisher/animations/animating-6ef9f299/north-east/frame_000.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north-east/frame_001.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north-east/frame_002.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north-east/frame_003.png"
+            ],
+            "north-west": [
+              "Forest_Skirmisher/animations/animating-6ef9f299/north-west/frame_000.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north-west/frame_001.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north-west/frame_002.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north-west/frame_003.png"
+            ],
+            "north": [
+              "Forest_Skirmisher/animations/animating-6ef9f299/north/frame_000.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north/frame_001.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north/frame_002.png",
+              "Forest_Skirmisher/animations/animating-6ef9f299/north/frame_003.png"
+            ]
+          },
+          "raising_a_weapon_into_a_guarding_defensive_stance": {
+            "south": [
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_000.png",
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_001.png",
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_002.png",
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_003.png",
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_004.png",
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_005.png",
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_006.png",
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_007.png",
+              "Forest_Skirmisher/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_008.png"
+            ]
+          },
+          "animating-9240667b": {
+            "north-east": [
+              "Forest_Skirmisher/animations/animating-9240667b/north-east/frame_000.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-east/frame_001.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-east/frame_002.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-east/frame_003.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-east/frame_004.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-east/frame_005.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-east/frame_006.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-east/frame_007.png"
+            ],
+            "east": [
+              "Forest_Skirmisher/animations/animating-9240667b/east/frame_000.png",
+              "Forest_Skirmisher/animations/animating-9240667b/east/frame_001.png",
+              "Forest_Skirmisher/animations/animating-9240667b/east/frame_002.png",
+              "Forest_Skirmisher/animations/animating-9240667b/east/frame_003.png",
+              "Forest_Skirmisher/animations/animating-9240667b/east/frame_004.png",
+              "Forest_Skirmisher/animations/animating-9240667b/east/frame_005.png",
+              "Forest_Skirmisher/animations/animating-9240667b/east/frame_006.png",
+              "Forest_Skirmisher/animations/animating-9240667b/east/frame_007.png"
+            ],
+            "south-west": [
+              "Forest_Skirmisher/animations/animating-9240667b/south-west/frame_000.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-west/frame_001.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-west/frame_002.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-west/frame_003.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-west/frame_004.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-west/frame_005.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-west/frame_006.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-west/frame_007.png"
+            ],
+            "south": [
+              "Forest_Skirmisher/animations/animating-9240667b/south/frame_000.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south/frame_001.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south/frame_002.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south/frame_003.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south/frame_004.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south/frame_005.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south/frame_006.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south/frame_007.png"
+            ],
+            "south-east": [
+              "Forest_Skirmisher/animations/animating-9240667b/south-east/frame_000.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-east/frame_001.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-east/frame_002.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-east/frame_003.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-east/frame_004.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-east/frame_005.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-east/frame_006.png",
+              "Forest_Skirmisher/animations/animating-9240667b/south-east/frame_007.png"
+            ],
+            "west": [
+              "Forest_Skirmisher/animations/animating-9240667b/west/frame_000.png",
+              "Forest_Skirmisher/animations/animating-9240667b/west/frame_001.png",
+              "Forest_Skirmisher/animations/animating-9240667b/west/frame_002.png",
+              "Forest_Skirmisher/animations/animating-9240667b/west/frame_003.png",
+              "Forest_Skirmisher/animations/animating-9240667b/west/frame_004.png",
+              "Forest_Skirmisher/animations/animating-9240667b/west/frame_005.png",
+              "Forest_Skirmisher/animations/animating-9240667b/west/frame_006.png",
+              "Forest_Skirmisher/animations/animating-9240667b/west/frame_007.png"
+            ],
+            "north-west": [
+              "Forest_Skirmisher/animations/animating-9240667b/north-west/frame_000.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-west/frame_001.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-west/frame_002.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-west/frame_003.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-west/frame_004.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-west/frame_005.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-west/frame_006.png",
+              "Forest_Skirmisher/animations/animating-9240667b/north-west/frame_007.png"
+            ]
+          },
+          "falling_backward": {
+            "south-west": [
+              "Forest_Skirmisher/animations/falling_backward/south-west/frame_000.png",
+              "Forest_Skirmisher/animations/falling_backward/south-west/frame_001.png",
+              "Forest_Skirmisher/animations/falling_backward/south-west/frame_002.png",
+              "Forest_Skirmisher/animations/falling_backward/south-west/frame_003.png",
+              "Forest_Skirmisher/animations/falling_backward/south-west/frame_004.png",
+              "Forest_Skirmisher/animations/falling_backward/south-west/frame_005.png",
+              "Forest_Skirmisher/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "south": [
+              "Forest_Skirmisher/animations/falling_backward/south/frame_000.png",
+              "Forest_Skirmisher/animations/falling_backward/south/frame_001.png",
+              "Forest_Skirmisher/animations/falling_backward/south/frame_002.png",
+              "Forest_Skirmisher/animations/falling_backward/south/frame_003.png",
+              "Forest_Skirmisher/animations/falling_backward/south/frame_004.png",
+              "Forest_Skirmisher/animations/falling_backward/south/frame_005.png",
+              "Forest_Skirmisher/animations/falling_backward/south/frame_006.png"
+            ],
+            "south-east": [
+              "Forest_Skirmisher/animations/falling_backward/south-east/frame_000.png",
+              "Forest_Skirmisher/animations/falling_backward/south-east/frame_001.png",
+              "Forest_Skirmisher/animations/falling_backward/south-east/frame_002.png",
+              "Forest_Skirmisher/animations/falling_backward/south-east/frame_003.png",
+              "Forest_Skirmisher/animations/falling_backward/south-east/frame_004.png",
+              "Forest_Skirmisher/animations/falling_backward/south-east/frame_005.png",
+              "Forest_Skirmisher/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "north-west": [
+              "Forest_Skirmisher/animations/falling_backward/north-west/frame_000.png",
+              "Forest_Skirmisher/animations/falling_backward/north-west/frame_001.png",
+              "Forest_Skirmisher/animations/falling_backward/north-west/frame_002.png",
+              "Forest_Skirmisher/animations/falling_backward/north-west/frame_003.png",
+              "Forest_Skirmisher/animations/falling_backward/north-west/frame_004.png",
+              "Forest_Skirmisher/animations/falling_backward/north-west/frame_005.png",
+              "Forest_Skirmisher/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "east": [
+              "Forest_Skirmisher/animations/falling_backward/east/frame_000.png",
+              "Forest_Skirmisher/animations/falling_backward/east/frame_001.png",
+              "Forest_Skirmisher/animations/falling_backward/east/frame_002.png",
+              "Forest_Skirmisher/animations/falling_backward/east/frame_003.png",
+              "Forest_Skirmisher/animations/falling_backward/east/frame_004.png",
+              "Forest_Skirmisher/animations/falling_backward/east/frame_005.png",
+              "Forest_Skirmisher/animations/falling_backward/east/frame_006.png"
+            ],
+            "north-east": [
+              "Forest_Skirmisher/animations/falling_backward/north-east/frame_000.png",
+              "Forest_Skirmisher/animations/falling_backward/north-east/frame_001.png",
+              "Forest_Skirmisher/animations/falling_backward/north-east/frame_002.png",
+              "Forest_Skirmisher/animations/falling_backward/north-east/frame_003.png",
+              "Forest_Skirmisher/animations/falling_backward/north-east/frame_004.png",
+              "Forest_Skirmisher/animations/falling_backward/north-east/frame_005.png",
+              "Forest_Skirmisher/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "north": [
+              "Forest_Skirmisher/animations/falling_backward/north/frame_000.png",
+              "Forest_Skirmisher/animations/falling_backward/north/frame_001.png",
+              "Forest_Skirmisher/animations/falling_backward/north/frame_002.png",
+              "Forest_Skirmisher/animations/falling_backward/north/frame_003.png",
+              "Forest_Skirmisher/animations/falling_backward/north/frame_004.png",
+              "Forest_Skirmisher/animations/falling_backward/north/frame_005.png",
+              "Forest_Skirmisher/animations/falling_backward/north/frame_006.png"
+            ],
+            "west": [
+              "Forest_Skirmisher/animations/falling_backward/west/frame_000.png",
+              "Forest_Skirmisher/animations/falling_backward/west/frame_001.png",
+              "Forest_Skirmisher/animations/falling_backward/west/frame_002.png",
+              "Forest_Skirmisher/animations/falling_backward/west/frame_003.png",
+              "Forest_Skirmisher/animations/falling_backward/west/frame_004.png",
+              "Forest_Skirmisher/animations/falling_backward/west/frame_005.png",
+              "Forest_Skirmisher/animations/falling_backward/west/frame_006.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:41:28.214878"
+}

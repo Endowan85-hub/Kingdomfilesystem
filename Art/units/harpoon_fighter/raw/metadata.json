@@ -1,0 +1,269 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "0529d910-95bc-4a25-b773-32c5b280e3f9",
+        "name": "Harpoon Fighter",
+        "prompt": "A coastal warrior carrying a long wooden harpoon with a barbed iron tip. Wears a weathered leather vest, rough-spun pants, and worn leather boots. Has a coil of rope at his belt. Tanned skin, short dark hair. Gritty and rugged look, maritime fighter.",
+        "size": {
+          "width": 132,
+          "height": 132
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-25T11:01:22.396767+00:00"
+      },
+      "folder": "Harpoon_Fighter",
+      "frames": {
+        "rotations": {
+          "south": "Harpoon_Fighter/rotations/south.png",
+          "south-east": "Harpoon_Fighter/rotations/south-east.png",
+          "east": "Harpoon_Fighter/rotations/east.png",
+          "north-east": "Harpoon_Fighter/rotations/north-east.png",
+          "north": "Harpoon_Fighter/rotations/north.png",
+          "north-west": "Harpoon_Fighter/rotations/north-west.png",
+          "west": "Harpoon_Fighter/rotations/west.png",
+          "south-west": "Harpoon_Fighter/rotations/south-west.png"
+        },
+        "animations": {
+          "animating": {
+            "north-east": [
+              "Harpoon_Fighter/animations/animating/north-east/frame_000.png",
+              "Harpoon_Fighter/animations/animating/north-east/frame_001.png",
+              "Harpoon_Fighter/animations/animating/north-east/frame_002.png",
+              "Harpoon_Fighter/animations/animating/north-east/frame_003.png",
+              "Harpoon_Fighter/animations/animating/north-east/frame_004.png",
+              "Harpoon_Fighter/animations/animating/north-east/frame_005.png",
+              "Harpoon_Fighter/animations/animating/north-east/frame_006.png",
+              "Harpoon_Fighter/animations/animating/north-east/frame_007.png"
+            ],
+            "south-east": [
+              "Harpoon_Fighter/animations/animating/south-east/frame_000.png",
+              "Harpoon_Fighter/animations/animating/south-east/frame_001.png",
+              "Harpoon_Fighter/animations/animating/south-east/frame_002.png",
+              "Harpoon_Fighter/animations/animating/south-east/frame_003.png",
+              "Harpoon_Fighter/animations/animating/south-east/frame_004.png",
+              "Harpoon_Fighter/animations/animating/south-east/frame_005.png",
+              "Harpoon_Fighter/animations/animating/south-east/frame_006.png",
+              "Harpoon_Fighter/animations/animating/south-east/frame_007.png"
+            ],
+            "south": [
+              "Harpoon_Fighter/animations/animating/south/frame_000.png",
+              "Harpoon_Fighter/animations/animating/south/frame_001.png",
+              "Harpoon_Fighter/animations/animating/south/frame_002.png",
+              "Harpoon_Fighter/animations/animating/south/frame_003.png",
+              "Harpoon_Fighter/animations/animating/south/frame_004.png",
+              "Harpoon_Fighter/animations/animating/south/frame_005.png",
+              "Harpoon_Fighter/animations/animating/south/frame_006.png",
+              "Harpoon_Fighter/animations/animating/south/frame_007.png"
+            ],
+            "west": [
+              "Harpoon_Fighter/animations/animating/west/frame_000.png",
+              "Harpoon_Fighter/animations/animating/west/frame_001.png",
+              "Harpoon_Fighter/animations/animating/west/frame_002.png",
+              "Harpoon_Fighter/animations/animating/west/frame_003.png",
+              "Harpoon_Fighter/animations/animating/west/frame_004.png",
+              "Harpoon_Fighter/animations/animating/west/frame_005.png",
+              "Harpoon_Fighter/animations/animating/west/frame_006.png",
+              "Harpoon_Fighter/animations/animating/west/frame_007.png"
+            ],
+            "north-west": [
+              "Harpoon_Fighter/animations/animating/north-west/frame_000.png",
+              "Harpoon_Fighter/animations/animating/north-west/frame_001.png",
+              "Harpoon_Fighter/animations/animating/north-west/frame_002.png",
+              "Harpoon_Fighter/animations/animating/north-west/frame_003.png",
+              "Harpoon_Fighter/animations/animating/north-west/frame_004.png",
+              "Harpoon_Fighter/animations/animating/north-west/frame_005.png",
+              "Harpoon_Fighter/animations/animating/north-west/frame_006.png",
+              "Harpoon_Fighter/animations/animating/north-west/frame_007.png"
+            ],
+            "south-west": [
+              "Harpoon_Fighter/animations/animating/south-west/frame_000.png",
+              "Harpoon_Fighter/animations/animating/south-west/frame_001.png",
+              "Harpoon_Fighter/animations/animating/south-west/frame_002.png",
+              "Harpoon_Fighter/animations/animating/south-west/frame_003.png",
+              "Harpoon_Fighter/animations/animating/south-west/frame_004.png",
+              "Harpoon_Fighter/animations/animating/south-west/frame_005.png",
+              "Harpoon_Fighter/animations/animating/south-west/frame_006.png",
+              "Harpoon_Fighter/animations/animating/south-west/frame_007.png"
+            ],
+            "east": [
+              "Harpoon_Fighter/animations/animating/east/frame_000.png",
+              "Harpoon_Fighter/animations/animating/east/frame_001.png",
+              "Harpoon_Fighter/animations/animating/east/frame_002.png",
+              "Harpoon_Fighter/animations/animating/east/frame_003.png",
+              "Harpoon_Fighter/animations/animating/east/frame_004.png",
+              "Harpoon_Fighter/animations/animating/east/frame_005.png",
+              "Harpoon_Fighter/animations/animating/east/frame_006.png",
+              "Harpoon_Fighter/animations/animating/east/frame_007.png"
+            ],
+            "north": [
+              "Harpoon_Fighter/animations/animating/north/frame_000.png",
+              "Harpoon_Fighter/animations/animating/north/frame_001.png",
+              "Harpoon_Fighter/animations/animating/north/frame_002.png",
+              "Harpoon_Fighter/animations/animating/north/frame_003.png",
+              "Harpoon_Fighter/animations/animating/north/frame_004.png",
+              "Harpoon_Fighter/animations/animating/north/frame_005.png",
+              "Harpoon_Fighter/animations/animating/north/frame_006.png",
+              "Harpoon_Fighter/animations/animating/north/frame_007.png"
+            ]
+          },
+          "falling_backward": {
+            "south-west": [
+              "Harpoon_Fighter/animations/falling_backward/south-west/frame_000.png",
+              "Harpoon_Fighter/animations/falling_backward/south-west/frame_001.png",
+              "Harpoon_Fighter/animations/falling_backward/south-west/frame_002.png",
+              "Harpoon_Fighter/animations/falling_backward/south-west/frame_003.png",
+              "Harpoon_Fighter/animations/falling_backward/south-west/frame_004.png",
+              "Harpoon_Fighter/animations/falling_backward/south-west/frame_005.png",
+              "Harpoon_Fighter/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "north-east": [
+              "Harpoon_Fighter/animations/falling_backward/north-east/frame_000.png",
+              "Harpoon_Fighter/animations/falling_backward/north-east/frame_001.png",
+              "Harpoon_Fighter/animations/falling_backward/north-east/frame_002.png",
+              "Harpoon_Fighter/animations/falling_backward/north-east/frame_003.png",
+              "Harpoon_Fighter/animations/falling_backward/north-east/frame_004.png",
+              "Harpoon_Fighter/animations/falling_backward/north-east/frame_005.png",
+              "Harpoon_Fighter/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "west": [
+              "Harpoon_Fighter/animations/falling_backward/west/frame_000.png",
+              "Harpoon_Fighter/animations/falling_backward/west/frame_001.png",
+              "Harpoon_Fighter/animations/falling_backward/west/frame_002.png",
+              "Harpoon_Fighter/animations/falling_backward/west/frame_003.png",
+              "Harpoon_Fighter/animations/falling_backward/west/frame_004.png",
+              "Harpoon_Fighter/animations/falling_backward/west/frame_005.png",
+              "Harpoon_Fighter/animations/falling_backward/west/frame_006.png"
+            ],
+            "south": [
+              "Harpoon_Fighter/animations/falling_backward/south/frame_000.png",
+              "Harpoon_Fighter/animations/falling_backward/south/frame_001.png",
+              "Harpoon_Fighter/animations/falling_backward/south/frame_002.png",
+              "Harpoon_Fighter/animations/falling_backward/south/frame_003.png",
+              "Harpoon_Fighter/animations/falling_backward/south/frame_004.png",
+              "Harpoon_Fighter/animations/falling_backward/south/frame_005.png",
+              "Harpoon_Fighter/animations/falling_backward/south/frame_006.png"
+            ],
+            "south-east": [
+              "Harpoon_Fighter/animations/falling_backward/south-east/frame_000.png",
+              "Harpoon_Fighter/animations/falling_backward/south-east/frame_001.png",
+              "Harpoon_Fighter/animations/falling_backward/south-east/frame_002.png",
+              "Harpoon_Fighter/animations/falling_backward/south-east/frame_003.png",
+              "Harpoon_Fighter/animations/falling_backward/south-east/frame_004.png",
+              "Harpoon_Fighter/animations/falling_backward/south-east/frame_005.png",
+              "Harpoon_Fighter/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "north": [
+              "Harpoon_Fighter/animations/falling_backward/north/frame_000.png",
+              "Harpoon_Fighter/animations/falling_backward/north/frame_001.png",
+              "Harpoon_Fighter/animations/falling_backward/north/frame_002.png",
+              "Harpoon_Fighter/animations/falling_backward/north/frame_003.png",
+              "Harpoon_Fighter/animations/falling_backward/north/frame_004.png",
+              "Harpoon_Fighter/animations/falling_backward/north/frame_005.png",
+              "Harpoon_Fighter/animations/falling_backward/north/frame_006.png"
+            ],
+            "north-west": [
+              "Harpoon_Fighter/animations/falling_backward/north-west/frame_000.png",
+              "Harpoon_Fighter/animations/falling_backward/north-west/frame_001.png",
+              "Harpoon_Fighter/animations/falling_backward/north-west/frame_002.png",
+              "Harpoon_Fighter/animations/falling_backward/north-west/frame_003.png",
+              "Harpoon_Fighter/animations/falling_backward/north-west/frame_004.png",
+              "Harpoon_Fighter/animations/falling_backward/north-west/frame_005.png",
+              "Harpoon_Fighter/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "east": [
+              "Harpoon_Fighter/animations/falling_backward/east/frame_000.png",
+              "Harpoon_Fighter/animations/falling_backward/east/frame_001.png",
+              "Harpoon_Fighter/animations/falling_backward/east/frame_002.png",
+              "Harpoon_Fighter/animations/falling_backward/east/frame_003.png",
+              "Harpoon_Fighter/animations/falling_backward/east/frame_004.png",
+              "Harpoon_Fighter/animations/falling_backward/east/frame_005.png",
+              "Harpoon_Fighter/animations/falling_backward/east/frame_006.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Harpoon_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Harpoon_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Harpoon_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Harpoon_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Harpoon_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png"
+            ]
+          },
+          "animating-7586656e": {
+            "east": [
+              "Harpoon_Fighter/animations/animating-7586656e/east/frame_000.png",
+              "Harpoon_Fighter/animations/animating-7586656e/east/frame_001.png",
+              "Harpoon_Fighter/animations/animating-7586656e/east/frame_002.png",
+              "Harpoon_Fighter/animations/animating-7586656e/east/frame_003.png"
+            ],
+            "south-west": [
+              "Harpoon_Fighter/animations/animating-7586656e/south-west/frame_000.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south-west/frame_001.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south-west/frame_002.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south-west/frame_003.png"
+            ],
+            "north": [
+              "Harpoon_Fighter/animations/animating-7586656e/north/frame_000.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north/frame_001.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north/frame_002.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north/frame_003.png"
+            ],
+            "west": [
+              "Harpoon_Fighter/animations/animating-7586656e/west/frame_000.png",
+              "Harpoon_Fighter/animations/animating-7586656e/west/frame_001.png",
+              "Harpoon_Fighter/animations/animating-7586656e/west/frame_002.png",
+              "Harpoon_Fighter/animations/animating-7586656e/west/frame_003.png"
+            ],
+            "south": [
+              "Harpoon_Fighter/animations/animating-7586656e/south/frame_000.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south/frame_001.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south/frame_002.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south/frame_003.png"
+            ],
+            "north-east": [
+              "Harpoon_Fighter/animations/animating-7586656e/north-east/frame_000.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north-east/frame_001.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north-east/frame_002.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north-east/frame_003.png"
+            ],
+            "south-east": [
+              "Harpoon_Fighter/animations/animating-7586656e/south-east/frame_000.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south-east/frame_001.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south-east/frame_002.png",
+              "Harpoon_Fighter/animations/animating-7586656e/south-east/frame_003.png"
+            ],
+            "north-west": [
+              "Harpoon_Fighter/animations/animating-7586656e/north-west/frame_000.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north-west/frame_001.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north-west/frame_002.png",
+              "Harpoon_Fighter/animations/animating-7586656e/north-west/frame_003.png"
+            ]
+          },
+          "raising_a_weapon_into_a_guarding_defensive_stance": {
+            "south": [
+              "Harpoon_Fighter/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_000.png",
+              "Harpoon_Fighter/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_001.png",
+              "Harpoon_Fighter/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_002.png",
+              "Harpoon_Fighter/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_003.png",
+              "Harpoon_Fighter/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_004.png"
+            ]
+          },
+          "thrusting_harpoon_forward_with_a_quick_powerful_ja": {
+            "south": [
+              "Harpoon_Fighter/animations/thrusting_harpoon_forward_with_a_quick_powerful_ja/south/frame_000.png",
+              "Harpoon_Fighter/animations/thrusting_harpoon_forward_with_a_quick_powerful_ja/south/frame_001.png",
+              "Harpoon_Fighter/animations/thrusting_harpoon_forward_with_a_quick_powerful_ja/south/frame_002.png",
+              "Harpoon_Fighter/animations/thrusting_harpoon_forward_with_a_quick_powerful_ja/south/frame_003.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:50:57.418951"
+}

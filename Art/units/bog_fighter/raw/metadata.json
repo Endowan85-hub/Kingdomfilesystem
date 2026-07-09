@@ -1,0 +1,280 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "5f4339b5-cad1-40d8-9c83-7e430e400e72",
+        "name": "Bog Fighter",
+        "prompt": "A tier 1 swamp fighter in basic dark green and brown waterlogged leather armor, carrying a simple heavy wooden club. Mud-covered, no ornate details, conscript-level equipment.",
+        "size": {
+          "width": 124,
+          "height": 124
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T03:24:08.630701+00:00"
+      },
+      "folder": "Bog_Fighter",
+      "frames": {
+        "rotations": {
+          "south": "Bog_Fighter/rotations/south.png",
+          "south-east": "Bog_Fighter/rotations/south-east.png",
+          "east": "Bog_Fighter/rotations/east.png",
+          "north-east": "Bog_Fighter/rotations/north-east.png",
+          "north": "Bog_Fighter/rotations/north.png",
+          "north-west": "Bog_Fighter/rotations/north-west.png",
+          "west": "Bog_Fighter/rotations/west.png",
+          "south-west": "Bog_Fighter/rotations/south-west.png"
+        },
+        "animations": {
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Bog_Fighter/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Bog_Fighter/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Bog_Fighter/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Bog_Fighter/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Bog_Fighter/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Bog_Fighter/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Bog_Fighter/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "animating": {
+            "north-east": [
+              "Bog_Fighter/animations/animating/north-east/frame_000.png",
+              "Bog_Fighter/animations/animating/north-east/frame_001.png",
+              "Bog_Fighter/animations/animating/north-east/frame_002.png",
+              "Bog_Fighter/animations/animating/north-east/frame_003.png",
+              "Bog_Fighter/animations/animating/north-east/frame_004.png",
+              "Bog_Fighter/animations/animating/north-east/frame_005.png",
+              "Bog_Fighter/animations/animating/north-east/frame_006.png",
+              "Bog_Fighter/animations/animating/north-east/frame_007.png"
+            ],
+            "south-east": [
+              "Bog_Fighter/animations/animating/south-east/frame_000.png",
+              "Bog_Fighter/animations/animating/south-east/frame_001.png",
+              "Bog_Fighter/animations/animating/south-east/frame_002.png",
+              "Bog_Fighter/animations/animating/south-east/frame_003.png",
+              "Bog_Fighter/animations/animating/south-east/frame_004.png",
+              "Bog_Fighter/animations/animating/south-east/frame_005.png",
+              "Bog_Fighter/animations/animating/south-east/frame_006.png",
+              "Bog_Fighter/animations/animating/south-east/frame_007.png"
+            ],
+            "west": [
+              "Bog_Fighter/animations/animating/west/frame_000.png",
+              "Bog_Fighter/animations/animating/west/frame_001.png",
+              "Bog_Fighter/animations/animating/west/frame_002.png",
+              "Bog_Fighter/animations/animating/west/frame_003.png",
+              "Bog_Fighter/animations/animating/west/frame_004.png",
+              "Bog_Fighter/animations/animating/west/frame_005.png",
+              "Bog_Fighter/animations/animating/west/frame_006.png",
+              "Bog_Fighter/animations/animating/west/frame_007.png"
+            ],
+            "south": [
+              "Bog_Fighter/animations/animating/south/frame_000.png",
+              "Bog_Fighter/animations/animating/south/frame_001.png",
+              "Bog_Fighter/animations/animating/south/frame_002.png",
+              "Bog_Fighter/animations/animating/south/frame_003.png",
+              "Bog_Fighter/animations/animating/south/frame_004.png",
+              "Bog_Fighter/animations/animating/south/frame_005.png",
+              "Bog_Fighter/animations/animating/south/frame_006.png",
+              "Bog_Fighter/animations/animating/south/frame_007.png"
+            ],
+            "north": [
+              "Bog_Fighter/animations/animating/north/frame_000.png",
+              "Bog_Fighter/animations/animating/north/frame_001.png",
+              "Bog_Fighter/animations/animating/north/frame_002.png",
+              "Bog_Fighter/animations/animating/north/frame_003.png",
+              "Bog_Fighter/animations/animating/north/frame_004.png",
+              "Bog_Fighter/animations/animating/north/frame_005.png",
+              "Bog_Fighter/animations/animating/north/frame_006.png",
+              "Bog_Fighter/animations/animating/north/frame_007.png"
+            ],
+            "east": [
+              "Bog_Fighter/animations/animating/east/frame_000.png",
+              "Bog_Fighter/animations/animating/east/frame_001.png",
+              "Bog_Fighter/animations/animating/east/frame_002.png",
+              "Bog_Fighter/animations/animating/east/frame_003.png",
+              "Bog_Fighter/animations/animating/east/frame_004.png",
+              "Bog_Fighter/animations/animating/east/frame_005.png",
+              "Bog_Fighter/animations/animating/east/frame_006.png",
+              "Bog_Fighter/animations/animating/east/frame_007.png"
+            ],
+            "south-west": [
+              "Bog_Fighter/animations/animating/south-west/frame_000.png",
+              "Bog_Fighter/animations/animating/south-west/frame_001.png",
+              "Bog_Fighter/animations/animating/south-west/frame_002.png",
+              "Bog_Fighter/animations/animating/south-west/frame_003.png",
+              "Bog_Fighter/animations/animating/south-west/frame_004.png",
+              "Bog_Fighter/animations/animating/south-west/frame_005.png",
+              "Bog_Fighter/animations/animating/south-west/frame_006.png",
+              "Bog_Fighter/animations/animating/south-west/frame_007.png"
+            ],
+            "north-west": [
+              "Bog_Fighter/animations/animating/north-west/frame_000.png",
+              "Bog_Fighter/animations/animating/north-west/frame_001.png",
+              "Bog_Fighter/animations/animating/north-west/frame_002.png",
+              "Bog_Fighter/animations/animating/north-west/frame_003.png",
+              "Bog_Fighter/animations/animating/north-west/frame_004.png",
+              "Bog_Fighter/animations/animating/north-west/frame_005.png",
+              "Bog_Fighter/animations/animating/north-west/frame_006.png",
+              "Bog_Fighter/animations/animating/north-west/frame_007.png"
+            ]
+          },
+          "falling_backward": {
+            "east": [
+              "Bog_Fighter/animations/falling_backward/east/frame_000.png",
+              "Bog_Fighter/animations/falling_backward/east/frame_001.png",
+              "Bog_Fighter/animations/falling_backward/east/frame_002.png",
+              "Bog_Fighter/animations/falling_backward/east/frame_003.png",
+              "Bog_Fighter/animations/falling_backward/east/frame_004.png",
+              "Bog_Fighter/animations/falling_backward/east/frame_005.png",
+              "Bog_Fighter/animations/falling_backward/east/frame_006.png"
+            ],
+            "north-east": [
+              "Bog_Fighter/animations/falling_backward/north-east/frame_000.png",
+              "Bog_Fighter/animations/falling_backward/north-east/frame_001.png",
+              "Bog_Fighter/animations/falling_backward/north-east/frame_002.png",
+              "Bog_Fighter/animations/falling_backward/north-east/frame_003.png",
+              "Bog_Fighter/animations/falling_backward/north-east/frame_004.png",
+              "Bog_Fighter/animations/falling_backward/north-east/frame_005.png",
+              "Bog_Fighter/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "south": [
+              "Bog_Fighter/animations/falling_backward/south/frame_000.png",
+              "Bog_Fighter/animations/falling_backward/south/frame_001.png",
+              "Bog_Fighter/animations/falling_backward/south/frame_002.png",
+              "Bog_Fighter/animations/falling_backward/south/frame_003.png",
+              "Bog_Fighter/animations/falling_backward/south/frame_004.png",
+              "Bog_Fighter/animations/falling_backward/south/frame_005.png",
+              "Bog_Fighter/animations/falling_backward/south/frame_006.png"
+            ],
+            "west": [
+              "Bog_Fighter/animations/falling_backward/west/frame_000.png",
+              "Bog_Fighter/animations/falling_backward/west/frame_001.png",
+              "Bog_Fighter/animations/falling_backward/west/frame_002.png",
+              "Bog_Fighter/animations/falling_backward/west/frame_003.png",
+              "Bog_Fighter/animations/falling_backward/west/frame_004.png",
+              "Bog_Fighter/animations/falling_backward/west/frame_005.png",
+              "Bog_Fighter/animations/falling_backward/west/frame_006.png"
+            ],
+            "north-west": [
+              "Bog_Fighter/animations/falling_backward/north-west/frame_000.png",
+              "Bog_Fighter/animations/falling_backward/north-west/frame_001.png",
+              "Bog_Fighter/animations/falling_backward/north-west/frame_002.png",
+              "Bog_Fighter/animations/falling_backward/north-west/frame_003.png",
+              "Bog_Fighter/animations/falling_backward/north-west/frame_004.png",
+              "Bog_Fighter/animations/falling_backward/north-west/frame_005.png",
+              "Bog_Fighter/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "south-west": [
+              "Bog_Fighter/animations/falling_backward/south-west/frame_000.png",
+              "Bog_Fighter/animations/falling_backward/south-west/frame_001.png",
+              "Bog_Fighter/animations/falling_backward/south-west/frame_002.png",
+              "Bog_Fighter/animations/falling_backward/south-west/frame_003.png",
+              "Bog_Fighter/animations/falling_backward/south-west/frame_004.png",
+              "Bog_Fighter/animations/falling_backward/south-west/frame_005.png",
+              "Bog_Fighter/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "north": [
+              "Bog_Fighter/animations/falling_backward/north/frame_000.png",
+              "Bog_Fighter/animations/falling_backward/north/frame_001.png",
+              "Bog_Fighter/animations/falling_backward/north/frame_002.png",
+              "Bog_Fighter/animations/falling_backward/north/frame_003.png",
+              "Bog_Fighter/animations/falling_backward/north/frame_004.png",
+              "Bog_Fighter/animations/falling_backward/north/frame_005.png",
+              "Bog_Fighter/animations/falling_backward/north/frame_006.png"
+            ],
+            "south-east": [
+              "Bog_Fighter/animations/falling_backward/south-east/frame_000.png",
+              "Bog_Fighter/animations/falling_backward/south-east/frame_001.png",
+              "Bog_Fighter/animations/falling_backward/south-east/frame_002.png",
+              "Bog_Fighter/animations/falling_backward/south-east/frame_003.png",
+              "Bog_Fighter/animations/falling_backward/south-east/frame_004.png",
+              "Bog_Fighter/animations/falling_backward/south-east/frame_005.png",
+              "Bog_Fighter/animations/falling_backward/south-east/frame_006.png"
+            ]
+          },
+          "animating-a0161ea0": {
+            "west": [
+              "Bog_Fighter/animations/animating-a0161ea0/west/frame_000.png",
+              "Bog_Fighter/animations/animating-a0161ea0/west/frame_001.png",
+              "Bog_Fighter/animations/animating-a0161ea0/west/frame_002.png",
+              "Bog_Fighter/animations/animating-a0161ea0/west/frame_003.png"
+            ],
+            "north-west": [
+              "Bog_Fighter/animations/animating-a0161ea0/north-west/frame_000.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north-west/frame_001.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north-west/frame_002.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north-west/frame_003.png"
+            ],
+            "south": [
+              "Bog_Fighter/animations/animating-a0161ea0/south/frame_000.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south/frame_001.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south/frame_002.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south/frame_003.png"
+            ],
+            "south-west": [
+              "Bog_Fighter/animations/animating-a0161ea0/south-west/frame_000.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south-west/frame_001.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south-west/frame_002.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south-west/frame_003.png"
+            ],
+            "north-east": [
+              "Bog_Fighter/animations/animating-a0161ea0/north-east/frame_000.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north-east/frame_001.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north-east/frame_002.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north-east/frame_003.png"
+            ],
+            "east": [
+              "Bog_Fighter/animations/animating-a0161ea0/east/frame_000.png",
+              "Bog_Fighter/animations/animating-a0161ea0/east/frame_001.png",
+              "Bog_Fighter/animations/animating-a0161ea0/east/frame_002.png",
+              "Bog_Fighter/animations/animating-a0161ea0/east/frame_003.png"
+            ],
+            "north": [
+              "Bog_Fighter/animations/animating-a0161ea0/north/frame_000.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north/frame_001.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north/frame_002.png",
+              "Bog_Fighter/animations/animating-a0161ea0/north/frame_003.png"
+            ],
+            "south-east": [
+              "Bog_Fighter/animations/animating-a0161ea0/south-east/frame_000.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south-east/frame_001.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south-east/frame_002.png",
+              "Bog_Fighter/animations/animating-a0161ea0/south-east/frame_003.png"
+            ]
+          },
+          "swinging_a_heavy_spiked_club_in_a_crushing_blow": {
+            "south": [
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_000.png",
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_001.png",
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_002.png",
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_003.png",
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_004.png",
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_005.png",
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_006.png",
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_007.png",
+              "Bog_Fighter/animations/swinging_a_heavy_spiked_club_in_a_crushing_blow/south/frame_008.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png",
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_005.png",
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_006.png",
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_007.png",
+              "Bog_Fighter/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_008.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:42:51.628710"
+}

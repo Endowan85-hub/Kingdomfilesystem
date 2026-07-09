@@ -1,0 +1,276 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "09e27e82-200e-4e12-a85e-05a55bc29b9f",
+        "name": "Ice Archer",
+        "prompt": "A tier 1 tundra archer in basic white and pale blue fur-lined winter clothing, carrying a plain recurve bow and a rough quiver of arrows. Minimal gear, no ornate details, conscript-level equipment.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T02:48:09.996597+00:00"
+      },
+      "folder": "Ice_Archer",
+      "frames": {
+        "rotations": {
+          "south": "Ice_Archer/rotations/south.png",
+          "south-east": "Ice_Archer/rotations/south-east.png",
+          "east": "Ice_Archer/rotations/east.png",
+          "north-east": "Ice_Archer/rotations/north-east.png",
+          "north": "Ice_Archer/rotations/north.png",
+          "north-west": "Ice_Archer/rotations/north-west.png",
+          "west": "Ice_Archer/rotations/west.png",
+          "south-west": "Ice_Archer/rotations/south-west.png"
+        },
+        "animations": {
+          "drawing_a_recurve_bow_and_releasing_an_arrow": {
+            "south": [
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_000.png",
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_001.png",
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_002.png",
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_003.png",
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_004.png",
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_005.png",
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_006.png",
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_007.png",
+              "Ice_Archer/animations/drawing_a_recurve_bow_and_releasing_an_arrow/south/frame_008.png"
+            ]
+          },
+          "falling_backward": {
+            "south-east": [
+              "Ice_Archer/animations/falling_backward/south-east/frame_000.png",
+              "Ice_Archer/animations/falling_backward/south-east/frame_001.png",
+              "Ice_Archer/animations/falling_backward/south-east/frame_002.png",
+              "Ice_Archer/animations/falling_backward/south-east/frame_003.png",
+              "Ice_Archer/animations/falling_backward/south-east/frame_004.png",
+              "Ice_Archer/animations/falling_backward/south-east/frame_005.png",
+              "Ice_Archer/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "west": [
+              "Ice_Archer/animations/falling_backward/west/frame_000.png",
+              "Ice_Archer/animations/falling_backward/west/frame_001.png",
+              "Ice_Archer/animations/falling_backward/west/frame_002.png",
+              "Ice_Archer/animations/falling_backward/west/frame_003.png",
+              "Ice_Archer/animations/falling_backward/west/frame_004.png",
+              "Ice_Archer/animations/falling_backward/west/frame_005.png",
+              "Ice_Archer/animations/falling_backward/west/frame_006.png"
+            ],
+            "north-west": [
+              "Ice_Archer/animations/falling_backward/north-west/frame_000.png",
+              "Ice_Archer/animations/falling_backward/north-west/frame_001.png",
+              "Ice_Archer/animations/falling_backward/north-west/frame_002.png",
+              "Ice_Archer/animations/falling_backward/north-west/frame_003.png",
+              "Ice_Archer/animations/falling_backward/north-west/frame_004.png",
+              "Ice_Archer/animations/falling_backward/north-west/frame_005.png",
+              "Ice_Archer/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "north": [
+              "Ice_Archer/animations/falling_backward/north/frame_000.png",
+              "Ice_Archer/animations/falling_backward/north/frame_001.png",
+              "Ice_Archer/animations/falling_backward/north/frame_002.png",
+              "Ice_Archer/animations/falling_backward/north/frame_003.png",
+              "Ice_Archer/animations/falling_backward/north/frame_004.png",
+              "Ice_Archer/animations/falling_backward/north/frame_005.png",
+              "Ice_Archer/animations/falling_backward/north/frame_006.png"
+            ],
+            "south-west": [
+              "Ice_Archer/animations/falling_backward/south-west/frame_000.png",
+              "Ice_Archer/animations/falling_backward/south-west/frame_001.png",
+              "Ice_Archer/animations/falling_backward/south-west/frame_002.png",
+              "Ice_Archer/animations/falling_backward/south-west/frame_003.png",
+              "Ice_Archer/animations/falling_backward/south-west/frame_004.png",
+              "Ice_Archer/animations/falling_backward/south-west/frame_005.png",
+              "Ice_Archer/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "north-east": [
+              "Ice_Archer/animations/falling_backward/north-east/frame_000.png",
+              "Ice_Archer/animations/falling_backward/north-east/frame_001.png",
+              "Ice_Archer/animations/falling_backward/north-east/frame_002.png",
+              "Ice_Archer/animations/falling_backward/north-east/frame_003.png",
+              "Ice_Archer/animations/falling_backward/north-east/frame_004.png",
+              "Ice_Archer/animations/falling_backward/north-east/frame_005.png",
+              "Ice_Archer/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "east": [
+              "Ice_Archer/animations/falling_backward/east/frame_000.png",
+              "Ice_Archer/animations/falling_backward/east/frame_001.png",
+              "Ice_Archer/animations/falling_backward/east/frame_002.png",
+              "Ice_Archer/animations/falling_backward/east/frame_003.png",
+              "Ice_Archer/animations/falling_backward/east/frame_004.png",
+              "Ice_Archer/animations/falling_backward/east/frame_005.png",
+              "Ice_Archer/animations/falling_backward/east/frame_006.png"
+            ],
+            "south": [
+              "Ice_Archer/animations/falling_backward/south/frame_000.png",
+              "Ice_Archer/animations/falling_backward/south/frame_001.png",
+              "Ice_Archer/animations/falling_backward/south/frame_002.png",
+              "Ice_Archer/animations/falling_backward/south/frame_003.png",
+              "Ice_Archer/animations/falling_backward/south/frame_004.png",
+              "Ice_Archer/animations/falling_backward/south/frame_005.png",
+              "Ice_Archer/animations/falling_backward/south/frame_006.png"
+            ]
+          },
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Ice_Archer/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Ice_Archer/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Ice_Archer/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Ice_Archer/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Ice_Archer/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Ice_Archer/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Ice_Archer/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Ice_Archer/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Ice_Archer/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Ice_Archer/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Ice_Archer/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Ice_Archer/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png"
+            ]
+          },
+          "animating": {
+            "south-east": [
+              "Ice_Archer/animations/animating/south-east/frame_000.png",
+              "Ice_Archer/animations/animating/south-east/frame_001.png",
+              "Ice_Archer/animations/animating/south-east/frame_002.png",
+              "Ice_Archer/animations/animating/south-east/frame_003.png",
+              "Ice_Archer/animations/animating/south-east/frame_004.png",
+              "Ice_Archer/animations/animating/south-east/frame_005.png",
+              "Ice_Archer/animations/animating/south-east/frame_006.png",
+              "Ice_Archer/animations/animating/south-east/frame_007.png"
+            ],
+            "south": [
+              "Ice_Archer/animations/animating/south/frame_000.png",
+              "Ice_Archer/animations/animating/south/frame_001.png",
+              "Ice_Archer/animations/animating/south/frame_002.png",
+              "Ice_Archer/animations/animating/south/frame_003.png",
+              "Ice_Archer/animations/animating/south/frame_004.png",
+              "Ice_Archer/animations/animating/south/frame_005.png",
+              "Ice_Archer/animations/animating/south/frame_006.png",
+              "Ice_Archer/animations/animating/south/frame_007.png"
+            ],
+            "south-west": [
+              "Ice_Archer/animations/animating/south-west/frame_000.png",
+              "Ice_Archer/animations/animating/south-west/frame_001.png",
+              "Ice_Archer/animations/animating/south-west/frame_002.png",
+              "Ice_Archer/animations/animating/south-west/frame_003.png",
+              "Ice_Archer/animations/animating/south-west/frame_004.png",
+              "Ice_Archer/animations/animating/south-west/frame_005.png",
+              "Ice_Archer/animations/animating/south-west/frame_006.png",
+              "Ice_Archer/animations/animating/south-west/frame_007.png"
+            ],
+            "north": [
+              "Ice_Archer/animations/animating/north/frame_000.png",
+              "Ice_Archer/animations/animating/north/frame_001.png",
+              "Ice_Archer/animations/animating/north/frame_002.png",
+              "Ice_Archer/animations/animating/north/frame_003.png",
+              "Ice_Archer/animations/animating/north/frame_004.png",
+              "Ice_Archer/animations/animating/north/frame_005.png",
+              "Ice_Archer/animations/animating/north/frame_006.png",
+              "Ice_Archer/animations/animating/north/frame_007.png"
+            ],
+            "east": [
+              "Ice_Archer/animations/animating/east/frame_000.png",
+              "Ice_Archer/animations/animating/east/frame_001.png",
+              "Ice_Archer/animations/animating/east/frame_002.png",
+              "Ice_Archer/animations/animating/east/frame_003.png",
+              "Ice_Archer/animations/animating/east/frame_004.png",
+              "Ice_Archer/animations/animating/east/frame_005.png",
+              "Ice_Archer/animations/animating/east/frame_006.png",
+              "Ice_Archer/animations/animating/east/frame_007.png"
+            ],
+            "north-east": [
+              "Ice_Archer/animations/animating/north-east/frame_000.png",
+              "Ice_Archer/animations/animating/north-east/frame_001.png",
+              "Ice_Archer/animations/animating/north-east/frame_002.png",
+              "Ice_Archer/animations/animating/north-east/frame_003.png",
+              "Ice_Archer/animations/animating/north-east/frame_004.png",
+              "Ice_Archer/animations/animating/north-east/frame_005.png",
+              "Ice_Archer/animations/animating/north-east/frame_006.png",
+              "Ice_Archer/animations/animating/north-east/frame_007.png"
+            ],
+            "west": [
+              "Ice_Archer/animations/animating/west/frame_000.png",
+              "Ice_Archer/animations/animating/west/frame_001.png",
+              "Ice_Archer/animations/animating/west/frame_002.png",
+              "Ice_Archer/animations/animating/west/frame_003.png",
+              "Ice_Archer/animations/animating/west/frame_004.png",
+              "Ice_Archer/animations/animating/west/frame_005.png",
+              "Ice_Archer/animations/animating/west/frame_006.png",
+              "Ice_Archer/animations/animating/west/frame_007.png"
+            ],
+            "north-west": [
+              "Ice_Archer/animations/animating/north-west/frame_000.png",
+              "Ice_Archer/animations/animating/north-west/frame_001.png",
+              "Ice_Archer/animations/animating/north-west/frame_002.png",
+              "Ice_Archer/animations/animating/north-west/frame_003.png",
+              "Ice_Archer/animations/animating/north-west/frame_004.png",
+              "Ice_Archer/animations/animating/north-west/frame_005.png",
+              "Ice_Archer/animations/animating/north-west/frame_006.png",
+              "Ice_Archer/animations/animating/north-west/frame_007.png"
+            ]
+          },
+          "animating-c38ce99a": {
+            "south-west": [
+              "Ice_Archer/animations/animating-c38ce99a/south-west/frame_000.png",
+              "Ice_Archer/animations/animating-c38ce99a/south-west/frame_001.png",
+              "Ice_Archer/animations/animating-c38ce99a/south-west/frame_002.png",
+              "Ice_Archer/animations/animating-c38ce99a/south-west/frame_003.png"
+            ],
+            "north-west": [
+              "Ice_Archer/animations/animating-c38ce99a/north-west/frame_000.png",
+              "Ice_Archer/animations/animating-c38ce99a/north-west/frame_001.png",
+              "Ice_Archer/animations/animating-c38ce99a/north-west/frame_002.png",
+              "Ice_Archer/animations/animating-c38ce99a/north-west/frame_003.png"
+            ],
+            "north": [
+              "Ice_Archer/animations/animating-c38ce99a/north/frame_000.png",
+              "Ice_Archer/animations/animating-c38ce99a/north/frame_001.png",
+              "Ice_Archer/animations/animating-c38ce99a/north/frame_002.png",
+              "Ice_Archer/animations/animating-c38ce99a/north/frame_003.png"
+            ],
+            "north-east": [
+              "Ice_Archer/animations/animating-c38ce99a/north-east/frame_000.png",
+              "Ice_Archer/animations/animating-c38ce99a/north-east/frame_001.png",
+              "Ice_Archer/animations/animating-c38ce99a/north-east/frame_002.png",
+              "Ice_Archer/animations/animating-c38ce99a/north-east/frame_003.png"
+            ],
+            "south": [
+              "Ice_Archer/animations/animating-c38ce99a/south/frame_000.png",
+              "Ice_Archer/animations/animating-c38ce99a/south/frame_001.png",
+              "Ice_Archer/animations/animating-c38ce99a/south/frame_002.png",
+              "Ice_Archer/animations/animating-c38ce99a/south/frame_003.png"
+            ],
+            "south-east": [
+              "Ice_Archer/animations/animating-c38ce99a/south-east/frame_000.png",
+              "Ice_Archer/animations/animating-c38ce99a/south-east/frame_001.png",
+              "Ice_Archer/animations/animating-c38ce99a/south-east/frame_002.png",
+              "Ice_Archer/animations/animating-c38ce99a/south-east/frame_003.png"
+            ],
+            "east": [
+              "Ice_Archer/animations/animating-c38ce99a/east/frame_000.png",
+              "Ice_Archer/animations/animating-c38ce99a/east/frame_001.png",
+              "Ice_Archer/animations/animating-c38ce99a/east/frame_002.png",
+              "Ice_Archer/animations/animating-c38ce99a/east/frame_003.png"
+            ],
+            "west": [
+              "Ice_Archer/animations/animating-c38ce99a/west/frame_000.png",
+              "Ice_Archer/animations/animating-c38ce99a/west/frame_001.png",
+              "Ice_Archer/animations/animating-c38ce99a/west/frame_002.png",
+              "Ice_Archer/animations/animating-c38ce99a/west/frame_003.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:42:33.100488"
+}

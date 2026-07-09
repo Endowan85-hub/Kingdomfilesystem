@@ -1,0 +1,280 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "747e5d6c-4ca6-4661-87a2-844d4822abea",
+        "name": "Northern Raider",
+        "prompt": "A tier 1 northern raider in basic fur-trimmed leather armor, wielding a simple heavy battle axe. No ornate details, minimal decoration, conscript-level equipment.",
+        "size": {
+          "width": 148,
+          "height": 148
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T03:06:09.169688+00:00"
+      },
+      "folder": "Northern_Raider",
+      "frames": {
+        "rotations": {
+          "south": "Northern_Raider/rotations/south.png",
+          "south-east": "Northern_Raider/rotations/south-east.png",
+          "east": "Northern_Raider/rotations/east.png",
+          "north-east": "Northern_Raider/rotations/north-east.png",
+          "north": "Northern_Raider/rotations/north.png",
+          "north-west": "Northern_Raider/rotations/north-west.png",
+          "west": "Northern_Raider/rotations/west.png",
+          "south-west": "Northern_Raider/rotations/south-west.png"
+        },
+        "animations": {
+          "animating": {
+            "north": [
+              "Northern_Raider/animations/animating/north/frame_000.png",
+              "Northern_Raider/animations/animating/north/frame_001.png",
+              "Northern_Raider/animations/animating/north/frame_002.png",
+              "Northern_Raider/animations/animating/north/frame_003.png"
+            ],
+            "north-east": [
+              "Northern_Raider/animations/animating/north-east/frame_000.png",
+              "Northern_Raider/animations/animating/north-east/frame_001.png",
+              "Northern_Raider/animations/animating/north-east/frame_002.png",
+              "Northern_Raider/animations/animating/north-east/frame_003.png"
+            ],
+            "south": [
+              "Northern_Raider/animations/animating/south/frame_000.png",
+              "Northern_Raider/animations/animating/south/frame_001.png",
+              "Northern_Raider/animations/animating/south/frame_002.png",
+              "Northern_Raider/animations/animating/south/frame_003.png"
+            ],
+            "south-east": [
+              "Northern_Raider/animations/animating/south-east/frame_000.png",
+              "Northern_Raider/animations/animating/south-east/frame_001.png",
+              "Northern_Raider/animations/animating/south-east/frame_002.png",
+              "Northern_Raider/animations/animating/south-east/frame_003.png"
+            ],
+            "south-west": [
+              "Northern_Raider/animations/animating/south-west/frame_000.png",
+              "Northern_Raider/animations/animating/south-west/frame_001.png",
+              "Northern_Raider/animations/animating/south-west/frame_002.png",
+              "Northern_Raider/animations/animating/south-west/frame_003.png"
+            ],
+            "west": [
+              "Northern_Raider/animations/animating/west/frame_000.png",
+              "Northern_Raider/animations/animating/west/frame_001.png",
+              "Northern_Raider/animations/animating/west/frame_002.png",
+              "Northern_Raider/animations/animating/west/frame_003.png"
+            ],
+            "north-west": [
+              "Northern_Raider/animations/animating/north-west/frame_000.png",
+              "Northern_Raider/animations/animating/north-west/frame_001.png",
+              "Northern_Raider/animations/animating/north-west/frame_002.png",
+              "Northern_Raider/animations/animating/north-west/frame_003.png"
+            ],
+            "east": [
+              "Northern_Raider/animations/animating/east/frame_000.png",
+              "Northern_Raider/animations/animating/east/frame_001.png",
+              "Northern_Raider/animations/animating/east/frame_002.png",
+              "Northern_Raider/animations/animating/east/frame_003.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png",
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_005.png",
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_006.png",
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_007.png",
+              "Northern_Raider/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_008.png"
+            ]
+          },
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Northern_Raider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Northern_Raider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Northern_Raider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Northern_Raider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Northern_Raider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Northern_Raider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Northern_Raider/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "animating-c6911e07": {
+            "west": [
+              "Northern_Raider/animations/animating-c6911e07/west/frame_000.png",
+              "Northern_Raider/animations/animating-c6911e07/west/frame_001.png",
+              "Northern_Raider/animations/animating-c6911e07/west/frame_002.png",
+              "Northern_Raider/animations/animating-c6911e07/west/frame_003.png",
+              "Northern_Raider/animations/animating-c6911e07/west/frame_004.png",
+              "Northern_Raider/animations/animating-c6911e07/west/frame_005.png",
+              "Northern_Raider/animations/animating-c6911e07/west/frame_006.png",
+              "Northern_Raider/animations/animating-c6911e07/west/frame_007.png"
+            ],
+            "south-west": [
+              "Northern_Raider/animations/animating-c6911e07/south-west/frame_000.png",
+              "Northern_Raider/animations/animating-c6911e07/south-west/frame_001.png",
+              "Northern_Raider/animations/animating-c6911e07/south-west/frame_002.png",
+              "Northern_Raider/animations/animating-c6911e07/south-west/frame_003.png",
+              "Northern_Raider/animations/animating-c6911e07/south-west/frame_004.png",
+              "Northern_Raider/animations/animating-c6911e07/south-west/frame_005.png",
+              "Northern_Raider/animations/animating-c6911e07/south-west/frame_006.png",
+              "Northern_Raider/animations/animating-c6911e07/south-west/frame_007.png"
+            ],
+            "north": [
+              "Northern_Raider/animations/animating-c6911e07/north/frame_000.png",
+              "Northern_Raider/animations/animating-c6911e07/north/frame_001.png",
+              "Northern_Raider/animations/animating-c6911e07/north/frame_002.png",
+              "Northern_Raider/animations/animating-c6911e07/north/frame_003.png",
+              "Northern_Raider/animations/animating-c6911e07/north/frame_004.png",
+              "Northern_Raider/animations/animating-c6911e07/north/frame_005.png",
+              "Northern_Raider/animations/animating-c6911e07/north/frame_006.png",
+              "Northern_Raider/animations/animating-c6911e07/north/frame_007.png"
+            ],
+            "south-east": [
+              "Northern_Raider/animations/animating-c6911e07/south-east/frame_000.png",
+              "Northern_Raider/animations/animating-c6911e07/south-east/frame_001.png",
+              "Northern_Raider/animations/animating-c6911e07/south-east/frame_002.png",
+              "Northern_Raider/animations/animating-c6911e07/south-east/frame_003.png",
+              "Northern_Raider/animations/animating-c6911e07/south-east/frame_004.png",
+              "Northern_Raider/animations/animating-c6911e07/south-east/frame_005.png",
+              "Northern_Raider/animations/animating-c6911e07/south-east/frame_006.png",
+              "Northern_Raider/animations/animating-c6911e07/south-east/frame_007.png"
+            ],
+            "east": [
+              "Northern_Raider/animations/animating-c6911e07/east/frame_000.png",
+              "Northern_Raider/animations/animating-c6911e07/east/frame_001.png",
+              "Northern_Raider/animations/animating-c6911e07/east/frame_002.png",
+              "Northern_Raider/animations/animating-c6911e07/east/frame_003.png",
+              "Northern_Raider/animations/animating-c6911e07/east/frame_004.png",
+              "Northern_Raider/animations/animating-c6911e07/east/frame_005.png",
+              "Northern_Raider/animations/animating-c6911e07/east/frame_006.png",
+              "Northern_Raider/animations/animating-c6911e07/east/frame_007.png"
+            ],
+            "south": [
+              "Northern_Raider/animations/animating-c6911e07/south/frame_000.png",
+              "Northern_Raider/animations/animating-c6911e07/south/frame_001.png",
+              "Northern_Raider/animations/animating-c6911e07/south/frame_002.png",
+              "Northern_Raider/animations/animating-c6911e07/south/frame_003.png",
+              "Northern_Raider/animations/animating-c6911e07/south/frame_004.png",
+              "Northern_Raider/animations/animating-c6911e07/south/frame_005.png",
+              "Northern_Raider/animations/animating-c6911e07/south/frame_006.png",
+              "Northern_Raider/animations/animating-c6911e07/south/frame_007.png"
+            ],
+            "north-west": [
+              "Northern_Raider/animations/animating-c6911e07/north-west/frame_000.png",
+              "Northern_Raider/animations/animating-c6911e07/north-west/frame_001.png",
+              "Northern_Raider/animations/animating-c6911e07/north-west/frame_002.png",
+              "Northern_Raider/animations/animating-c6911e07/north-west/frame_003.png",
+              "Northern_Raider/animations/animating-c6911e07/north-west/frame_004.png",
+              "Northern_Raider/animations/animating-c6911e07/north-west/frame_005.png",
+              "Northern_Raider/animations/animating-c6911e07/north-west/frame_006.png",
+              "Northern_Raider/animations/animating-c6911e07/north-west/frame_007.png"
+            ],
+            "north-east": [
+              "Northern_Raider/animations/animating-c6911e07/north-east/frame_000.png",
+              "Northern_Raider/animations/animating-c6911e07/north-east/frame_001.png",
+              "Northern_Raider/animations/animating-c6911e07/north-east/frame_002.png",
+              "Northern_Raider/animations/animating-c6911e07/north-east/frame_003.png",
+              "Northern_Raider/animations/animating-c6911e07/north-east/frame_004.png",
+              "Northern_Raider/animations/animating-c6911e07/north-east/frame_005.png",
+              "Northern_Raider/animations/animating-c6911e07/north-east/frame_006.png",
+              "Northern_Raider/animations/animating-c6911e07/north-east/frame_007.png"
+            ]
+          },
+          "swinging_a_heavy_battle_axe_in_a_wild_berserker_sl": {
+            "south": [
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_000.png",
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_001.png",
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_002.png",
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_003.png",
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_004.png",
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_005.png",
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_006.png",
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_007.png",
+              "Northern_Raider/animations/swinging_a_heavy_battle_axe_in_a_wild_berserker_sl/south/frame_008.png"
+            ]
+          },
+          "falling_backward": {
+            "north-east": [
+              "Northern_Raider/animations/falling_backward/north-east/frame_000.png",
+              "Northern_Raider/animations/falling_backward/north-east/frame_001.png",
+              "Northern_Raider/animations/falling_backward/north-east/frame_002.png",
+              "Northern_Raider/animations/falling_backward/north-east/frame_003.png",
+              "Northern_Raider/animations/falling_backward/north-east/frame_004.png",
+              "Northern_Raider/animations/falling_backward/north-east/frame_005.png",
+              "Northern_Raider/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "west": [
+              "Northern_Raider/animations/falling_backward/west/frame_000.png",
+              "Northern_Raider/animations/falling_backward/west/frame_001.png",
+              "Northern_Raider/animations/falling_backward/west/frame_002.png",
+              "Northern_Raider/animations/falling_backward/west/frame_003.png",
+              "Northern_Raider/animations/falling_backward/west/frame_004.png",
+              "Northern_Raider/animations/falling_backward/west/frame_005.png",
+              "Northern_Raider/animations/falling_backward/west/frame_006.png"
+            ],
+            "east": [
+              "Northern_Raider/animations/falling_backward/east/frame_000.png",
+              "Northern_Raider/animations/falling_backward/east/frame_001.png",
+              "Northern_Raider/animations/falling_backward/east/frame_002.png",
+              "Northern_Raider/animations/falling_backward/east/frame_003.png",
+              "Northern_Raider/animations/falling_backward/east/frame_004.png",
+              "Northern_Raider/animations/falling_backward/east/frame_005.png",
+              "Northern_Raider/animations/falling_backward/east/frame_006.png"
+            ],
+            "north-west": [
+              "Northern_Raider/animations/falling_backward/north-west/frame_000.png",
+              "Northern_Raider/animations/falling_backward/north-west/frame_001.png",
+              "Northern_Raider/animations/falling_backward/north-west/frame_002.png",
+              "Northern_Raider/animations/falling_backward/north-west/frame_003.png",
+              "Northern_Raider/animations/falling_backward/north-west/frame_004.png",
+              "Northern_Raider/animations/falling_backward/north-west/frame_005.png",
+              "Northern_Raider/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "south": [
+              "Northern_Raider/animations/falling_backward/south/frame_000.png",
+              "Northern_Raider/animations/falling_backward/south/frame_001.png",
+              "Northern_Raider/animations/falling_backward/south/frame_002.png",
+              "Northern_Raider/animations/falling_backward/south/frame_003.png",
+              "Northern_Raider/animations/falling_backward/south/frame_004.png",
+              "Northern_Raider/animations/falling_backward/south/frame_005.png",
+              "Northern_Raider/animations/falling_backward/south/frame_006.png"
+            ],
+            "south-east": [
+              "Northern_Raider/animations/falling_backward/south-east/frame_000.png",
+              "Northern_Raider/animations/falling_backward/south-east/frame_001.png",
+              "Northern_Raider/animations/falling_backward/south-east/frame_002.png",
+              "Northern_Raider/animations/falling_backward/south-east/frame_003.png",
+              "Northern_Raider/animations/falling_backward/south-east/frame_004.png",
+              "Northern_Raider/animations/falling_backward/south-east/frame_005.png",
+              "Northern_Raider/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "south-west": [
+              "Northern_Raider/animations/falling_backward/south-west/frame_000.png",
+              "Northern_Raider/animations/falling_backward/south-west/frame_001.png",
+              "Northern_Raider/animations/falling_backward/south-west/frame_002.png",
+              "Northern_Raider/animations/falling_backward/south-west/frame_003.png",
+              "Northern_Raider/animations/falling_backward/south-west/frame_004.png",
+              "Northern_Raider/animations/falling_backward/south-west/frame_005.png",
+              "Northern_Raider/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "north": [
+              "Northern_Raider/animations/falling_backward/north/frame_000.png",
+              "Northern_Raider/animations/falling_backward/north/frame_001.png",
+              "Northern_Raider/animations/falling_backward/north/frame_002.png",
+              "Northern_Raider/animations/falling_backward/north/frame_003.png",
+              "Northern_Raider/animations/falling_backward/north/frame_004.png",
+              "Northern_Raider/animations/falling_backward/north/frame_005.png",
+              "Northern_Raider/animations/falling_backward/north/frame_006.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:42:43.275671"
+}

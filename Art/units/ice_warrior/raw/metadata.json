@@ -1,0 +1,278 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "f4efda7c-0e19-4577-aa04-362b878211ee",
+        "name": "Ice Warrior",
+        "prompt": "A tier 1 tundra warrior in basic fur-lined leather armor in white and pale blue, carrying a simple iron axe and a plain round shield. No ornate details, conscript-level equipment.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T02:30:00.935001+00:00"
+      },
+      "folder": "Ice_Warrior",
+      "frames": {
+        "rotations": {
+          "south": "Ice_Warrior/rotations/south.png",
+          "south-east": "Ice_Warrior/rotations/south-east.png",
+          "east": "Ice_Warrior/rotations/east.png",
+          "north-east": "Ice_Warrior/rotations/north-east.png",
+          "north": "Ice_Warrior/rotations/north.png",
+          "north-west": "Ice_Warrior/rotations/north-west.png",
+          "west": "Ice_Warrior/rotations/west.png",
+          "south-west": "Ice_Warrior/rotations/south-west.png"
+        },
+        "animations": {
+          "staggering_backward_from_a_hit_head_snapping_to_th": {
+            "south": [
+              "Ice_Warrior/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_000.png",
+              "Ice_Warrior/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_001.png",
+              "Ice_Warrior/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_002.png",
+              "Ice_Warrior/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_003.png",
+              "Ice_Warrior/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_004.png",
+              "Ice_Warrior/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_005.png",
+              "Ice_Warrior/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_006.png"
+            ]
+          },
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Ice_Warrior/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Ice_Warrior/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Ice_Warrior/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Ice_Warrior/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Ice_Warrior/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Ice_Warrior/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Ice_Warrior/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "animating": {
+            "east": [
+              "Ice_Warrior/animations/animating/east/frame_000.png",
+              "Ice_Warrior/animations/animating/east/frame_001.png",
+              "Ice_Warrior/animations/animating/east/frame_002.png",
+              "Ice_Warrior/animations/animating/east/frame_003.png"
+            ],
+            "north-west": [
+              "Ice_Warrior/animations/animating/north-west/frame_000.png",
+              "Ice_Warrior/animations/animating/north-west/frame_001.png",
+              "Ice_Warrior/animations/animating/north-west/frame_002.png",
+              "Ice_Warrior/animations/animating/north-west/frame_003.png"
+            ],
+            "north-east": [
+              "Ice_Warrior/animations/animating/north-east/frame_000.png",
+              "Ice_Warrior/animations/animating/north-east/frame_001.png",
+              "Ice_Warrior/animations/animating/north-east/frame_002.png",
+              "Ice_Warrior/animations/animating/north-east/frame_003.png"
+            ],
+            "west": [
+              "Ice_Warrior/animations/animating/west/frame_000.png",
+              "Ice_Warrior/animations/animating/west/frame_001.png",
+              "Ice_Warrior/animations/animating/west/frame_002.png",
+              "Ice_Warrior/animations/animating/west/frame_003.png"
+            ],
+            "south": [
+              "Ice_Warrior/animations/animating/south/frame_000.png",
+              "Ice_Warrior/animations/animating/south/frame_001.png",
+              "Ice_Warrior/animations/animating/south/frame_002.png",
+              "Ice_Warrior/animations/animating/south/frame_003.png"
+            ],
+            "north": [
+              "Ice_Warrior/animations/animating/north/frame_000.png",
+              "Ice_Warrior/animations/animating/north/frame_001.png",
+              "Ice_Warrior/animations/animating/north/frame_002.png",
+              "Ice_Warrior/animations/animating/north/frame_003.png"
+            ],
+            "south-east": [
+              "Ice_Warrior/animations/animating/south-east/frame_000.png",
+              "Ice_Warrior/animations/animating/south-east/frame_001.png",
+              "Ice_Warrior/animations/animating/south-east/frame_002.png",
+              "Ice_Warrior/animations/animating/south-east/frame_003.png"
+            ],
+            "south-west": [
+              "Ice_Warrior/animations/animating/south-west/frame_000.png",
+              "Ice_Warrior/animations/animating/south-west/frame_001.png",
+              "Ice_Warrior/animations/animating/south-west/frame_002.png",
+              "Ice_Warrior/animations/animating/south-west/frame_003.png"
+            ]
+          },
+          "animating-9f485d3c": {
+            "south-east": [
+              "Ice_Warrior/animations/animating-9f485d3c/south-east/frame_000.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-east/frame_001.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-east/frame_002.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-east/frame_003.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-east/frame_004.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-east/frame_005.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-east/frame_006.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-east/frame_007.png"
+            ],
+            "east": [
+              "Ice_Warrior/animations/animating-9f485d3c/east/frame_000.png",
+              "Ice_Warrior/animations/animating-9f485d3c/east/frame_001.png",
+              "Ice_Warrior/animations/animating-9f485d3c/east/frame_002.png",
+              "Ice_Warrior/animations/animating-9f485d3c/east/frame_003.png",
+              "Ice_Warrior/animations/animating-9f485d3c/east/frame_004.png",
+              "Ice_Warrior/animations/animating-9f485d3c/east/frame_005.png",
+              "Ice_Warrior/animations/animating-9f485d3c/east/frame_006.png",
+              "Ice_Warrior/animations/animating-9f485d3c/east/frame_007.png"
+            ],
+            "south": [
+              "Ice_Warrior/animations/animating-9f485d3c/south/frame_000.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south/frame_001.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south/frame_002.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south/frame_003.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south/frame_004.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south/frame_005.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south/frame_006.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south/frame_007.png"
+            ],
+            "north-east": [
+              "Ice_Warrior/animations/animating-9f485d3c/north-east/frame_000.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-east/frame_001.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-east/frame_002.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-east/frame_003.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-east/frame_004.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-east/frame_005.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-east/frame_006.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-east/frame_007.png"
+            ],
+            "south-west": [
+              "Ice_Warrior/animations/animating-9f485d3c/south-west/frame_000.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-west/frame_001.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-west/frame_002.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-west/frame_003.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-west/frame_004.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-west/frame_005.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-west/frame_006.png",
+              "Ice_Warrior/animations/animating-9f485d3c/south-west/frame_007.png"
+            ],
+            "north": [
+              "Ice_Warrior/animations/animating-9f485d3c/north/frame_000.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north/frame_001.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north/frame_002.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north/frame_003.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north/frame_004.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north/frame_005.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north/frame_006.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north/frame_007.png"
+            ],
+            "north-west": [
+              "Ice_Warrior/animations/animating-9f485d3c/north-west/frame_000.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-west/frame_001.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-west/frame_002.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-west/frame_003.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-west/frame_004.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-west/frame_005.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-west/frame_006.png",
+              "Ice_Warrior/animations/animating-9f485d3c/north-west/frame_007.png"
+            ],
+            "west": [
+              "Ice_Warrior/animations/animating-9f485d3c/west/frame_000.png",
+              "Ice_Warrior/animations/animating-9f485d3c/west/frame_001.png",
+              "Ice_Warrior/animations/animating-9f485d3c/west/frame_002.png",
+              "Ice_Warrior/animations/animating-9f485d3c/west/frame_003.png",
+              "Ice_Warrior/animations/animating-9f485d3c/west/frame_004.png",
+              "Ice_Warrior/animations/animating-9f485d3c/west/frame_005.png",
+              "Ice_Warrior/animations/animating-9f485d3c/west/frame_006.png",
+              "Ice_Warrior/animations/animating-9f485d3c/west/frame_007.png"
+            ]
+          },
+          "swinging_an_axe_in_a_powerful_horizontal_slash": {
+            "south": [
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_000.png",
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_001.png",
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_002.png",
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_003.png",
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_004.png",
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_005.png",
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_006.png",
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_007.png",
+              "Ice_Warrior/animations/swinging_an_axe_in_a_powerful_horizontal_slash/south/frame_008.png"
+            ]
+          },
+          "falling_backward": {
+            "south": [
+              "Ice_Warrior/animations/falling_backward/south/frame_000.png",
+              "Ice_Warrior/animations/falling_backward/south/frame_001.png",
+              "Ice_Warrior/animations/falling_backward/south/frame_002.png",
+              "Ice_Warrior/animations/falling_backward/south/frame_003.png",
+              "Ice_Warrior/animations/falling_backward/south/frame_004.png",
+              "Ice_Warrior/animations/falling_backward/south/frame_005.png",
+              "Ice_Warrior/animations/falling_backward/south/frame_006.png"
+            ],
+            "north-east": [
+              "Ice_Warrior/animations/falling_backward/north-east/frame_000.png",
+              "Ice_Warrior/animations/falling_backward/north-east/frame_001.png",
+              "Ice_Warrior/animations/falling_backward/north-east/frame_002.png",
+              "Ice_Warrior/animations/falling_backward/north-east/frame_003.png",
+              "Ice_Warrior/animations/falling_backward/north-east/frame_004.png",
+              "Ice_Warrior/animations/falling_backward/north-east/frame_005.png",
+              "Ice_Warrior/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "east": [
+              "Ice_Warrior/animations/falling_backward/east/frame_000.png",
+              "Ice_Warrior/animations/falling_backward/east/frame_001.png",
+              "Ice_Warrior/animations/falling_backward/east/frame_002.png",
+              "Ice_Warrior/animations/falling_backward/east/frame_003.png",
+              "Ice_Warrior/animations/falling_backward/east/frame_004.png",
+              "Ice_Warrior/animations/falling_backward/east/frame_005.png",
+              "Ice_Warrior/animations/falling_backward/east/frame_006.png"
+            ],
+            "west": [
+              "Ice_Warrior/animations/falling_backward/west/frame_000.png",
+              "Ice_Warrior/animations/falling_backward/west/frame_001.png",
+              "Ice_Warrior/animations/falling_backward/west/frame_002.png",
+              "Ice_Warrior/animations/falling_backward/west/frame_003.png",
+              "Ice_Warrior/animations/falling_backward/west/frame_004.png",
+              "Ice_Warrior/animations/falling_backward/west/frame_005.png",
+              "Ice_Warrior/animations/falling_backward/west/frame_006.png"
+            ],
+            "north": [
+              "Ice_Warrior/animations/falling_backward/north/frame_000.png",
+              "Ice_Warrior/animations/falling_backward/north/frame_001.png",
+              "Ice_Warrior/animations/falling_backward/north/frame_002.png",
+              "Ice_Warrior/animations/falling_backward/north/frame_003.png",
+              "Ice_Warrior/animations/falling_backward/north/frame_004.png",
+              "Ice_Warrior/animations/falling_backward/north/frame_005.png",
+              "Ice_Warrior/animations/falling_backward/north/frame_006.png"
+            ],
+            "south-east": [
+              "Ice_Warrior/animations/falling_backward/south-east/frame_000.png",
+              "Ice_Warrior/animations/falling_backward/south-east/frame_001.png",
+              "Ice_Warrior/animations/falling_backward/south-east/frame_002.png",
+              "Ice_Warrior/animations/falling_backward/south-east/frame_003.png",
+              "Ice_Warrior/animations/falling_backward/south-east/frame_004.png",
+              "Ice_Warrior/animations/falling_backward/south-east/frame_005.png",
+              "Ice_Warrior/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "south-west": [
+              "Ice_Warrior/animations/falling_backward/south-west/frame_000.png",
+              "Ice_Warrior/animations/falling_backward/south-west/frame_001.png",
+              "Ice_Warrior/animations/falling_backward/south-west/frame_002.png",
+              "Ice_Warrior/animations/falling_backward/south-west/frame_003.png",
+              "Ice_Warrior/animations/falling_backward/south-west/frame_004.png",
+              "Ice_Warrior/animations/falling_backward/south-west/frame_005.png",
+              "Ice_Warrior/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "north-west": [
+              "Ice_Warrior/animations/falling_backward/north-west/frame_000.png",
+              "Ice_Warrior/animations/falling_backward/north-west/frame_001.png",
+              "Ice_Warrior/animations/falling_backward/north-west/frame_002.png",
+              "Ice_Warrior/animations/falling_backward/north-west/frame_003.png",
+              "Ice_Warrior/animations/falling_backward/north-west/frame_004.png",
+              "Ice_Warrior/animations/falling_backward/north-west/frame_005.png",
+              "Ice_Warrior/animations/falling_backward/north-west/frame_006.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:42:26.113932"
+}

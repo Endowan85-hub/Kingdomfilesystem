@@ -1,0 +1,278 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "9cfd3b45-282a-463c-9855-d147810f705f",
+        "name": "Caravan Guard",
+        "prompt": "A tier 1 desert caravan guard in basic sandy-tan cloth wrappings and minimal leather armor, carrying a simple curved scimitar and a plain round shield. No ornate details, conscript-level equipment.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T01:32:10.340409+00:00"
+      },
+      "folder": "Caravan_Guard",
+      "frames": {
+        "rotations": {
+          "south": "Caravan_Guard/rotations/south.png",
+          "south-east": "Caravan_Guard/rotations/south-east.png",
+          "east": "Caravan_Guard/rotations/east.png",
+          "north-east": "Caravan_Guard/rotations/north-east.png",
+          "north": "Caravan_Guard/rotations/north.png",
+          "north-west": "Caravan_Guard/rotations/north-west.png",
+          "west": "Caravan_Guard/rotations/west.png",
+          "south-west": "Caravan_Guard/rotations/south-west.png"
+        },
+        "animations": {
+          "raising_a_weapon_into_a_guarding_defensive_stance": {
+            "south": [
+              "Caravan_Guard/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_000.png",
+              "Caravan_Guard/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_001.png",
+              "Caravan_Guard/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_002.png",
+              "Caravan_Guard/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_003.png",
+              "Caravan_Guard/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_004.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png",
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_005.png",
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_006.png",
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_007.png",
+              "Caravan_Guard/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_008.png"
+            ]
+          },
+          "animating": {
+            "north-east": [
+              "Caravan_Guard/animations/animating/north-east/frame_000.png",
+              "Caravan_Guard/animations/animating/north-east/frame_001.png",
+              "Caravan_Guard/animations/animating/north-east/frame_002.png",
+              "Caravan_Guard/animations/animating/north-east/frame_003.png",
+              "Caravan_Guard/animations/animating/north-east/frame_004.png",
+              "Caravan_Guard/animations/animating/north-east/frame_005.png",
+              "Caravan_Guard/animations/animating/north-east/frame_006.png",
+              "Caravan_Guard/animations/animating/north-east/frame_007.png"
+            ],
+            "south-west": [
+              "Caravan_Guard/animations/animating/south-west/frame_000.png",
+              "Caravan_Guard/animations/animating/south-west/frame_001.png",
+              "Caravan_Guard/animations/animating/south-west/frame_002.png",
+              "Caravan_Guard/animations/animating/south-west/frame_003.png",
+              "Caravan_Guard/animations/animating/south-west/frame_004.png",
+              "Caravan_Guard/animations/animating/south-west/frame_005.png",
+              "Caravan_Guard/animations/animating/south-west/frame_006.png",
+              "Caravan_Guard/animations/animating/south-west/frame_007.png"
+            ],
+            "north-west": [
+              "Caravan_Guard/animations/animating/north-west/frame_000.png",
+              "Caravan_Guard/animations/animating/north-west/frame_001.png",
+              "Caravan_Guard/animations/animating/north-west/frame_002.png",
+              "Caravan_Guard/animations/animating/north-west/frame_003.png",
+              "Caravan_Guard/animations/animating/north-west/frame_004.png",
+              "Caravan_Guard/animations/animating/north-west/frame_005.png",
+              "Caravan_Guard/animations/animating/north-west/frame_006.png",
+              "Caravan_Guard/animations/animating/north-west/frame_007.png"
+            ],
+            "south-east": [
+              "Caravan_Guard/animations/animating/south-east/frame_000.png",
+              "Caravan_Guard/animations/animating/south-east/frame_001.png",
+              "Caravan_Guard/animations/animating/south-east/frame_002.png",
+              "Caravan_Guard/animations/animating/south-east/frame_003.png",
+              "Caravan_Guard/animations/animating/south-east/frame_004.png",
+              "Caravan_Guard/animations/animating/south-east/frame_005.png",
+              "Caravan_Guard/animations/animating/south-east/frame_006.png",
+              "Caravan_Guard/animations/animating/south-east/frame_007.png"
+            ],
+            "north": [
+              "Caravan_Guard/animations/animating/north/frame_000.png",
+              "Caravan_Guard/animations/animating/north/frame_001.png",
+              "Caravan_Guard/animations/animating/north/frame_002.png",
+              "Caravan_Guard/animations/animating/north/frame_003.png",
+              "Caravan_Guard/animations/animating/north/frame_004.png",
+              "Caravan_Guard/animations/animating/north/frame_005.png",
+              "Caravan_Guard/animations/animating/north/frame_006.png",
+              "Caravan_Guard/animations/animating/north/frame_007.png"
+            ],
+            "south": [
+              "Caravan_Guard/animations/animating/south/frame_000.png",
+              "Caravan_Guard/animations/animating/south/frame_001.png",
+              "Caravan_Guard/animations/animating/south/frame_002.png",
+              "Caravan_Guard/animations/animating/south/frame_003.png",
+              "Caravan_Guard/animations/animating/south/frame_004.png",
+              "Caravan_Guard/animations/animating/south/frame_005.png",
+              "Caravan_Guard/animations/animating/south/frame_006.png",
+              "Caravan_Guard/animations/animating/south/frame_007.png"
+            ],
+            "west": [
+              "Caravan_Guard/animations/animating/west/frame_000.png",
+              "Caravan_Guard/animations/animating/west/frame_001.png",
+              "Caravan_Guard/animations/animating/west/frame_002.png",
+              "Caravan_Guard/animations/animating/west/frame_003.png",
+              "Caravan_Guard/animations/animating/west/frame_004.png",
+              "Caravan_Guard/animations/animating/west/frame_005.png",
+              "Caravan_Guard/animations/animating/west/frame_006.png",
+              "Caravan_Guard/animations/animating/west/frame_007.png"
+            ],
+            "east": [
+              "Caravan_Guard/animations/animating/east/frame_000.png",
+              "Caravan_Guard/animations/animating/east/frame_001.png",
+              "Caravan_Guard/animations/animating/east/frame_002.png",
+              "Caravan_Guard/animations/animating/east/frame_003.png",
+              "Caravan_Guard/animations/animating/east/frame_004.png",
+              "Caravan_Guard/animations/animating/east/frame_005.png",
+              "Caravan_Guard/animations/animating/east/frame_006.png",
+              "Caravan_Guard/animations/animating/east/frame_007.png"
+            ]
+          },
+          "slashing_a_curved_scimitar_in_a_quick_horizontal_c": {
+            "south": [
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_000.png",
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_001.png",
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_002.png",
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_003.png",
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_004.png",
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_005.png",
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_006.png",
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_007.png",
+              "Caravan_Guard/animations/slashing_a_curved_scimitar_in_a_quick_horizontal_c/south/frame_008.png"
+            ]
+          },
+          "animating-8a8c0184": {
+            "south": [
+              "Caravan_Guard/animations/animating-8a8c0184/south/frame_000.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south/frame_001.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south/frame_002.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south/frame_003.png"
+            ],
+            "north-west": [
+              "Caravan_Guard/animations/animating-8a8c0184/north-west/frame_000.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north-west/frame_001.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north-west/frame_002.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north-west/frame_003.png"
+            ],
+            "north-east": [
+              "Caravan_Guard/animations/animating-8a8c0184/north-east/frame_000.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north-east/frame_001.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north-east/frame_002.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north-east/frame_003.png"
+            ],
+            "west": [
+              "Caravan_Guard/animations/animating-8a8c0184/west/frame_000.png",
+              "Caravan_Guard/animations/animating-8a8c0184/west/frame_001.png",
+              "Caravan_Guard/animations/animating-8a8c0184/west/frame_002.png",
+              "Caravan_Guard/animations/animating-8a8c0184/west/frame_003.png"
+            ],
+            "south-west": [
+              "Caravan_Guard/animations/animating-8a8c0184/south-west/frame_000.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south-west/frame_001.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south-west/frame_002.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south-west/frame_003.png"
+            ],
+            "south-east": [
+              "Caravan_Guard/animations/animating-8a8c0184/south-east/frame_000.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south-east/frame_001.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south-east/frame_002.png",
+              "Caravan_Guard/animations/animating-8a8c0184/south-east/frame_003.png"
+            ],
+            "east": [
+              "Caravan_Guard/animations/animating-8a8c0184/east/frame_000.png",
+              "Caravan_Guard/animations/animating-8a8c0184/east/frame_001.png",
+              "Caravan_Guard/animations/animating-8a8c0184/east/frame_002.png",
+              "Caravan_Guard/animations/animating-8a8c0184/east/frame_003.png"
+            ],
+            "north": [
+              "Caravan_Guard/animations/animating-8a8c0184/north/frame_000.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north/frame_001.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north/frame_002.png",
+              "Caravan_Guard/animations/animating-8a8c0184/north/frame_003.png"
+            ]
+          },
+          "falling_backward": {
+            "east": [
+              "Caravan_Guard/animations/falling_backward/east/frame_000.png",
+              "Caravan_Guard/animations/falling_backward/east/frame_001.png",
+              "Caravan_Guard/animations/falling_backward/east/frame_002.png",
+              "Caravan_Guard/animations/falling_backward/east/frame_003.png",
+              "Caravan_Guard/animations/falling_backward/east/frame_004.png",
+              "Caravan_Guard/animations/falling_backward/east/frame_005.png",
+              "Caravan_Guard/animations/falling_backward/east/frame_006.png"
+            ],
+            "north-east": [
+              "Caravan_Guard/animations/falling_backward/north-east/frame_000.png",
+              "Caravan_Guard/animations/falling_backward/north-east/frame_001.png",
+              "Caravan_Guard/animations/falling_backward/north-east/frame_002.png",
+              "Caravan_Guard/animations/falling_backward/north-east/frame_003.png",
+              "Caravan_Guard/animations/falling_backward/north-east/frame_004.png",
+              "Caravan_Guard/animations/falling_backward/north-east/frame_005.png",
+              "Caravan_Guard/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "south-east": [
+              "Caravan_Guard/animations/falling_backward/south-east/frame_000.png",
+              "Caravan_Guard/animations/falling_backward/south-east/frame_001.png",
+              "Caravan_Guard/animations/falling_backward/south-east/frame_002.png",
+              "Caravan_Guard/animations/falling_backward/south-east/frame_003.png",
+              "Caravan_Guard/animations/falling_backward/south-east/frame_004.png",
+              "Caravan_Guard/animations/falling_backward/south-east/frame_005.png",
+              "Caravan_Guard/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "north": [
+              "Caravan_Guard/animations/falling_backward/north/frame_000.png",
+              "Caravan_Guard/animations/falling_backward/north/frame_001.png",
+              "Caravan_Guard/animations/falling_backward/north/frame_002.png",
+              "Caravan_Guard/animations/falling_backward/north/frame_003.png",
+              "Caravan_Guard/animations/falling_backward/north/frame_004.png",
+              "Caravan_Guard/animations/falling_backward/north/frame_005.png",
+              "Caravan_Guard/animations/falling_backward/north/frame_006.png"
+            ],
+            "north-west": [
+              "Caravan_Guard/animations/falling_backward/north-west/frame_000.png",
+              "Caravan_Guard/animations/falling_backward/north-west/frame_001.png",
+              "Caravan_Guard/animations/falling_backward/north-west/frame_002.png",
+              "Caravan_Guard/animations/falling_backward/north-west/frame_003.png",
+              "Caravan_Guard/animations/falling_backward/north-west/frame_004.png",
+              "Caravan_Guard/animations/falling_backward/north-west/frame_005.png",
+              "Caravan_Guard/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "west": [
+              "Caravan_Guard/animations/falling_backward/west/frame_000.png",
+              "Caravan_Guard/animations/falling_backward/west/frame_001.png",
+              "Caravan_Guard/animations/falling_backward/west/frame_002.png",
+              "Caravan_Guard/animations/falling_backward/west/frame_003.png",
+              "Caravan_Guard/animations/falling_backward/west/frame_004.png",
+              "Caravan_Guard/animations/falling_backward/west/frame_005.png",
+              "Caravan_Guard/animations/falling_backward/west/frame_006.png"
+            ],
+            "south": [
+              "Caravan_Guard/animations/falling_backward/south/frame_000.png",
+              "Caravan_Guard/animations/falling_backward/south/frame_001.png",
+              "Caravan_Guard/animations/falling_backward/south/frame_002.png",
+              "Caravan_Guard/animations/falling_backward/south/frame_003.png",
+              "Caravan_Guard/animations/falling_backward/south/frame_004.png",
+              "Caravan_Guard/animations/falling_backward/south/frame_005.png",
+              "Caravan_Guard/animations/falling_backward/south/frame_006.png"
+            ],
+            "south-west": [
+              "Caravan_Guard/animations/falling_backward/south-west/frame_000.png",
+              "Caravan_Guard/animations/falling_backward/south-west/frame_001.png",
+              "Caravan_Guard/animations/falling_backward/south-west/frame_002.png",
+              "Caravan_Guard/animations/falling_backward/south-west/frame_003.png",
+              "Caravan_Guard/animations/falling_backward/south-west/frame_004.png",
+              "Caravan_Guard/animations/falling_backward/south-west/frame_005.png",
+              "Caravan_Guard/animations/falling_backward/south-west/frame_006.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:42:02.299834"
+}

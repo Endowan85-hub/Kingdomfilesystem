@@ -1,0 +1,280 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "4420d2f6-41bf-4291-9d43-ee115cd6f9c2",
+        "name": "Sand Raider",
+        "prompt": "A tier 1 desert cavalry raider mounted on a plain brown horse, wearing basic tan cloth and minimal leather armor. Carries a simple curved scimitar. No ornate details, conscript-level equipment.",
+        "size": {
+          "width": 156,
+          "height": 156
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T01:09:13.151838+00:00"
+      },
+      "folder": "Sand_Raider",
+      "frames": {
+        "rotations": {
+          "south": "Sand_Raider/rotations/south.png",
+          "south-east": "Sand_Raider/rotations/south-east.png",
+          "east": "Sand_Raider/rotations/east.png",
+          "north-east": "Sand_Raider/rotations/north-east.png",
+          "north": "Sand_Raider/rotations/north.png",
+          "north-west": "Sand_Raider/rotations/north-west.png",
+          "west": "Sand_Raider/rotations/west.png",
+          "south-west": "Sand_Raider/rotations/south-west.png"
+        },
+        "animations": {
+          "staggering_backward_from_a_hit_head_snapping_to_th": {
+            "south": [
+              "Sand_Raider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_000.png",
+              "Sand_Raider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_001.png",
+              "Sand_Raider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_002.png",
+              "Sand_Raider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_003.png",
+              "Sand_Raider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_004.png",
+              "Sand_Raider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_005.png",
+              "Sand_Raider/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_006.png"
+            ]
+          },
+          "animating": {
+            "south-west": [
+              "Sand_Raider/animations/animating/south-west/frame_000.png",
+              "Sand_Raider/animations/animating/south-west/frame_001.png",
+              "Sand_Raider/animations/animating/south-west/frame_002.png",
+              "Sand_Raider/animations/animating/south-west/frame_003.png",
+              "Sand_Raider/animations/animating/south-west/frame_004.png",
+              "Sand_Raider/animations/animating/south-west/frame_005.png",
+              "Sand_Raider/animations/animating/south-west/frame_006.png",
+              "Sand_Raider/animations/animating/south-west/frame_007.png"
+            ],
+            "east": [
+              "Sand_Raider/animations/animating/east/frame_000.png",
+              "Sand_Raider/animations/animating/east/frame_001.png",
+              "Sand_Raider/animations/animating/east/frame_002.png",
+              "Sand_Raider/animations/animating/east/frame_003.png",
+              "Sand_Raider/animations/animating/east/frame_004.png",
+              "Sand_Raider/animations/animating/east/frame_005.png",
+              "Sand_Raider/animations/animating/east/frame_006.png",
+              "Sand_Raider/animations/animating/east/frame_007.png"
+            ],
+            "south": [
+              "Sand_Raider/animations/animating/south/frame_000.png",
+              "Sand_Raider/animations/animating/south/frame_001.png",
+              "Sand_Raider/animations/animating/south/frame_002.png",
+              "Sand_Raider/animations/animating/south/frame_003.png",
+              "Sand_Raider/animations/animating/south/frame_004.png",
+              "Sand_Raider/animations/animating/south/frame_005.png",
+              "Sand_Raider/animations/animating/south/frame_006.png",
+              "Sand_Raider/animations/animating/south/frame_007.png"
+            ],
+            "north": [
+              "Sand_Raider/animations/animating/north/frame_000.png",
+              "Sand_Raider/animations/animating/north/frame_001.png",
+              "Sand_Raider/animations/animating/north/frame_002.png",
+              "Sand_Raider/animations/animating/north/frame_003.png",
+              "Sand_Raider/animations/animating/north/frame_004.png",
+              "Sand_Raider/animations/animating/north/frame_005.png",
+              "Sand_Raider/animations/animating/north/frame_006.png",
+              "Sand_Raider/animations/animating/north/frame_007.png"
+            ],
+            "south-east": [
+              "Sand_Raider/animations/animating/south-east/frame_000.png",
+              "Sand_Raider/animations/animating/south-east/frame_001.png",
+              "Sand_Raider/animations/animating/south-east/frame_002.png",
+              "Sand_Raider/animations/animating/south-east/frame_003.png",
+              "Sand_Raider/animations/animating/south-east/frame_004.png",
+              "Sand_Raider/animations/animating/south-east/frame_005.png",
+              "Sand_Raider/animations/animating/south-east/frame_006.png",
+              "Sand_Raider/animations/animating/south-east/frame_007.png"
+            ],
+            "west": [
+              "Sand_Raider/animations/animating/west/frame_000.png",
+              "Sand_Raider/animations/animating/west/frame_001.png",
+              "Sand_Raider/animations/animating/west/frame_002.png",
+              "Sand_Raider/animations/animating/west/frame_003.png",
+              "Sand_Raider/animations/animating/west/frame_004.png",
+              "Sand_Raider/animations/animating/west/frame_005.png",
+              "Sand_Raider/animations/animating/west/frame_006.png",
+              "Sand_Raider/animations/animating/west/frame_007.png"
+            ],
+            "north-east": [
+              "Sand_Raider/animations/animating/north-east/frame_000.png",
+              "Sand_Raider/animations/animating/north-east/frame_001.png",
+              "Sand_Raider/animations/animating/north-east/frame_002.png",
+              "Sand_Raider/animations/animating/north-east/frame_003.png",
+              "Sand_Raider/animations/animating/north-east/frame_004.png",
+              "Sand_Raider/animations/animating/north-east/frame_005.png",
+              "Sand_Raider/animations/animating/north-east/frame_006.png",
+              "Sand_Raider/animations/animating/north-east/frame_007.png"
+            ]
+          },
+          "animating-5312c2f4": {
+            "north-west": [
+              "Sand_Raider/animations/animating-5312c2f4/north-west/frame_000.png",
+              "Sand_Raider/animations/animating-5312c2f4/north-west/frame_001.png",
+              "Sand_Raider/animations/animating-5312c2f4/north-west/frame_002.png",
+              "Sand_Raider/animations/animating-5312c2f4/north-west/frame_003.png",
+              "Sand_Raider/animations/animating-5312c2f4/north-west/frame_004.png",
+              "Sand_Raider/animations/animating-5312c2f4/north-west/frame_005.png",
+              "Sand_Raider/animations/animating-5312c2f4/north-west/frame_006.png",
+              "Sand_Raider/animations/animating-5312c2f4/north-west/frame_007.png"
+            ]
+          },
+          "raising_a_weapon_into_a_guarding_defensive_stance": {
+            "south": [
+              "Sand_Raider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_000.png",
+              "Sand_Raider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_001.png",
+              "Sand_Raider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_002.png",
+              "Sand_Raider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_003.png",
+              "Sand_Raider/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_004.png"
+            ]
+          },
+          "slashing_a_curved_scimitar_in_a_wide_arc_while_mou": {
+            "south": [
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_000.png",
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_001.png",
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_002.png",
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_003.png",
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_004.png",
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_005.png",
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_006.png",
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_007.png",
+              "Sand_Raider/animations/slashing_a_curved_scimitar_in_a_wide_arc_while_mou/south/frame_008.png"
+            ]
+          },
+          "falling_backward": {
+            "west": [
+              "Sand_Raider/animations/falling_backward/west/frame_000.png",
+              "Sand_Raider/animations/falling_backward/west/frame_001.png",
+              "Sand_Raider/animations/falling_backward/west/frame_002.png",
+              "Sand_Raider/animations/falling_backward/west/frame_003.png",
+              "Sand_Raider/animations/falling_backward/west/frame_004.png",
+              "Sand_Raider/animations/falling_backward/west/frame_005.png",
+              "Sand_Raider/animations/falling_backward/west/frame_006.png"
+            ],
+            "south-west": [
+              "Sand_Raider/animations/falling_backward/south-west/frame_000.png",
+              "Sand_Raider/animations/falling_backward/south-west/frame_001.png",
+              "Sand_Raider/animations/falling_backward/south-west/frame_002.png",
+              "Sand_Raider/animations/falling_backward/south-west/frame_003.png",
+              "Sand_Raider/animations/falling_backward/south-west/frame_004.png",
+              "Sand_Raider/animations/falling_backward/south-west/frame_005.png",
+              "Sand_Raider/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "north-west": [
+              "Sand_Raider/animations/falling_backward/north-west/frame_000.png",
+              "Sand_Raider/animations/falling_backward/north-west/frame_001.png",
+              "Sand_Raider/animations/falling_backward/north-west/frame_002.png",
+              "Sand_Raider/animations/falling_backward/north-west/frame_003.png",
+              "Sand_Raider/animations/falling_backward/north-west/frame_004.png",
+              "Sand_Raider/animations/falling_backward/north-west/frame_005.png",
+              "Sand_Raider/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "south-east": [
+              "Sand_Raider/animations/falling_backward/south-east/frame_000.png",
+              "Sand_Raider/animations/falling_backward/south-east/frame_001.png",
+              "Sand_Raider/animations/falling_backward/south-east/frame_002.png",
+              "Sand_Raider/animations/falling_backward/south-east/frame_003.png",
+              "Sand_Raider/animations/falling_backward/south-east/frame_004.png",
+              "Sand_Raider/animations/falling_backward/south-east/frame_005.png",
+              "Sand_Raider/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "south": [
+              "Sand_Raider/animations/falling_backward/south/frame_000.png",
+              "Sand_Raider/animations/falling_backward/south/frame_001.png",
+              "Sand_Raider/animations/falling_backward/south/frame_002.png",
+              "Sand_Raider/animations/falling_backward/south/frame_003.png",
+              "Sand_Raider/animations/falling_backward/south/frame_004.png",
+              "Sand_Raider/animations/falling_backward/south/frame_005.png",
+              "Sand_Raider/animations/falling_backward/south/frame_006.png"
+            ],
+            "north": [
+              "Sand_Raider/animations/falling_backward/north/frame_000.png",
+              "Sand_Raider/animations/falling_backward/north/frame_001.png",
+              "Sand_Raider/animations/falling_backward/north/frame_002.png",
+              "Sand_Raider/animations/falling_backward/north/frame_003.png",
+              "Sand_Raider/animations/falling_backward/north/frame_004.png",
+              "Sand_Raider/animations/falling_backward/north/frame_005.png",
+              "Sand_Raider/animations/falling_backward/north/frame_006.png"
+            ],
+            "east": [
+              "Sand_Raider/animations/falling_backward/east/frame_000.png",
+              "Sand_Raider/animations/falling_backward/east/frame_001.png",
+              "Sand_Raider/animations/falling_backward/east/frame_002.png",
+              "Sand_Raider/animations/falling_backward/east/frame_003.png",
+              "Sand_Raider/animations/falling_backward/east/frame_004.png",
+              "Sand_Raider/animations/falling_backward/east/frame_005.png",
+              "Sand_Raider/animations/falling_backward/east/frame_006.png"
+            ],
+            "north-east": [
+              "Sand_Raider/animations/falling_backward/north-east/frame_000.png",
+              "Sand_Raider/animations/falling_backward/north-east/frame_001.png",
+              "Sand_Raider/animations/falling_backward/north-east/frame_002.png",
+              "Sand_Raider/animations/falling_backward/north-east/frame_003.png",
+              "Sand_Raider/animations/falling_backward/north-east/frame_004.png",
+              "Sand_Raider/animations/falling_backward/north-east/frame_005.png",
+              "Sand_Raider/animations/falling_backward/north-east/frame_006.png"
+            ]
+          },
+          "animating-f53b99ee": {
+            "west": [
+              "Sand_Raider/animations/animating-f53b99ee/west/frame_000.png",
+              "Sand_Raider/animations/animating-f53b99ee/west/frame_001.png",
+              "Sand_Raider/animations/animating-f53b99ee/west/frame_002.png",
+              "Sand_Raider/animations/animating-f53b99ee/west/frame_003.png"
+            ]
+          },
+          "animating-fe4a90fb": {
+            "north-west": [
+              "Sand_Raider/animations/animating-fe4a90fb/north-west/frame_000.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north-west/frame_001.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north-west/frame_002.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north-west/frame_003.png"
+            ],
+            "south-west": [
+              "Sand_Raider/animations/animating-fe4a90fb/south-west/frame_000.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south-west/frame_001.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south-west/frame_002.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south-west/frame_003.png"
+            ],
+            "east": [
+              "Sand_Raider/animations/animating-fe4a90fb/east/frame_000.png",
+              "Sand_Raider/animations/animating-fe4a90fb/east/frame_001.png",
+              "Sand_Raider/animations/animating-fe4a90fb/east/frame_002.png",
+              "Sand_Raider/animations/animating-fe4a90fb/east/frame_003.png"
+            ],
+            "north": [
+              "Sand_Raider/animations/animating-fe4a90fb/north/frame_000.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north/frame_001.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north/frame_002.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north/frame_003.png"
+            ],
+            "south": [
+              "Sand_Raider/animations/animating-fe4a90fb/south/frame_000.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south/frame_001.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south/frame_002.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south/frame_003.png"
+            ],
+            "south-east": [
+              "Sand_Raider/animations/animating-fe4a90fb/south-east/frame_000.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south-east/frame_001.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south-east/frame_002.png",
+              "Sand_Raider/animations/animating-fe4a90fb/south-east/frame_003.png"
+            ],
+            "north-east": [
+              "Sand_Raider/animations/animating-fe4a90fb/north-east/frame_000.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north-east/frame_001.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north-east/frame_002.png",
+              "Sand_Raider/animations/animating-fe4a90fb/north-east/frame_003.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:41:57.002828"
+}

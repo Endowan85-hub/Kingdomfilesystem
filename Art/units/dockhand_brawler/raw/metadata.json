@@ -1,0 +1,280 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "23684615-3d50-4c1b-a520-0b1b1281fedf",
+        "name": "Dockhand Brawler",
+        "prompt": "A tier 1 dockhand brawler in basic worn work clothes and a simple leather vest, wielding a plain large knife or hook weapon. No ornate details, conscript-level equipment.",
+        "size": {
+          "width": 112,
+          "height": 112
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T05:01:11.971077+00:00"
+      },
+      "folder": "Dockhand_Brawler",
+      "frames": {
+        "rotations": {
+          "south": "Dockhand_Brawler/rotations/south.png",
+          "south-east": "Dockhand_Brawler/rotations/south-east.png",
+          "east": "Dockhand_Brawler/rotations/east.png",
+          "north-east": "Dockhand_Brawler/rotations/north-east.png",
+          "north": "Dockhand_Brawler/rotations/north.png",
+          "north-west": "Dockhand_Brawler/rotations/north-west.png",
+          "west": "Dockhand_Brawler/rotations/west.png",
+          "south-west": "Dockhand_Brawler/rotations/south-west.png"
+        },
+        "animations": {
+          "animating": {
+            "south": [
+              "Dockhand_Brawler/animations/animating/south/frame_000.png",
+              "Dockhand_Brawler/animations/animating/south/frame_001.png",
+              "Dockhand_Brawler/animations/animating/south/frame_002.png",
+              "Dockhand_Brawler/animations/animating/south/frame_003.png"
+            ],
+            "south-east": [
+              "Dockhand_Brawler/animations/animating/south-east/frame_000.png",
+              "Dockhand_Brawler/animations/animating/south-east/frame_001.png",
+              "Dockhand_Brawler/animations/animating/south-east/frame_002.png",
+              "Dockhand_Brawler/animations/animating/south-east/frame_003.png"
+            ],
+            "south-west": [
+              "Dockhand_Brawler/animations/animating/south-west/frame_000.png",
+              "Dockhand_Brawler/animations/animating/south-west/frame_001.png",
+              "Dockhand_Brawler/animations/animating/south-west/frame_002.png",
+              "Dockhand_Brawler/animations/animating/south-west/frame_003.png"
+            ],
+            "west": [
+              "Dockhand_Brawler/animations/animating/west/frame_000.png",
+              "Dockhand_Brawler/animations/animating/west/frame_001.png",
+              "Dockhand_Brawler/animations/animating/west/frame_002.png",
+              "Dockhand_Brawler/animations/animating/west/frame_003.png"
+            ],
+            "north": [
+              "Dockhand_Brawler/animations/animating/north/frame_000.png",
+              "Dockhand_Brawler/animations/animating/north/frame_001.png",
+              "Dockhand_Brawler/animations/animating/north/frame_002.png",
+              "Dockhand_Brawler/animations/animating/north/frame_003.png"
+            ],
+            "north-west": [
+              "Dockhand_Brawler/animations/animating/north-west/frame_000.png",
+              "Dockhand_Brawler/animations/animating/north-west/frame_001.png",
+              "Dockhand_Brawler/animations/animating/north-west/frame_002.png",
+              "Dockhand_Brawler/animations/animating/north-west/frame_003.png"
+            ],
+            "east": [
+              "Dockhand_Brawler/animations/animating/east/frame_000.png",
+              "Dockhand_Brawler/animations/animating/east/frame_001.png",
+              "Dockhand_Brawler/animations/animating/east/frame_002.png",
+              "Dockhand_Brawler/animations/animating/east/frame_003.png"
+            ],
+            "north-east": [
+              "Dockhand_Brawler/animations/animating/north-east/frame_000.png",
+              "Dockhand_Brawler/animations/animating/north-east/frame_001.png",
+              "Dockhand_Brawler/animations/animating/north-east/frame_002.png",
+              "Dockhand_Brawler/animations/animating/north-east/frame_003.png"
+            ]
+          },
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Dockhand_Brawler/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Dockhand_Brawler/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Dockhand_Brawler/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Dockhand_Brawler/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Dockhand_Brawler/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Dockhand_Brawler/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Dockhand_Brawler/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png",
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_005.png",
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_006.png",
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_007.png",
+              "Dockhand_Brawler/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_008.png"
+            ]
+          },
+          "falling_backward": {
+            "south-west": [
+              "Dockhand_Brawler/animations/falling_backward/south-west/frame_000.png",
+              "Dockhand_Brawler/animations/falling_backward/south-west/frame_001.png",
+              "Dockhand_Brawler/animations/falling_backward/south-west/frame_002.png",
+              "Dockhand_Brawler/animations/falling_backward/south-west/frame_003.png",
+              "Dockhand_Brawler/animations/falling_backward/south-west/frame_004.png",
+              "Dockhand_Brawler/animations/falling_backward/south-west/frame_005.png",
+              "Dockhand_Brawler/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "south": [
+              "Dockhand_Brawler/animations/falling_backward/south/frame_000.png",
+              "Dockhand_Brawler/animations/falling_backward/south/frame_001.png",
+              "Dockhand_Brawler/animations/falling_backward/south/frame_002.png",
+              "Dockhand_Brawler/animations/falling_backward/south/frame_003.png",
+              "Dockhand_Brawler/animations/falling_backward/south/frame_004.png",
+              "Dockhand_Brawler/animations/falling_backward/south/frame_005.png",
+              "Dockhand_Brawler/animations/falling_backward/south/frame_006.png"
+            ],
+            "east": [
+              "Dockhand_Brawler/animations/falling_backward/east/frame_000.png",
+              "Dockhand_Brawler/animations/falling_backward/east/frame_001.png",
+              "Dockhand_Brawler/animations/falling_backward/east/frame_002.png",
+              "Dockhand_Brawler/animations/falling_backward/east/frame_003.png",
+              "Dockhand_Brawler/animations/falling_backward/east/frame_004.png",
+              "Dockhand_Brawler/animations/falling_backward/east/frame_005.png",
+              "Dockhand_Brawler/animations/falling_backward/east/frame_006.png"
+            ],
+            "west": [
+              "Dockhand_Brawler/animations/falling_backward/west/frame_000.png",
+              "Dockhand_Brawler/animations/falling_backward/west/frame_001.png",
+              "Dockhand_Brawler/animations/falling_backward/west/frame_002.png",
+              "Dockhand_Brawler/animations/falling_backward/west/frame_003.png",
+              "Dockhand_Brawler/animations/falling_backward/west/frame_004.png",
+              "Dockhand_Brawler/animations/falling_backward/west/frame_005.png",
+              "Dockhand_Brawler/animations/falling_backward/west/frame_006.png"
+            ],
+            "south-east": [
+              "Dockhand_Brawler/animations/falling_backward/south-east/frame_000.png",
+              "Dockhand_Brawler/animations/falling_backward/south-east/frame_001.png",
+              "Dockhand_Brawler/animations/falling_backward/south-east/frame_002.png",
+              "Dockhand_Brawler/animations/falling_backward/south-east/frame_003.png",
+              "Dockhand_Brawler/animations/falling_backward/south-east/frame_004.png",
+              "Dockhand_Brawler/animations/falling_backward/south-east/frame_005.png",
+              "Dockhand_Brawler/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "north": [
+              "Dockhand_Brawler/animations/falling_backward/north/frame_000.png",
+              "Dockhand_Brawler/animations/falling_backward/north/frame_001.png",
+              "Dockhand_Brawler/animations/falling_backward/north/frame_002.png",
+              "Dockhand_Brawler/animations/falling_backward/north/frame_003.png",
+              "Dockhand_Brawler/animations/falling_backward/north/frame_004.png",
+              "Dockhand_Brawler/animations/falling_backward/north/frame_005.png",
+              "Dockhand_Brawler/animations/falling_backward/north/frame_006.png"
+            ],
+            "north-west": [
+              "Dockhand_Brawler/animations/falling_backward/north-west/frame_000.png",
+              "Dockhand_Brawler/animations/falling_backward/north-west/frame_001.png",
+              "Dockhand_Brawler/animations/falling_backward/north-west/frame_002.png",
+              "Dockhand_Brawler/animations/falling_backward/north-west/frame_003.png",
+              "Dockhand_Brawler/animations/falling_backward/north-west/frame_004.png",
+              "Dockhand_Brawler/animations/falling_backward/north-west/frame_005.png",
+              "Dockhand_Brawler/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "north-east": [
+              "Dockhand_Brawler/animations/falling_backward/north-east/frame_000.png",
+              "Dockhand_Brawler/animations/falling_backward/north-east/frame_001.png",
+              "Dockhand_Brawler/animations/falling_backward/north-east/frame_002.png",
+              "Dockhand_Brawler/animations/falling_backward/north-east/frame_003.png",
+              "Dockhand_Brawler/animations/falling_backward/north-east/frame_004.png",
+              "Dockhand_Brawler/animations/falling_backward/north-east/frame_005.png",
+              "Dockhand_Brawler/animations/falling_backward/north-east/frame_006.png"
+            ]
+          },
+          "slashing_with_a_large_curved_knife_in_an_aggressiv": {
+            "south": [
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_000.png",
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_001.png",
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_002.png",
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_003.png",
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_004.png",
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_005.png",
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_006.png",
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_007.png",
+              "Dockhand_Brawler/animations/slashing_with_a_large_curved_knife_in_an_aggressiv/south/frame_008.png"
+            ]
+          },
+          "animating-ebd0a4f7": {
+            "north-east": [
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-east/frame_000.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-east/frame_001.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-east/frame_002.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-east/frame_003.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-east/frame_004.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-east/frame_005.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-east/frame_006.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-east/frame_007.png"
+            ],
+            "north-west": [
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-west/frame_000.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-west/frame_001.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-west/frame_002.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-west/frame_003.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-west/frame_004.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-west/frame_005.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-west/frame_006.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north-west/frame_007.png"
+            ],
+            "east": [
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/east/frame_000.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/east/frame_001.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/east/frame_002.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/east/frame_003.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/east/frame_004.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/east/frame_005.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/east/frame_006.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/east/frame_007.png"
+            ],
+            "west": [
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/west/frame_000.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/west/frame_001.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/west/frame_002.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/west/frame_003.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/west/frame_004.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/west/frame_005.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/west/frame_006.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/west/frame_007.png"
+            ],
+            "south-west": [
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-west/frame_000.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-west/frame_001.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-west/frame_002.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-west/frame_003.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-west/frame_004.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-west/frame_005.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-west/frame_006.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-west/frame_007.png"
+            ],
+            "south-east": [
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-east/frame_000.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-east/frame_001.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-east/frame_002.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-east/frame_003.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-east/frame_004.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-east/frame_005.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-east/frame_006.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south-east/frame_007.png"
+            ],
+            "south": [
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south/frame_000.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south/frame_001.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south/frame_002.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south/frame_003.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south/frame_004.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south/frame_005.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south/frame_006.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/south/frame_007.png"
+            ],
+            "north": [
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north/frame_000.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north/frame_001.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north/frame_002.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north/frame_003.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north/frame_004.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north/frame_005.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north/frame_006.png",
+              "Dockhand_Brawler/animations/animating-ebd0a4f7/north/frame_007.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:43:40.938562"
+}

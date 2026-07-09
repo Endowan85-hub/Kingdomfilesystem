@@ -1,0 +1,295 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "90f92d45-bdec-47e1-aac8-2aad63334c89",
+        "name": "Mountain Pikeman",
+        "prompt": "medieval fantasy mountain pikeman soldier, light chainmail armor, full closed-face iron helmet completely hiding face, gripping a long pike weapon with both hands in ready stance, tier 1 infantry unit.",
+        "size": {
+          "width": 216,
+          "height": 216
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-04-15T20:58:12.023969+00:00"
+      },
+      "folder": "Mountain_Pikeman",
+      "frames": {
+        "rotations": {
+          "south": "Mountain_Pikeman/rotations/south.png",
+          "south-east": "Mountain_Pikeman/rotations/south-east.png",
+          "east": "Mountain_Pikeman/rotations/east.png",
+          "north-east": "Mountain_Pikeman/rotations/north-east.png",
+          "north": "Mountain_Pikeman/rotations/north.png",
+          "north-west": "Mountain_Pikeman/rotations/north-west.png",
+          "west": "Mountain_Pikeman/rotations/west.png",
+          "south-west": "Mountain_Pikeman/rotations/south-west.png"
+        },
+        "animations": {
+          "thrusting_forward_with_a_long_pike_spear_both_hand": {
+            "north-east": [
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand/north-east/frame_000.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand/north-east/frame_001.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand/north-east/frame_002.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand/north-east/frame_003.png"
+            ]
+          },
+          "animating": {
+            "south": [
+              "Mountain_Pikeman/animations/animating/south/frame_000.png",
+              "Mountain_Pikeman/animations/animating/south/frame_001.png",
+              "Mountain_Pikeman/animations/animating/south/frame_002.png",
+              "Mountain_Pikeman/animations/animating/south/frame_003.png"
+            ],
+            "north-east": [
+              "Mountain_Pikeman/animations/animating/north-east/frame_000.png",
+              "Mountain_Pikeman/animations/animating/north-east/frame_001.png",
+              "Mountain_Pikeman/animations/animating/north-east/frame_002.png",
+              "Mountain_Pikeman/animations/animating/north-east/frame_003.png"
+            ],
+            "west": [
+              "Mountain_Pikeman/animations/animating/west/frame_000.png",
+              "Mountain_Pikeman/animations/animating/west/frame_001.png",
+              "Mountain_Pikeman/animations/animating/west/frame_002.png",
+              "Mountain_Pikeman/animations/animating/west/frame_003.png"
+            ],
+            "north-west": [
+              "Mountain_Pikeman/animations/animating/north-west/frame_000.png",
+              "Mountain_Pikeman/animations/animating/north-west/frame_001.png",
+              "Mountain_Pikeman/animations/animating/north-west/frame_002.png",
+              "Mountain_Pikeman/animations/animating/north-west/frame_003.png"
+            ],
+            "east": [
+              "Mountain_Pikeman/animations/animating/east/frame_000.png",
+              "Mountain_Pikeman/animations/animating/east/frame_001.png",
+              "Mountain_Pikeman/animations/animating/east/frame_002.png",
+              "Mountain_Pikeman/animations/animating/east/frame_003.png"
+            ],
+            "south-east": [
+              "Mountain_Pikeman/animations/animating/south-east/frame_000.png",
+              "Mountain_Pikeman/animations/animating/south-east/frame_001.png",
+              "Mountain_Pikeman/animations/animating/south-east/frame_002.png",
+              "Mountain_Pikeman/animations/animating/south-east/frame_003.png"
+            ],
+            "north": [
+              "Mountain_Pikeman/animations/animating/north/frame_000.png",
+              "Mountain_Pikeman/animations/animating/north/frame_001.png",
+              "Mountain_Pikeman/animations/animating/north/frame_002.png",
+              "Mountain_Pikeman/animations/animating/north/frame_003.png"
+            ],
+            "south-west": [
+              "Mountain_Pikeman/animations/animating/south-west/frame_000.png",
+              "Mountain_Pikeman/animations/animating/south-west/frame_001.png",
+              "Mountain_Pikeman/animations/animating/south-west/frame_002.png",
+              "Mountain_Pikeman/animations/animating/south-west/frame_003.png"
+            ]
+          },
+          "thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7": {
+            "north": [
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/north/frame_000.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/north/frame_001.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/north/frame_002.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/north/frame_003.png"
+            ],
+            "east": [
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/east/frame_000.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/east/frame_001.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/east/frame_002.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/east/frame_003.png"
+            ],
+            "south": [
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/south/frame_000.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/south/frame_001.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/south/frame_002.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-4a6e7eb7/south/frame_003.png"
+            ]
+          },
+          "thrusting_forward_with_a_long_pike_spear_both_hand-75f7bc3e": {
+            "west": [
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-75f7bc3e/west/frame_000.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-75f7bc3e/west/frame_001.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-75f7bc3e/west/frame_002.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-75f7bc3e/west/frame_003.png"
+            ]
+          },
+          "falling_backward": {
+            "east": [
+              "Mountain_Pikeman/animations/falling_backward/east/frame_000.png",
+              "Mountain_Pikeman/animations/falling_backward/east/frame_001.png",
+              "Mountain_Pikeman/animations/falling_backward/east/frame_002.png",
+              "Mountain_Pikeman/animations/falling_backward/east/frame_003.png",
+              "Mountain_Pikeman/animations/falling_backward/east/frame_004.png",
+              "Mountain_Pikeman/animations/falling_backward/east/frame_005.png",
+              "Mountain_Pikeman/animations/falling_backward/east/frame_006.png"
+            ],
+            "north-west": [
+              "Mountain_Pikeman/animations/falling_backward/north-west/frame_000.png",
+              "Mountain_Pikeman/animations/falling_backward/north-west/frame_001.png",
+              "Mountain_Pikeman/animations/falling_backward/north-west/frame_002.png",
+              "Mountain_Pikeman/animations/falling_backward/north-west/frame_003.png",
+              "Mountain_Pikeman/animations/falling_backward/north-west/frame_004.png",
+              "Mountain_Pikeman/animations/falling_backward/north-west/frame_005.png",
+              "Mountain_Pikeman/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "north-east": [
+              "Mountain_Pikeman/animations/falling_backward/north-east/frame_000.png",
+              "Mountain_Pikeman/animations/falling_backward/north-east/frame_001.png",
+              "Mountain_Pikeman/animations/falling_backward/north-east/frame_002.png",
+              "Mountain_Pikeman/animations/falling_backward/north-east/frame_003.png",
+              "Mountain_Pikeman/animations/falling_backward/north-east/frame_004.png",
+              "Mountain_Pikeman/animations/falling_backward/north-east/frame_005.png",
+              "Mountain_Pikeman/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "south": [
+              "Mountain_Pikeman/animations/falling_backward/south/frame_000.png",
+              "Mountain_Pikeman/animations/falling_backward/south/frame_001.png",
+              "Mountain_Pikeman/animations/falling_backward/south/frame_002.png",
+              "Mountain_Pikeman/animations/falling_backward/south/frame_003.png",
+              "Mountain_Pikeman/animations/falling_backward/south/frame_004.png",
+              "Mountain_Pikeman/animations/falling_backward/south/frame_005.png",
+              "Mountain_Pikeman/animations/falling_backward/south/frame_006.png"
+            ],
+            "north": [
+              "Mountain_Pikeman/animations/falling_backward/north/frame_000.png",
+              "Mountain_Pikeman/animations/falling_backward/north/frame_001.png",
+              "Mountain_Pikeman/animations/falling_backward/north/frame_002.png",
+              "Mountain_Pikeman/animations/falling_backward/north/frame_003.png",
+              "Mountain_Pikeman/animations/falling_backward/north/frame_004.png",
+              "Mountain_Pikeman/animations/falling_backward/north/frame_005.png",
+              "Mountain_Pikeman/animations/falling_backward/north/frame_006.png"
+            ],
+            "south-east": [
+              "Mountain_Pikeman/animations/falling_backward/south-east/frame_000.png",
+              "Mountain_Pikeman/animations/falling_backward/south-east/frame_001.png",
+              "Mountain_Pikeman/animations/falling_backward/south-east/frame_002.png",
+              "Mountain_Pikeman/animations/falling_backward/south-east/frame_003.png",
+              "Mountain_Pikeman/animations/falling_backward/south-east/frame_004.png",
+              "Mountain_Pikeman/animations/falling_backward/south-east/frame_005.png",
+              "Mountain_Pikeman/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "west": [
+              "Mountain_Pikeman/animations/falling_backward/west/frame_000.png",
+              "Mountain_Pikeman/animations/falling_backward/west/frame_001.png",
+              "Mountain_Pikeman/animations/falling_backward/west/frame_002.png",
+              "Mountain_Pikeman/animations/falling_backward/west/frame_003.png",
+              "Mountain_Pikeman/animations/falling_backward/west/frame_004.png",
+              "Mountain_Pikeman/animations/falling_backward/west/frame_005.png",
+              "Mountain_Pikeman/animations/falling_backward/west/frame_006.png"
+            ],
+            "south-west": [
+              "Mountain_Pikeman/animations/falling_backward/south-west/frame_000.png",
+              "Mountain_Pikeman/animations/falling_backward/south-west/frame_001.png",
+              "Mountain_Pikeman/animations/falling_backward/south-west/frame_002.png",
+              "Mountain_Pikeman/animations/falling_backward/south-west/frame_003.png",
+              "Mountain_Pikeman/animations/falling_backward/south-west/frame_004.png",
+              "Mountain_Pikeman/animations/falling_backward/south-west/frame_005.png",
+              "Mountain_Pikeman/animations/falling_backward/south-west/frame_006.png"
+            ]
+          },
+          "thrusting_forward_with_a_long_pike_spear_both_hand-93aef1d2": {
+            "north-west": [
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-93aef1d2/north-west/frame_000.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-93aef1d2/north-west/frame_001.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-93aef1d2/north-west/frame_002.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-93aef1d2/north-west/frame_003.png"
+            ]
+          },
+          "animating-9e8ce5af": {
+            "east": [
+              "Mountain_Pikeman/animations/animating-9e8ce5af/east/frame_000.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/east/frame_001.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/east/frame_002.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/east/frame_003.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/east/frame_004.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/east/frame_005.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/east/frame_006.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/east/frame_007.png"
+            ],
+            "south-west": [
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-west/frame_000.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-west/frame_001.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-west/frame_002.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-west/frame_003.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-west/frame_004.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-west/frame_005.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-west/frame_006.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-west/frame_007.png"
+            ],
+            "west": [
+              "Mountain_Pikeman/animations/animating-9e8ce5af/west/frame_000.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/west/frame_001.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/west/frame_002.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/west/frame_003.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/west/frame_004.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/west/frame_005.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/west/frame_006.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/west/frame_007.png"
+            ],
+            "north-west": [
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-west/frame_000.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-west/frame_001.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-west/frame_002.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-west/frame_003.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-west/frame_004.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-west/frame_005.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-west/frame_006.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-west/frame_007.png"
+            ],
+            "north-east": [
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-east/frame_000.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-east/frame_001.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-east/frame_002.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-east/frame_003.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-east/frame_004.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-east/frame_005.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-east/frame_006.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north-east/frame_007.png"
+            ],
+            "north": [
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north/frame_000.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north/frame_001.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north/frame_002.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north/frame_003.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north/frame_004.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north/frame_005.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north/frame_006.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/north/frame_007.png"
+            ],
+            "south-east": [
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-east/frame_000.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-east/frame_001.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-east/frame_002.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-east/frame_003.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-east/frame_004.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-east/frame_005.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-east/frame_006.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south-east/frame_007.png"
+            ],
+            "south": [
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south/frame_000.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south/frame_001.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south/frame_002.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south/frame_003.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south/frame_004.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south/frame_005.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south/frame_006.png",
+              "Mountain_Pikeman/animations/animating-9e8ce5af/south/frame_007.png"
+            ]
+          },
+          "thrusting_forward_with_a_long_pike_spear_both_hand-b4a500ac": {
+            "south-east": [
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-b4a500ac/south-east/frame_000.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-b4a500ac/south-east/frame_001.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-b4a500ac/south-east/frame_002.png",
+              "Mountain_Pikeman/animations/thrusting_forward_with_a_long_pike_spear_both_hand-b4a500ac/south-east/frame_003.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:50:43.843007"
+}

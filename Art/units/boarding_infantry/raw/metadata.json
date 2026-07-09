@@ -1,0 +1,278 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "b6a14927-53a1-405e-8d9a-941afefe22ab",
+        "name": "Boarding Infantry",
+        "prompt": "A tier 1 coastal boarding soldier in basic reinforced leather armor, carrying a simple boarding axe. No ornate details, conscript-level equipment.",
+        "size": {
+          "width": 152,
+          "height": 152
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T04:38:10.484904+00:00"
+      },
+      "folder": "Boarding_Infantry",
+      "frames": {
+        "rotations": {
+          "south": "Boarding_Infantry/rotations/south.png",
+          "south-east": "Boarding_Infantry/rotations/south-east.png",
+          "east": "Boarding_Infantry/rotations/east.png",
+          "north-east": "Boarding_Infantry/rotations/north-east.png",
+          "north": "Boarding_Infantry/rotations/north.png",
+          "north-west": "Boarding_Infantry/rotations/north-west.png",
+          "west": "Boarding_Infantry/rotations/west.png",
+          "south-west": "Boarding_Infantry/rotations/south-west.png"
+        },
+        "animations": {
+          "animating": {
+            "south-east": [
+              "Boarding_Infantry/animations/animating/south-east/frame_000.png",
+              "Boarding_Infantry/animations/animating/south-east/frame_001.png",
+              "Boarding_Infantry/animations/animating/south-east/frame_002.png",
+              "Boarding_Infantry/animations/animating/south-east/frame_003.png"
+            ]
+          },
+          "swinging_a_boarding_axe_in_a_wide_slash": {
+            "south": [
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_000.png",
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_001.png",
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_002.png",
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_003.png",
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_004.png",
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_005.png",
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_006.png",
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_007.png",
+              "Boarding_Infantry/animations/swinging_a_boarding_axe_in_a_wide_slash/south/frame_008.png"
+            ]
+          },
+          "falling_backward": {
+            "south-east": [
+              "Boarding_Infantry/animations/falling_backward/south-east/frame_000.png",
+              "Boarding_Infantry/animations/falling_backward/south-east/frame_001.png",
+              "Boarding_Infantry/animations/falling_backward/south-east/frame_002.png",
+              "Boarding_Infantry/animations/falling_backward/south-east/frame_003.png",
+              "Boarding_Infantry/animations/falling_backward/south-east/frame_004.png",
+              "Boarding_Infantry/animations/falling_backward/south-east/frame_005.png",
+              "Boarding_Infantry/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "south-west": [
+              "Boarding_Infantry/animations/falling_backward/south-west/frame_000.png",
+              "Boarding_Infantry/animations/falling_backward/south-west/frame_001.png",
+              "Boarding_Infantry/animations/falling_backward/south-west/frame_002.png",
+              "Boarding_Infantry/animations/falling_backward/south-west/frame_003.png",
+              "Boarding_Infantry/animations/falling_backward/south-west/frame_004.png",
+              "Boarding_Infantry/animations/falling_backward/south-west/frame_005.png",
+              "Boarding_Infantry/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "west": [
+              "Boarding_Infantry/animations/falling_backward/west/frame_000.png",
+              "Boarding_Infantry/animations/falling_backward/west/frame_001.png",
+              "Boarding_Infantry/animations/falling_backward/west/frame_002.png",
+              "Boarding_Infantry/animations/falling_backward/west/frame_003.png",
+              "Boarding_Infantry/animations/falling_backward/west/frame_004.png",
+              "Boarding_Infantry/animations/falling_backward/west/frame_005.png",
+              "Boarding_Infantry/animations/falling_backward/west/frame_006.png"
+            ],
+            "north-east": [
+              "Boarding_Infantry/animations/falling_backward/north-east/frame_000.png",
+              "Boarding_Infantry/animations/falling_backward/north-east/frame_001.png",
+              "Boarding_Infantry/animations/falling_backward/north-east/frame_002.png",
+              "Boarding_Infantry/animations/falling_backward/north-east/frame_003.png",
+              "Boarding_Infantry/animations/falling_backward/north-east/frame_004.png",
+              "Boarding_Infantry/animations/falling_backward/north-east/frame_005.png",
+              "Boarding_Infantry/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "north-west": [
+              "Boarding_Infantry/animations/falling_backward/north-west/frame_000.png",
+              "Boarding_Infantry/animations/falling_backward/north-west/frame_001.png",
+              "Boarding_Infantry/animations/falling_backward/north-west/frame_002.png",
+              "Boarding_Infantry/animations/falling_backward/north-west/frame_003.png",
+              "Boarding_Infantry/animations/falling_backward/north-west/frame_004.png",
+              "Boarding_Infantry/animations/falling_backward/north-west/frame_005.png",
+              "Boarding_Infantry/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "south": [
+              "Boarding_Infantry/animations/falling_backward/south/frame_000.png",
+              "Boarding_Infantry/animations/falling_backward/south/frame_001.png",
+              "Boarding_Infantry/animations/falling_backward/south/frame_002.png",
+              "Boarding_Infantry/animations/falling_backward/south/frame_003.png",
+              "Boarding_Infantry/animations/falling_backward/south/frame_004.png",
+              "Boarding_Infantry/animations/falling_backward/south/frame_005.png",
+              "Boarding_Infantry/animations/falling_backward/south/frame_006.png"
+            ],
+            "east": [
+              "Boarding_Infantry/animations/falling_backward/east/frame_000.png",
+              "Boarding_Infantry/animations/falling_backward/east/frame_001.png",
+              "Boarding_Infantry/animations/falling_backward/east/frame_002.png",
+              "Boarding_Infantry/animations/falling_backward/east/frame_003.png",
+              "Boarding_Infantry/animations/falling_backward/east/frame_004.png",
+              "Boarding_Infantry/animations/falling_backward/east/frame_005.png",
+              "Boarding_Infantry/animations/falling_backward/east/frame_006.png"
+            ],
+            "north": [
+              "Boarding_Infantry/animations/falling_backward/north/frame_000.png",
+              "Boarding_Infantry/animations/falling_backward/north/frame_001.png",
+              "Boarding_Infantry/animations/falling_backward/north/frame_002.png",
+              "Boarding_Infantry/animations/falling_backward/north/frame_003.png",
+              "Boarding_Infantry/animations/falling_backward/north/frame_004.png",
+              "Boarding_Infantry/animations/falling_backward/north/frame_005.png",
+              "Boarding_Infantry/animations/falling_backward/north/frame_006.png"
+            ]
+          },
+          "animating-81ce8338": {
+            "east": [
+              "Boarding_Infantry/animations/animating-81ce8338/east/frame_000.png",
+              "Boarding_Infantry/animations/animating-81ce8338/east/frame_001.png",
+              "Boarding_Infantry/animations/animating-81ce8338/east/frame_002.png",
+              "Boarding_Infantry/animations/animating-81ce8338/east/frame_003.png"
+            ],
+            "north-east": [
+              "Boarding_Infantry/animations/animating-81ce8338/north-east/frame_000.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north-east/frame_001.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north-east/frame_002.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north-east/frame_003.png"
+            ],
+            "north-west": [
+              "Boarding_Infantry/animations/animating-81ce8338/north-west/frame_000.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north-west/frame_001.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north-west/frame_002.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north-west/frame_003.png"
+            ],
+            "west": [
+              "Boarding_Infantry/animations/animating-81ce8338/west/frame_000.png",
+              "Boarding_Infantry/animations/animating-81ce8338/west/frame_001.png",
+              "Boarding_Infantry/animations/animating-81ce8338/west/frame_002.png",
+              "Boarding_Infantry/animations/animating-81ce8338/west/frame_003.png"
+            ],
+            "north": [
+              "Boarding_Infantry/animations/animating-81ce8338/north/frame_000.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north/frame_001.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north/frame_002.png",
+              "Boarding_Infantry/animations/animating-81ce8338/north/frame_003.png"
+            ],
+            "south": [
+              "Boarding_Infantry/animations/animating-81ce8338/south/frame_000.png",
+              "Boarding_Infantry/animations/animating-81ce8338/south/frame_001.png",
+              "Boarding_Infantry/animations/animating-81ce8338/south/frame_002.png",
+              "Boarding_Infantry/animations/animating-81ce8338/south/frame_003.png"
+            ],
+            "south-west": [
+              "Boarding_Infantry/animations/animating-81ce8338/south-west/frame_000.png",
+              "Boarding_Infantry/animations/animating-81ce8338/south-west/frame_001.png",
+              "Boarding_Infantry/animations/animating-81ce8338/south-west/frame_002.png",
+              "Boarding_Infantry/animations/animating-81ce8338/south-west/frame_003.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Boarding_Infantry/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Boarding_Infantry/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Boarding_Infantry/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Boarding_Infantry/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Boarding_Infantry/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png"
+            ]
+          },
+          "raising_a_shield_or_arms_into_a_defensive_guard_st": {
+            "south": [
+              "Boarding_Infantry/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_000.png",
+              "Boarding_Infantry/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_001.png",
+              "Boarding_Infantry/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_002.png",
+              "Boarding_Infantry/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_003.png",
+              "Boarding_Infantry/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_004.png",
+              "Boarding_Infantry/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_005.png",
+              "Boarding_Infantry/animations/raising_a_shield_or_arms_into_a_defensive_guard_st/south/frame_006.png"
+            ]
+          },
+          "animating-e4ae1be1": {
+            "west": [
+              "Boarding_Infantry/animations/animating-e4ae1be1/west/frame_000.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/west/frame_001.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/west/frame_002.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/west/frame_003.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/west/frame_004.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/west/frame_005.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/west/frame_006.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/west/frame_007.png"
+            ],
+            "north": [
+              "Boarding_Infantry/animations/animating-e4ae1be1/north/frame_000.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north/frame_001.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north/frame_002.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north/frame_003.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north/frame_004.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north/frame_005.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north/frame_006.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north/frame_007.png"
+            ],
+            "north-east": [
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-east/frame_000.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-east/frame_001.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-east/frame_002.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-east/frame_003.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-east/frame_004.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-east/frame_005.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-east/frame_006.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-east/frame_007.png"
+            ],
+            "south-east": [
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-east/frame_000.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-east/frame_001.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-east/frame_002.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-east/frame_003.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-east/frame_004.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-east/frame_005.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-east/frame_006.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-east/frame_007.png"
+            ],
+            "east": [
+              "Boarding_Infantry/animations/animating-e4ae1be1/east/frame_000.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/east/frame_001.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/east/frame_002.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/east/frame_003.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/east/frame_004.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/east/frame_005.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/east/frame_006.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/east/frame_007.png"
+            ],
+            "south-west": [
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-west/frame_000.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-west/frame_001.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-west/frame_002.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-west/frame_003.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-west/frame_004.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-west/frame_005.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-west/frame_006.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south-west/frame_007.png"
+            ],
+            "north-west": [
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-west/frame_000.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-west/frame_001.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-west/frame_002.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-west/frame_003.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-west/frame_004.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-west/frame_005.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-west/frame_006.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/north-west/frame_007.png"
+            ],
+            "south": [
+              "Boarding_Infantry/animations/animating-e4ae1be1/south/frame_000.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south/frame_001.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south/frame_002.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south/frame_003.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south/frame_004.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south/frame_005.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south/frame_006.png",
+              "Boarding_Infantry/animations/animating-e4ae1be1/south/frame_007.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:43:30.543098"
+}

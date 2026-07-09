@@ -1,0 +1,278 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "25d62eb0-ebcc-49ea-a711-a4ea1547f21f",
+        "name": "Stonebreaker",
+        "prompt": "A tier 1 mountain warrior in basic heavy grey armor, wielding a simple two-handed warhammer with a plain iron head. No ornate details, minimal decoration, conscript-level equipment.",
+        "size": {
+          "width": 128,
+          "height": 128
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-27T00:51:17.358564+00:00"
+      },
+      "folder": "Stonebreaker",
+      "frames": {
+        "rotations": {
+          "south": "Stonebreaker/rotations/south.png",
+          "south-east": "Stonebreaker/rotations/south-east.png",
+          "east": "Stonebreaker/rotations/east.png",
+          "north-east": "Stonebreaker/rotations/north-east.png",
+          "north": "Stonebreaker/rotations/north.png",
+          "north-west": "Stonebreaker/rotations/north-west.png",
+          "west": "Stonebreaker/rotations/west.png",
+          "south-west": "Stonebreaker/rotations/south-west.png"
+        },
+        "animations": {
+          "swinging_a_massive_two-handed_warhammer_in_a_power": {
+            "south": [
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_000.png",
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_001.png",
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_002.png",
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_003.png",
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_004.png",
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_005.png",
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_006.png",
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_007.png",
+              "Stonebreaker/animations/swinging_a_massive_two-handed_warhammer_in_a_power/south/frame_008.png"
+            ]
+          },
+          "reacting_to_being_hit_staggering_backward_slightly": {
+            "south": [
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_000.png",
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_001.png",
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_002.png",
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_003.png",
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_004.png",
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_005.png",
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_006.png",
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_007.png",
+              "Stonebreaker/animations/reacting_to_being_hit_staggering_backward_slightly/south/frame_008.png"
+            ]
+          },
+          "animating": {
+            "east": [
+              "Stonebreaker/animations/animating/east/frame_000.png",
+              "Stonebreaker/animations/animating/east/frame_001.png",
+              "Stonebreaker/animations/animating/east/frame_002.png",
+              "Stonebreaker/animations/animating/east/frame_003.png"
+            ],
+            "north": [
+              "Stonebreaker/animations/animating/north/frame_000.png",
+              "Stonebreaker/animations/animating/north/frame_001.png",
+              "Stonebreaker/animations/animating/north/frame_002.png",
+              "Stonebreaker/animations/animating/north/frame_003.png"
+            ],
+            "north-west": [
+              "Stonebreaker/animations/animating/north-west/frame_000.png",
+              "Stonebreaker/animations/animating/north-west/frame_001.png",
+              "Stonebreaker/animations/animating/north-west/frame_002.png",
+              "Stonebreaker/animations/animating/north-west/frame_003.png"
+            ],
+            "south": [
+              "Stonebreaker/animations/animating/south/frame_000.png",
+              "Stonebreaker/animations/animating/south/frame_001.png",
+              "Stonebreaker/animations/animating/south/frame_002.png",
+              "Stonebreaker/animations/animating/south/frame_003.png"
+            ],
+            "south-east": [
+              "Stonebreaker/animations/animating/south-east/frame_000.png",
+              "Stonebreaker/animations/animating/south-east/frame_001.png",
+              "Stonebreaker/animations/animating/south-east/frame_002.png",
+              "Stonebreaker/animations/animating/south-east/frame_003.png"
+            ],
+            "west": [
+              "Stonebreaker/animations/animating/west/frame_000.png",
+              "Stonebreaker/animations/animating/west/frame_001.png",
+              "Stonebreaker/animations/animating/west/frame_002.png",
+              "Stonebreaker/animations/animating/west/frame_003.png"
+            ],
+            "south-west": [
+              "Stonebreaker/animations/animating/south-west/frame_000.png",
+              "Stonebreaker/animations/animating/south-west/frame_001.png",
+              "Stonebreaker/animations/animating/south-west/frame_002.png",
+              "Stonebreaker/animations/animating/south-west/frame_003.png"
+            ],
+            "north-east": [
+              "Stonebreaker/animations/animating/north-east/frame_000.png",
+              "Stonebreaker/animations/animating/north-east/frame_001.png",
+              "Stonebreaker/animations/animating/north-east/frame_002.png",
+              "Stonebreaker/animations/animating/north-east/frame_003.png"
+            ]
+          },
+          "raising_a_weapon_into_a_guarding_defensive_stance": {
+            "south": [
+              "Stonebreaker/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_000.png",
+              "Stonebreaker/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_001.png",
+              "Stonebreaker/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_002.png",
+              "Stonebreaker/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_003.png",
+              "Stonebreaker/animations/raising_a_weapon_into_a_guarding_defensive_stance/south/frame_004.png"
+            ]
+          },
+          "falling_backward": {
+            "north": [
+              "Stonebreaker/animations/falling_backward/north/frame_000.png",
+              "Stonebreaker/animations/falling_backward/north/frame_001.png",
+              "Stonebreaker/animations/falling_backward/north/frame_002.png",
+              "Stonebreaker/animations/falling_backward/north/frame_003.png",
+              "Stonebreaker/animations/falling_backward/north/frame_004.png",
+              "Stonebreaker/animations/falling_backward/north/frame_005.png",
+              "Stonebreaker/animations/falling_backward/north/frame_006.png"
+            ],
+            "south": [
+              "Stonebreaker/animations/falling_backward/south/frame_000.png",
+              "Stonebreaker/animations/falling_backward/south/frame_001.png",
+              "Stonebreaker/animations/falling_backward/south/frame_002.png",
+              "Stonebreaker/animations/falling_backward/south/frame_003.png",
+              "Stonebreaker/animations/falling_backward/south/frame_004.png",
+              "Stonebreaker/animations/falling_backward/south/frame_005.png",
+              "Stonebreaker/animations/falling_backward/south/frame_006.png"
+            ],
+            "north-west": [
+              "Stonebreaker/animations/falling_backward/north-west/frame_000.png",
+              "Stonebreaker/animations/falling_backward/north-west/frame_001.png",
+              "Stonebreaker/animations/falling_backward/north-west/frame_002.png",
+              "Stonebreaker/animations/falling_backward/north-west/frame_003.png",
+              "Stonebreaker/animations/falling_backward/north-west/frame_004.png",
+              "Stonebreaker/animations/falling_backward/north-west/frame_005.png",
+              "Stonebreaker/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "north-east": [
+              "Stonebreaker/animations/falling_backward/north-east/frame_000.png",
+              "Stonebreaker/animations/falling_backward/north-east/frame_001.png",
+              "Stonebreaker/animations/falling_backward/north-east/frame_002.png",
+              "Stonebreaker/animations/falling_backward/north-east/frame_003.png",
+              "Stonebreaker/animations/falling_backward/north-east/frame_004.png",
+              "Stonebreaker/animations/falling_backward/north-east/frame_005.png",
+              "Stonebreaker/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "south-west": [
+              "Stonebreaker/animations/falling_backward/south-west/frame_000.png",
+              "Stonebreaker/animations/falling_backward/south-west/frame_001.png",
+              "Stonebreaker/animations/falling_backward/south-west/frame_002.png",
+              "Stonebreaker/animations/falling_backward/south-west/frame_003.png",
+              "Stonebreaker/animations/falling_backward/south-west/frame_004.png",
+              "Stonebreaker/animations/falling_backward/south-west/frame_005.png",
+              "Stonebreaker/animations/falling_backward/south-west/frame_006.png"
+            ],
+            "west": [
+              "Stonebreaker/animations/falling_backward/west/frame_000.png",
+              "Stonebreaker/animations/falling_backward/west/frame_001.png",
+              "Stonebreaker/animations/falling_backward/west/frame_002.png",
+              "Stonebreaker/animations/falling_backward/west/frame_003.png",
+              "Stonebreaker/animations/falling_backward/west/frame_004.png",
+              "Stonebreaker/animations/falling_backward/west/frame_005.png",
+              "Stonebreaker/animations/falling_backward/west/frame_006.png"
+            ],
+            "south-east": [
+              "Stonebreaker/animations/falling_backward/south-east/frame_000.png",
+              "Stonebreaker/animations/falling_backward/south-east/frame_001.png",
+              "Stonebreaker/animations/falling_backward/south-east/frame_002.png",
+              "Stonebreaker/animations/falling_backward/south-east/frame_003.png",
+              "Stonebreaker/animations/falling_backward/south-east/frame_004.png",
+              "Stonebreaker/animations/falling_backward/south-east/frame_005.png",
+              "Stonebreaker/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "east": [
+              "Stonebreaker/animations/falling_backward/east/frame_000.png",
+              "Stonebreaker/animations/falling_backward/east/frame_001.png",
+              "Stonebreaker/animations/falling_backward/east/frame_002.png",
+              "Stonebreaker/animations/falling_backward/east/frame_003.png",
+              "Stonebreaker/animations/falling_backward/east/frame_004.png",
+              "Stonebreaker/animations/falling_backward/east/frame_005.png",
+              "Stonebreaker/animations/falling_backward/east/frame_006.png"
+            ]
+          },
+          "animating-fe206ca8": {
+            "north": [
+              "Stonebreaker/animations/animating-fe206ca8/north/frame_000.png",
+              "Stonebreaker/animations/animating-fe206ca8/north/frame_001.png",
+              "Stonebreaker/animations/animating-fe206ca8/north/frame_002.png",
+              "Stonebreaker/animations/animating-fe206ca8/north/frame_003.png",
+              "Stonebreaker/animations/animating-fe206ca8/north/frame_004.png",
+              "Stonebreaker/animations/animating-fe206ca8/north/frame_005.png",
+              "Stonebreaker/animations/animating-fe206ca8/north/frame_006.png",
+              "Stonebreaker/animations/animating-fe206ca8/north/frame_007.png"
+            ],
+            "east": [
+              "Stonebreaker/animations/animating-fe206ca8/east/frame_000.png",
+              "Stonebreaker/animations/animating-fe206ca8/east/frame_001.png",
+              "Stonebreaker/animations/animating-fe206ca8/east/frame_002.png",
+              "Stonebreaker/animations/animating-fe206ca8/east/frame_003.png",
+              "Stonebreaker/animations/animating-fe206ca8/east/frame_004.png",
+              "Stonebreaker/animations/animating-fe206ca8/east/frame_005.png",
+              "Stonebreaker/animations/animating-fe206ca8/east/frame_006.png",
+              "Stonebreaker/animations/animating-fe206ca8/east/frame_007.png"
+            ],
+            "north-east": [
+              "Stonebreaker/animations/animating-fe206ca8/north-east/frame_000.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-east/frame_001.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-east/frame_002.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-east/frame_003.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-east/frame_004.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-east/frame_005.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-east/frame_006.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-east/frame_007.png"
+            ],
+            "south": [
+              "Stonebreaker/animations/animating-fe206ca8/south/frame_000.png",
+              "Stonebreaker/animations/animating-fe206ca8/south/frame_001.png",
+              "Stonebreaker/animations/animating-fe206ca8/south/frame_002.png",
+              "Stonebreaker/animations/animating-fe206ca8/south/frame_003.png",
+              "Stonebreaker/animations/animating-fe206ca8/south/frame_004.png",
+              "Stonebreaker/animations/animating-fe206ca8/south/frame_005.png",
+              "Stonebreaker/animations/animating-fe206ca8/south/frame_006.png",
+              "Stonebreaker/animations/animating-fe206ca8/south/frame_007.png"
+            ],
+            "south-west": [
+              "Stonebreaker/animations/animating-fe206ca8/south-west/frame_000.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-west/frame_001.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-west/frame_002.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-west/frame_003.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-west/frame_004.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-west/frame_005.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-west/frame_006.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-west/frame_007.png"
+            ],
+            "north-west": [
+              "Stonebreaker/animations/animating-fe206ca8/north-west/frame_000.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-west/frame_001.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-west/frame_002.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-west/frame_003.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-west/frame_004.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-west/frame_005.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-west/frame_006.png",
+              "Stonebreaker/animations/animating-fe206ca8/north-west/frame_007.png"
+            ],
+            "south-east": [
+              "Stonebreaker/animations/animating-fe206ca8/south-east/frame_000.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-east/frame_001.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-east/frame_002.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-east/frame_003.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-east/frame_004.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-east/frame_005.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-east/frame_006.png",
+              "Stonebreaker/animations/animating-fe206ca8/south-east/frame_007.png"
+            ],
+            "west": [
+              "Stonebreaker/animations/animating-fe206ca8/west/frame_000.png",
+              "Stonebreaker/animations/animating-fe206ca8/west/frame_001.png",
+              "Stonebreaker/animations/animating-fe206ca8/west/frame_002.png",
+              "Stonebreaker/animations/animating-fe206ca8/west/frame_003.png",
+              "Stonebreaker/animations/animating-fe206ca8/west/frame_004.png",
+              "Stonebreaker/animations/animating-fe206ca8/west/frame_005.png",
+              "Stonebreaker/animations/animating-fe206ca8/west/frame_006.png",
+              "Stonebreaker/animations/animating-fe206ca8/west/frame_007.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:41:51.698990"
+}

@@ -1,0 +1,280 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "73cc2ee2-c92e-4d80-b93c-4cf81a802848",
+        "name": "Hunter",
+        "prompt": "A tier 1 forest hunter wearing basic worn leather armor and a simple hooded cloak in earthy green and brown tones. Carries a plain wooden longbow with a rough quiver of arrows at their back. Extremely basic gear \u2014 no ornate details, minimal protection, conscript-level equipment.",
+        "size": {
+          "width": 112,
+          "height": 112
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-06-26T23:15:43.227714+00:00"
+      },
+      "folder": "Hunter",
+      "frames": {
+        "rotations": {
+          "south": "Hunter/rotations/south.png",
+          "south-east": "Hunter/rotations/south-east.png",
+          "east": "Hunter/rotations/east.png",
+          "north-east": "Hunter/rotations/north-east.png",
+          "north": "Hunter/rotations/north.png",
+          "north-west": "Hunter/rotations/north-west.png",
+          "west": "Hunter/rotations/west.png",
+          "south-west": "Hunter/rotations/south-west.png"
+        },
+        "animations": {
+          "staggering_backward_from_a_hit_head_snapping_to_th": {
+            "south": [
+              "Hunter/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_000.png",
+              "Hunter/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_001.png",
+              "Hunter/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_002.png",
+              "Hunter/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_003.png",
+              "Hunter/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_004.png",
+              "Hunter/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_005.png",
+              "Hunter/animations/staggering_backward_from_a_hit_head_snapping_to_th/south/frame_006.png"
+            ]
+          },
+          "falling_backward": {
+            "south-east": [
+              "Hunter/animations/falling_backward/south-east/frame_000.png",
+              "Hunter/animations/falling_backward/south-east/frame_001.png",
+              "Hunter/animations/falling_backward/south-east/frame_002.png",
+              "Hunter/animations/falling_backward/south-east/frame_003.png",
+              "Hunter/animations/falling_backward/south-east/frame_004.png",
+              "Hunter/animations/falling_backward/south-east/frame_005.png",
+              "Hunter/animations/falling_backward/south-east/frame_006.png"
+            ],
+            "north": [
+              "Hunter/animations/falling_backward/north/frame_000.png",
+              "Hunter/animations/falling_backward/north/frame_001.png",
+              "Hunter/animations/falling_backward/north/frame_002.png",
+              "Hunter/animations/falling_backward/north/frame_003.png",
+              "Hunter/animations/falling_backward/north/frame_004.png",
+              "Hunter/animations/falling_backward/north/frame_005.png",
+              "Hunter/animations/falling_backward/north/frame_006.png"
+            ],
+            "north-west": [
+              "Hunter/animations/falling_backward/north-west/frame_000.png",
+              "Hunter/animations/falling_backward/north-west/frame_001.png",
+              "Hunter/animations/falling_backward/north-west/frame_002.png",
+              "Hunter/animations/falling_backward/north-west/frame_003.png",
+              "Hunter/animations/falling_backward/north-west/frame_004.png",
+              "Hunter/animations/falling_backward/north-west/frame_005.png",
+              "Hunter/animations/falling_backward/north-west/frame_006.png"
+            ],
+            "east": [
+              "Hunter/animations/falling_backward/east/frame_000.png",
+              "Hunter/animations/falling_backward/east/frame_001.png",
+              "Hunter/animations/falling_backward/east/frame_002.png",
+              "Hunter/animations/falling_backward/east/frame_003.png",
+              "Hunter/animations/falling_backward/east/frame_004.png",
+              "Hunter/animations/falling_backward/east/frame_005.png",
+              "Hunter/animations/falling_backward/east/frame_006.png"
+            ],
+            "south": [
+              "Hunter/animations/falling_backward/south/frame_000.png",
+              "Hunter/animations/falling_backward/south/frame_001.png",
+              "Hunter/animations/falling_backward/south/frame_002.png",
+              "Hunter/animations/falling_backward/south/frame_003.png",
+              "Hunter/animations/falling_backward/south/frame_004.png",
+              "Hunter/animations/falling_backward/south/frame_005.png",
+              "Hunter/animations/falling_backward/south/frame_006.png"
+            ],
+            "north-east": [
+              "Hunter/animations/falling_backward/north-east/frame_000.png",
+              "Hunter/animations/falling_backward/north-east/frame_001.png",
+              "Hunter/animations/falling_backward/north-east/frame_002.png",
+              "Hunter/animations/falling_backward/north-east/frame_003.png",
+              "Hunter/animations/falling_backward/north-east/frame_004.png",
+              "Hunter/animations/falling_backward/north-east/frame_005.png",
+              "Hunter/animations/falling_backward/north-east/frame_006.png"
+            ],
+            "west": [
+              "Hunter/animations/falling_backward/west/frame_000.png",
+              "Hunter/animations/falling_backward/west/frame_001.png",
+              "Hunter/animations/falling_backward/west/frame_002.png",
+              "Hunter/animations/falling_backward/west/frame_003.png",
+              "Hunter/animations/falling_backward/west/frame_004.png",
+              "Hunter/animations/falling_backward/west/frame_005.png",
+              "Hunter/animations/falling_backward/west/frame_006.png"
+            ],
+            "south-west": [
+              "Hunter/animations/falling_backward/south-west/frame_000.png",
+              "Hunter/animations/falling_backward/south-west/frame_001.png",
+              "Hunter/animations/falling_backward/south-west/frame_002.png",
+              "Hunter/animations/falling_backward/south-west/frame_003.png",
+              "Hunter/animations/falling_backward/south-west/frame_004.png",
+              "Hunter/animations/falling_backward/south-west/frame_005.png",
+              "Hunter/animations/falling_backward/south-west/frame_006.png"
+            ]
+          },
+          "raising_a_bow_into_a_guarding_defensive_stance_to": {
+            "south": [
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_000.png",
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_001.png",
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_002.png",
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_003.png",
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_004.png",
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_005.png",
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_006.png",
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_007.png",
+              "Hunter/animations/raising_a_bow_into_a_guarding_defensive_stance_to/south/frame_008.png"
+            ]
+          },
+          "animating": {
+            "west": [
+              "Hunter/animations/animating/west/frame_000.png",
+              "Hunter/animations/animating/west/frame_001.png",
+              "Hunter/animations/animating/west/frame_002.png",
+              "Hunter/animations/animating/west/frame_003.png"
+            ],
+            "south-east": [
+              "Hunter/animations/animating/south-east/frame_000.png",
+              "Hunter/animations/animating/south-east/frame_001.png",
+              "Hunter/animations/animating/south-east/frame_002.png",
+              "Hunter/animations/animating/south-east/frame_003.png"
+            ],
+            "east": [
+              "Hunter/animations/animating/east/frame_000.png",
+              "Hunter/animations/animating/east/frame_001.png",
+              "Hunter/animations/animating/east/frame_002.png",
+              "Hunter/animations/animating/east/frame_003.png"
+            ],
+            "south-west": [
+              "Hunter/animations/animating/south-west/frame_000.png",
+              "Hunter/animations/animating/south-west/frame_001.png",
+              "Hunter/animations/animating/south-west/frame_002.png",
+              "Hunter/animations/animating/south-west/frame_003.png"
+            ],
+            "south": [
+              "Hunter/animations/animating/south/frame_000.png",
+              "Hunter/animations/animating/south/frame_001.png",
+              "Hunter/animations/animating/south/frame_002.png",
+              "Hunter/animations/animating/south/frame_003.png"
+            ],
+            "north-west": [
+              "Hunter/animations/animating/north-west/frame_000.png",
+              "Hunter/animations/animating/north-west/frame_001.png",
+              "Hunter/animations/animating/north-west/frame_002.png",
+              "Hunter/animations/animating/north-west/frame_003.png"
+            ],
+            "north": [
+              "Hunter/animations/animating/north/frame_000.png",
+              "Hunter/animations/animating/north/frame_001.png",
+              "Hunter/animations/animating/north/frame_002.png",
+              "Hunter/animations/animating/north/frame_003.png"
+            ],
+            "north-east": [
+              "Hunter/animations/animating/north-east/frame_000.png",
+              "Hunter/animations/animating/north-east/frame_001.png",
+              "Hunter/animations/animating/north-east/frame_002.png",
+              "Hunter/animations/animating/north-east/frame_003.png"
+            ]
+          },
+          "animating-bca9a768": {
+            "east": [
+              "Hunter/animations/animating-bca9a768/east/frame_000.png",
+              "Hunter/animations/animating-bca9a768/east/frame_001.png",
+              "Hunter/animations/animating-bca9a768/east/frame_002.png",
+              "Hunter/animations/animating-bca9a768/east/frame_003.png",
+              "Hunter/animations/animating-bca9a768/east/frame_004.png",
+              "Hunter/animations/animating-bca9a768/east/frame_005.png",
+              "Hunter/animations/animating-bca9a768/east/frame_006.png",
+              "Hunter/animations/animating-bca9a768/east/frame_007.png"
+            ],
+            "south": [
+              "Hunter/animations/animating-bca9a768/south/frame_000.png",
+              "Hunter/animations/animating-bca9a768/south/frame_001.png",
+              "Hunter/animations/animating-bca9a768/south/frame_002.png",
+              "Hunter/animations/animating-bca9a768/south/frame_003.png",
+              "Hunter/animations/animating-bca9a768/south/frame_004.png",
+              "Hunter/animations/animating-bca9a768/south/frame_005.png",
+              "Hunter/animations/animating-bca9a768/south/frame_006.png",
+              "Hunter/animations/animating-bca9a768/south/frame_007.png"
+            ],
+            "north-east": [
+              "Hunter/animations/animating-bca9a768/north-east/frame_000.png",
+              "Hunter/animations/animating-bca9a768/north-east/frame_001.png",
+              "Hunter/animations/animating-bca9a768/north-east/frame_002.png",
+              "Hunter/animations/animating-bca9a768/north-east/frame_003.png",
+              "Hunter/animations/animating-bca9a768/north-east/frame_004.png",
+              "Hunter/animations/animating-bca9a768/north-east/frame_005.png",
+              "Hunter/animations/animating-bca9a768/north-east/frame_006.png",
+              "Hunter/animations/animating-bca9a768/north-east/frame_007.png"
+            ],
+            "north-west": [
+              "Hunter/animations/animating-bca9a768/north-west/frame_000.png",
+              "Hunter/animations/animating-bca9a768/north-west/frame_001.png",
+              "Hunter/animations/animating-bca9a768/north-west/frame_002.png",
+              "Hunter/animations/animating-bca9a768/north-west/frame_003.png",
+              "Hunter/animations/animating-bca9a768/north-west/frame_004.png",
+              "Hunter/animations/animating-bca9a768/north-west/frame_005.png",
+              "Hunter/animations/animating-bca9a768/north-west/frame_006.png",
+              "Hunter/animations/animating-bca9a768/north-west/frame_007.png"
+            ],
+            "north": [
+              "Hunter/animations/animating-bca9a768/north/frame_000.png",
+              "Hunter/animations/animating-bca9a768/north/frame_001.png",
+              "Hunter/animations/animating-bca9a768/north/frame_002.png",
+              "Hunter/animations/animating-bca9a768/north/frame_003.png",
+              "Hunter/animations/animating-bca9a768/north/frame_004.png",
+              "Hunter/animations/animating-bca9a768/north/frame_005.png",
+              "Hunter/animations/animating-bca9a768/north/frame_006.png",
+              "Hunter/animations/animating-bca9a768/north/frame_007.png"
+            ],
+            "west": [
+              "Hunter/animations/animating-bca9a768/west/frame_000.png",
+              "Hunter/animations/animating-bca9a768/west/frame_001.png",
+              "Hunter/animations/animating-bca9a768/west/frame_002.png",
+              "Hunter/animations/animating-bca9a768/west/frame_003.png",
+              "Hunter/animations/animating-bca9a768/west/frame_004.png",
+              "Hunter/animations/animating-bca9a768/west/frame_005.png",
+              "Hunter/animations/animating-bca9a768/west/frame_006.png",
+              "Hunter/animations/animating-bca9a768/west/frame_007.png"
+            ],
+            "south-east": [
+              "Hunter/animations/animating-bca9a768/south-east/frame_000.png",
+              "Hunter/animations/animating-bca9a768/south-east/frame_001.png",
+              "Hunter/animations/animating-bca9a768/south-east/frame_002.png",
+              "Hunter/animations/animating-bca9a768/south-east/frame_003.png",
+              "Hunter/animations/animating-bca9a768/south-east/frame_004.png",
+              "Hunter/animations/animating-bca9a768/south-east/frame_005.png",
+              "Hunter/animations/animating-bca9a768/south-east/frame_006.png",
+              "Hunter/animations/animating-bca9a768/south-east/frame_007.png"
+            ],
+            "south-west": [
+              "Hunter/animations/animating-bca9a768/south-west/frame_000.png",
+              "Hunter/animations/animating-bca9a768/south-west/frame_001.png",
+              "Hunter/animations/animating-bca9a768/south-west/frame_002.png",
+              "Hunter/animations/animating-bca9a768/south-west/frame_003.png",
+              "Hunter/animations/animating-bca9a768/south-west/frame_004.png",
+              "Hunter/animations/animating-bca9a768/south-west/frame_005.png",
+              "Hunter/animations/animating-bca9a768/south-west/frame_006.png",
+              "Hunter/animations/animating-bca9a768/south-west/frame_007.png"
+            ]
+          },
+          "drawing_a_bow_and_releasing_an_arrow": {
+            "south": [
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_000.png",
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_001.png",
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_002.png",
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_003.png",
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_004.png",
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_005.png",
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_006.png",
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_007.png",
+              "Hunter/animations/drawing_a_bow_and_releasing_an_arrow/south/frame_008.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-06-28T21:41:19.864726"
+}
