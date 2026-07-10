@@ -139,6 +139,9 @@ var _swamp_fog_overlay: Node2D = null
 var _sun_world_pos: Vector2 = Vector2.ZERO
 const SUN_CYCLE_SECONDS: float = 300.0  # full east-to-west sweep duration
 
+# Top-layer child node — draws roads, trees, nodes, labels ABOVE the river water strip
+var _map_top_layer: Node2D = null
+
 
 
 var _hover_id: int = -1
@@ -156,7 +159,24 @@ func set_pick_mode(mode: int, source_id: int, valid_targets: Array = []) -> void
 	_pick_mode = mode
 	_pick_source_id = source_id
 	_pick_valid_targets = valid_targets
+	_invalidate()
+
+
+func _invalidate() -> void:
 	queue_redraw()
+	if _map_top_layer != null:
+		_map_top_layer.queue_redraw()
+
+
+func _sync_overlays() -> void:
+	if _swamp_fog_overlay != null:
+		_swamp_fog_overlay.set("zoom", _zoom)
+		_swamp_fog_overlay.set("origin", _origin)
+		_swamp_fog_overlay.queue_redraw()
+	if _river_overlay != null:
+		_river_overlay.set("zoom", _zoom)
+		_river_overlay.set("origin", _origin)
+		_river_overlay.queue_redraw()
 
 const NODE_RADIUS: float = 9.0
 const DRAG_THRESHOLD: float  = 6.0    # px before a click becomes a drag
@@ -189,7 +209,7 @@ func init(gs: GameState, md: MapData, human_id: int, voronoi: Dictionary) -> voi
 	_load_terrain_from_scene_manager()
 	_build_terrain_mesh()
 	_frame_map()
-	queue_redraw()
+	_invalidate()
 
 
 func _ready() -> void:
@@ -209,7 +229,7 @@ func _recompute_zoom_bounds() -> void:
 	_zoom_min = full_zoom * MIN_ZOOM_FACTOR
 	_zoom_max = full_zoom * 15.0
 	_zoom = clampf(_zoom, _zoom_min, _zoom_max)
-	queue_redraw()
+	_invalidate()
 
 
 func _process(delta: float) -> void:
@@ -287,19 +307,11 @@ func _process(delta: float) -> void:
 		_last_sun_redraw_time = _sun_time
 		dirty = true
 
-	# Sync overlay cameras when camera moved
 	if camera_moved:
-		if _swamp_fog_overlay != null:
-			_swamp_fog_overlay.set("zoom", _zoom)
-			_swamp_fog_overlay.set("origin", _origin)
-			_swamp_fog_overlay.queue_redraw()
-		if _river_overlay != null:
-			_river_overlay.set("zoom", _zoom)
-			_river_overlay.set("origin", _origin)
-			_river_overlay.queue_redraw()
+		_sync_overlays()
 
 	if dirty:
-		queue_redraw()
+		_invalidate()
 
 
 func _center_on_province(pid: int) -> void:
@@ -524,7 +536,7 @@ func _build_clipped_cells() -> void:
 
 
 func refresh() -> void:
-	queue_redraw()
+	_invalidate()
 
 
 # --------------------------------------------------
@@ -564,7 +576,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							_border_bounce_start = Time.get_ticks_msec() / 1000.0
 							province_clicked.emit(pid)
 							_center_on_province(pid)
-							queue_redraw()
+							_invalidate()
 					_left_held = false
 			MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT:
 				_is_panning = mb.pressed
@@ -591,18 +603,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		if _is_panning:
 			var world_delta := mm.relative / _zoom
 			_origin += world_delta
-			# Track recent velocity samples for fling
 			var dt: float = get_process_delta_time()
 			if dt > 0.0:
 				_velocity_samples.append([world_delta, dt])
 				if _velocity_samples.size() > PAN_FLING_FRAMES:
 					_velocity_samples.pop_front()
-			queue_redraw()
+			_sync_overlays()
+			_invalidate()
 		var new_hover: int = _pick_province(mm.position)
 		if new_hover != _hover_id:
 			_hover_id = new_hover
 			province_hovered.emit(_hover_id)
-			queue_redraw()
+			_invalidate()
 
 
 # --------------------------------------------------
@@ -618,12 +630,8 @@ func _draw() -> void:
 	_draw_desert_ground()
 	_draw_tundra_ground()
 	_draw_rivers()
-	_draw_cell_borders()
-	_draw_routes()
-	_draw_trees()
-	_draw_nodes()
-	_draw_labels()
-	_draw_order_indicators()
+	# RiverOverlay child draws the water strip here (above terrain, below top layer).
+	# MapTopLayer child draws roads, trees, nodes, labels, borders above the water.
 
 
 func _draw_background() -> void:
@@ -807,6 +815,11 @@ func _load_terrain_from_scene_manager() -> void:
 	_filter_river_trees()
 	_scatter_river_trees()
 	_build_tree_meshes()
+	# MapTopLayer must be added AFTER RiverOverlay so it renders on top of the water strip
+	if _map_top_layer == null:
+		_map_top_layer = load("res://Visual/campaign/MapTopLayer.gd").new()
+		_map_top_layer.set("pm", self)
+		add_child(_map_top_layer)
 
 
 func _load_biome_texs(biome: String, names: Array) -> Array:
@@ -2076,7 +2089,8 @@ func _zoom_at(screen_pos: Vector2, factor: float) -> void:
 	var world_before: Vector2 = _to_world(screen_pos)
 	_zoom = clampf(_zoom * factor, _zoom_min, _zoom_max)
 	_origin = screen_pos / _zoom - world_before
-	queue_redraw()
+	_sync_overlays()
+	_invalidate()
 
 
 func _frame_map() -> void:
