@@ -1367,8 +1367,10 @@ func _draw_trib_banks(data: Dictionary) -> void:
 				col.a = lerpf(1.0, 0.0, (t_start + t_end) * 0.5)
 				var band := PackedVector2Array()
 				for i in range(idx_start, idx_end):
-					var world_pt: Vector2 = (edge_world[i] as Vector2) + (perps[i] as Vector2) * offset
-					band.append(_to_screen(world_pt))
+					# Convert edge to screen first, then apply offset in screen space.
+					# Offset values are screen-pixel distances; perp is a world-space unit vector
+					# which acts as a direction in screen space (matching the original behaviour).
+					band.append(_to_screen(edge_world[i] as Vector2) + (perps[i] as Vector2) * offset)
 				draw_polyline(band, col, line_w)
 
 
