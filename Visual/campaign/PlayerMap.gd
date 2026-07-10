@@ -37,6 +37,12 @@ var _is_panning: bool = false
 var _left_held: bool = false
 var _press_pos: Vector2 = Vector2.ZERO
 
+# Momentum / fling
+var _pan_velocity: Vector2 = Vector2.ZERO   # world units per second
+var _velocity_samples: Array = []           # recent [relative_screen, dt] pairs
+const PAN_FRICTION:     float = 8.0         # higher = stops faster
+const PAN_FLING_FRAMES: int   = 5           # how many recent frames to average velocity
+
 # Smooth center-on-province
 var _cam_target: Vector2 = Vector2.ZERO
 var _cam_lerping: bool = false
@@ -49,6 +55,15 @@ var _voronoi_cells: Dictionary = {}        # int -> Array[Vector2]  (original, u
 var _clipped_cells: Dictionary = {}        # int -> PackedVector2Array (clipped to continent)
 var _continent_poly: PackedVector2Array = PackedVector2Array()
 var _island_polys: Array = []              # Array of PackedVector2Array
+
+# Perf tracking
+var _perf_acc: float     = 0.0
+var _perf_frames: int    = 0
+var _perf_slow: int      = 0    # frames over spike threshold
+var _perf_min_ms: float  = 9999.0
+var _perf_max_ms: float  = 0.0
+const PERF_LOG_INTERVAL: float = 10.0   # seconds between summary logs
+const PERF_SPIKE_MS:     float = 33.3   # >33ms = below 30fps spike
 
 var _grass_atlas_tex: Texture2D = null
 var _terrain_tile_data: Array = []
@@ -66,6 +81,17 @@ var _swamp_atlas_tex: Texture2D = null
 var _swamp_tile_data: Array = []
 var _swamp_ie_tex: Texture2D = null
 var _swamp_ie_data: Array = []
+
+var _desert_atlas_tex: Texture2D = null
+var _desert_tile_data: Array = []
+var _desert_mesh: ArrayMesh = null
+
+var _tundra_atlas_tex: Texture2D = null
+var _tundra_tile_data: Array = []
+var _tundra_mesh: ArrayMesh = null
+
+var _swamp_mesh: ArrayMesh = null
+var _swamp_ie_mesh: ArrayMesh = null
 
 var _tree_textures: Array = []   # Array of Texture2D
 var _dead_tree_start_idx: int = 0
@@ -86,12 +112,22 @@ var _river_parallax_tex: Texture2D = null
 var _river_overlay: Node2D = null
 var _river_grid_path: Array = []         # main river path
 var _river_branch_paths: Array = []      # tributary paths
-var _river_wind_uv: Vector2 = Vector2.ZERO
 var _river_smooth_main: Array = []       # cached Chaikin-smoothed main path
 var _river_smooth_branches: Array = []   # cached Chaikin-smoothed tributary paths
 
+# Prebuilt river strip meshes — water fill rendered by RiverOverlay with TIME shader
+var _river_main_strip_mesh: ArrayMesh = null
+var _river_trib_strip_meshes: Array = []
+# Per-tributary world-space bank edge data for GDScript bank-line drawing
+var _river_trib_bank_data: Array = []
+
+# Sun shadow redraw throttle — node shadow ellipses update every N seconds
+var _last_sun_redraw_time: float = -999.0
+const SUN_SHADOW_REDRAW_INTERVAL: float = 5.0
+
 var _tree_positions: Array = []         # raw from terrain generator
 var _drawable_trees: Array = []         # pre-filtered, coast trees removed
+var _tree_meshes: Array = []            # one ArrayMesh per texture index (world-space quads)
 const TREE_WORLD_SIZE: float = 16.0  # half-width/height in world units
 
 # Weather: GPU shader-driven cloud shadows + sun light wash
@@ -178,14 +214,41 @@ func _recompute_zoom_bounds() -> void:
 
 func _process(delta: float) -> void:
 	var dirty := false
+	var camera_moved := false
 
+	# Perf tracking
+	var frame_ms: float = delta * 1000.0
+	_perf_acc    += delta
+	_perf_frames += 1
+	_perf_min_ms  = minf(_perf_min_ms, frame_ms)
+	_perf_max_ms  = maxf(_perf_max_ms, frame_ms)
+	if frame_ms > PERF_SPIKE_MS:
+		_perf_slow += 1
+	if _perf_acc >= PERF_LOG_INTERVAL:
+		var avg_ms: float  = (_perf_acc / _perf_frames) * 1000.0
+		var avg_fps: float = _perf_frames / _perf_acc
+		DebugLogger.log("perf_summary", {
+			"avg_fps": snappedf(avg_fps, 0.1),
+			"avg_ms":  snappedf(avg_ms,  0.1),
+			"min_ms":  snappedf(_perf_min_ms, 0.1),
+			"max_ms":  snappedf(_perf_max_ms, 0.1),
+			"spike_frames": _perf_slow,
+			"total_frames": _perf_frames,
+		})
+		_perf_acc = 0.0; _perf_frames = 0; _perf_slow = 0
+		_perf_min_ms = 9999.0; _perf_max_ms = 0.0
+
+	# Cloud shadow shader params update — cheap uniform set, no queue_redraw needed
 	_update_weather(delta)
-	_river_wind_uv += Vector2(0.005, 0.0017) * delta
-	if _swamp_fog_overlay != null:
-		_swamp_fog_overlay.set("zoom",   _zoom)
-		_swamp_fog_overlay.set("origin", _origin)
-		_swamp_fog_overlay.queue_redraw()
-	dirty = true
+
+	# Momentum fling — coast to stop after drag release
+	if not _is_panning and _pan_velocity.length_squared() > 0.0001:
+		_origin += _pan_velocity * delta
+		_pan_velocity = _pan_velocity.lerp(Vector2.ZERO, minf(PAN_FRICTION * delta, 1.0))
+		if _pan_velocity.length_squared() < 0.0001:
+			_pan_velocity = Vector2.ZERO
+		dirty = true
+		camera_moved = true
 
 	# Smooth camera lerp (click-to-center)
 	if _cam_lerping:
@@ -196,6 +259,7 @@ func _process(delta: float) -> void:
 		else:
 			_origin += diff * minf(delta * PAN_SMOOTH, 1.0)
 		dirty = true
+		camera_moved = true
 
 	# Keyboard pan -- only when no GUI control has focus
 	if get_viewport().gui_get_focus_owner() == null:
@@ -205,12 +269,34 @@ func _process(delta: float) -> void:
 		if Input.is_key_pressed(KEY_UP)    or Input.is_key_pressed(KEY_W): kp.y += 1
 		if Input.is_key_pressed(KEY_DOWN)  or Input.is_key_pressed(KEY_S): kp.y -= 1
 		if kp != Vector2.ZERO:
-			# Speed = fraction of visible world width per second
 			var vp := get_viewport_rect().size
 			var visible_world_w := (vp.x - left_margin) / _zoom
 			_origin += kp * visible_world_w * PAN_SPEED_FRAC * delta
 			_cam_lerping = false
 			dirty = true
+			camera_moved = true
+
+	# Selection border bounce — keep redrawing for the duration of the animation
+	if _border_bounce_start >= 0.0:
+		var elapsed := Time.get_ticks_msec() / 1000.0 - _border_bounce_start
+		if elapsed < BORDER_BOUNCE_DURATION:
+			dirty = true
+
+	# Sun shadow throttle — province node shadow ellipses update slowly (5s interval)
+	if _sun_time - _last_sun_redraw_time >= SUN_SHADOW_REDRAW_INTERVAL:
+		_last_sun_redraw_time = _sun_time
+		dirty = true
+
+	# Sync overlay cameras when camera moved
+	if camera_moved:
+		if _swamp_fog_overlay != null:
+			_swamp_fog_overlay.set("zoom", _zoom)
+			_swamp_fog_overlay.set("origin", _origin)
+			_swamp_fog_overlay.queue_redraw()
+		if _river_overlay != null:
+			_river_overlay.set("zoom", _zoom)
+			_river_overlay.set("origin", _origin)
+			_river_overlay.queue_redraw()
 
 	if dirty:
 		queue_redraw()
@@ -456,9 +542,20 @@ func _unhandled_input(event: InputEvent) -> void:
 					_left_held = true
 					_press_pos = mb.position
 					_is_panning = false
+					_pan_velocity = Vector2.ZERO
 				else:
 					if _is_panning:
 						_is_panning = false
+						# Compute fling velocity from recent samples
+						if not _velocity_samples.is_empty():
+							var total_delta := Vector2.ZERO
+							var total_dt := 0.0
+							for s in _velocity_samples:
+								total_delta += s[0]
+								total_dt    += s[1]
+							if total_dt > 0.0:
+								_pan_velocity = total_delta / total_dt
+						_velocity_samples.clear()
 					elif mb.position.distance_to(_press_pos) < DRAG_THRESHOLD:
 						# Clean click -- select province and smooth-pan to it
 						var pid: int = _pick_province(mb.position)
@@ -471,12 +568,16 @@ func _unhandled_input(event: InputEvent) -> void:
 					_left_held = false
 			MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT:
 				_is_panning = mb.pressed
+				if not mb.pressed:
+					_pan_velocity = Vector2.ZERO
 			MOUSE_BUTTON_WHEEL_UP:
 				_zoom_at(mb.position, ZOOM_STEP)
 				_cam_lerping = false
+				_pan_velocity = Vector2.ZERO
 			MOUSE_BUTTON_WHEEL_DOWN:
 				_zoom_at(mb.position, 1.0 / ZOOM_STEP)
 				_cam_lerping = false
+				_pan_velocity = Vector2.ZERO
 
 	elif event is InputEventMouseMotion:
 		var mm := event as InputEventMouseMotion
@@ -485,8 +586,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			if mm.global_position.distance_to(_press_pos) >= DRAG_THRESHOLD:
 				_is_panning = true
 				_cam_lerping = false
+				_pan_velocity = Vector2.ZERO
+				_velocity_samples.clear()
 		if _is_panning:
-			_origin += mm.relative / _zoom
+			var world_delta := mm.relative / _zoom
+			_origin += world_delta
+			# Track recent velocity samples for fling
+			var dt: float = get_process_delta_time()
+			if dt > 0.0:
+				_velocity_samples.append([world_delta, dt])
+				if _velocity_samples.size() > PAN_FLING_FRAMES:
+					_velocity_samples.pop_front()
 			queue_redraw()
 		var new_hover: int = _pick_province(mm.position)
 		if new_hover != _hover_id:
@@ -505,6 +615,8 @@ func _draw() -> void:
 	_draw_cells()
 	_draw_grass_overlays()
 	_draw_swamp_pits()
+	_draw_desert_ground()
+	_draw_tundra_ground()
 	_draw_rivers()
 	_draw_cell_borders()
 	_draw_routes()
@@ -662,6 +774,11 @@ func _load_terrain_from_scene_manager() -> void:
 	_swamp_tile_data = terrain.swamp_tile_data
 	_swamp_ie_tex    = terrain.swamp_ie_atlas
 	_swamp_ie_data   = terrain.swamp_ie_data
+	_desert_atlas_tex = terrain.desert_atlas
+	_desert_tile_data = terrain.desert_tile_data
+	_tundra_atlas_tex = terrain.tundra_atlas
+	_tundra_tile_data = terrain.tundra_tile_data
+	_build_biome_meshes()
 	_init_swamp_fog()
 	_grass_overlay_tex = load("res://Art/map/terrain/grass.png") as Texture2D
 	_province_lvl1_tex = load("res://Art/map/terrain/province_lvl1.png") as Texture2D
@@ -689,6 +806,7 @@ func _load_terrain_from_scene_manager() -> void:
 	_build_river_path()
 	_filter_river_trees()
 	_scatter_river_trees()
+	_build_tree_meshes()
 
 
 func _load_biome_texs(biome: String, names: Array) -> Array:
@@ -765,11 +883,10 @@ func _load_river_tiles() -> void:
 		_river_overlay = load("res://Visual/campaign/RiverOverlay.gd").new()
 		var mat := ShaderMaterial.new()
 		mat.shader = load("res://Visual/campaign/RiverParallax.gdshader") as Shader
-		mat.set_shader_parameter("parallax_tex", _river_parallax_tex)
+		# scroll_speed default is already set in shader; texture is passed per draw_mesh call
 		_river_overlay.material = mat
 		add_child(_river_overlay)
-	_river_overlay.river_tiles = _river_tiles
-	_river_overlay.tile_world = RIVER_TILE_WORLD
+	_river_overlay.set("parallax_tex", _river_parallax_tex)
 
 
 func _build_river_path() -> void:
@@ -916,6 +1033,23 @@ func _build_river_path() -> void:
 		"smooth_main_size": _river_smooth_main.size(),
 		"smooth_branch_count": _river_smooth_branches.size(),
 	})
+
+	# Build world-space river strip meshes — drawn by RiverOverlay with TIME shader
+	var tex_sz := Vector2(512.0, 512.0)
+	if _river_parallax_tex != null:
+		tex_sz = _river_parallax_tex.get_size()
+	_river_main_strip_mesh = _build_river_strip_mesh(_river_smooth_main, tex_sz, false)
+	_river_trib_strip_meshes.clear()
+	_river_trib_bank_data.clear()
+	for branch_smooth in _river_smooth_branches:
+		_river_trib_strip_meshes.append(_build_river_strip_mesh(branch_smooth, tex_sz, true))
+		_river_trib_bank_data.append(_build_river_bank_data(branch_smooth))
+	if _river_overlay != null:
+		_river_overlay.set("strip_main",  _river_main_strip_mesh)
+		_river_overlay.set("strip_tribs", _river_trib_strip_meshes)
+		_river_overlay.set("zoom",   _zoom)
+		_river_overlay.set("origin", _origin)
+		_river_overlay.queue_redraw()
 
 
 func _chaikin_smooth(path: Array, passes: int) -> Array:
@@ -1163,21 +1297,15 @@ func _draw_rivers() -> void:
 	if _river_path_tiles.is_empty():
 		return
 
-	# --- Pass 1: parallax water fill polygon for all branches ---
-	_draw_river_parallax_strip(_river_smooth_main, false)
-	for i in _river_smooth_branches.size():
-		_draw_river_parallax_strip(_river_smooth_branches[i], true)
+	# Pass 1 (parallax water fill) is handled by the RiverOverlay child node.
+	# Its ShaderMaterial scrolls UVs via TIME — no CPU redraw needed for animation.
 
-	# --- Pass 2: tile sprites — main river N→S first, then tributaries ---
+	# --- Pass 2: tile sprites — main river N→S ---
 	var tile_sz := RIVER_TILE_WORLD * _zoom * 1.12
-	var half := tile_sz * 0.5
 	var main_tiles: Array = []
-	var trib_tiles: Array = []
 	for entry in _river_path_tiles:
 		if (entry as Dictionary).get("main", false):
 			main_tiles.append(entry)
-		else:
-			trib_tiles.append(entry)
 	main_tiles.sort_custom(func(a, b): return (a["pos"] as Vector2).y < (b["pos"] as Vector2).y)
 	for entry in main_tiles:
 		var tile_idx: int = entry["tile"]
@@ -1197,9 +1325,51 @@ func _draw_rivers() -> void:
 				draw_h = narrow
 			elif tile_idx == 2 or tile_idx == 3:  # vertical — shrink width only
 				draw_w = narrow
-			else:  # corners — skip, bank drawn by parallax strip
+			else:
 				continue
 		draw_texture_rect(tex, Rect2(sp.x - draw_w * 0.5, sp.y - draw_h * 0.5, draw_w, draw_h), false)
+
+	# --- Pass 3: tributary bank lines (from precomputed world-space data) ---
+	for bank_data in _river_trib_bank_data:
+		_draw_trib_banks(bank_data)
+
+
+func _draw_trib_banks(data: Dictionary) -> void:
+	var left_world:  Array = data["left_pts"]
+	var right_world: Array = data["right_pts"]
+	var left_perps:  Array = data["left_perps"]
+	var right_perps: Array = data["right_perps"]
+	var bank_start_idx: int = data.get("bank_start_idx", 0)
+	var n := left_world.size()
+	if n <= bank_start_idx + 1:
+		return
+	var bank_colors: Array = [
+		Color("#13646b"), Color("#58989a"), Color("#3c261a"), Color("#5c4027"), Color("#6e5134"),
+	]
+	var bank_widths:  Array = [4.0, 2.0, 2.0, 2.0, 6.0]
+	var bank_offsets: Array = [0.0, 4.0, 6.0, 8.0, 10.0]
+	var total_bank_pts := n - bank_start_idx
+	var num_chunks := 8
+	for side in 2:
+		var edge_world: Array = left_world  if side == 0 else right_world
+		var perps: Array      = left_perps  if side == 0 else right_perps
+		for layer in bank_colors.size():
+			var offset: float = bank_offsets[layer]
+			var line_w: float = bank_widths[layer]
+			for bk in num_chunks:
+				var t_start := float(bk)     / float(num_chunks)
+				var t_end   := float(bk + 1) / float(num_chunks)
+				var idx_start := bank_start_idx + int(t_start * total_bank_pts)
+				var idx_end   := mini(bank_start_idx + int(t_end * total_bank_pts) + 1, n)
+				if idx_end <= idx_start + 1:
+					continue
+				var col: Color = bank_colors[layer]
+				col.a = lerpf(1.0, 0.0, (t_start + t_end) * 0.5)
+				var band := PackedVector2Array()
+				for i in range(idx_start, idx_end):
+					var world_pt: Vector2 = (edge_world[i] as Vector2) + (perps[i] as Vector2) * offset
+					band.append(_to_screen(world_pt))
+				draw_polyline(band, col, line_w)
 
 
 func _draw_river_parallax_strip(smooth: Array, taper: bool = false) -> void:
@@ -1288,6 +1458,119 @@ func _draw_river_parallax_strip(smooth: Array, taper: bool = false) -> void:
 					band.append((edge_pts[i] as Vector2) + (perps[i] as Vector2) * offset)
 				draw_polyline(band, col, line_w)
 
+
+func _build_river_strip_mesh(smooth: Array, tex_sz: Vector2, taper: bool) -> ArrayMesh:
+	if smooth.size() < 2:
+		return null
+	var verts := PackedVector2Array()
+	var uvs   := PackedVector2Array()
+	var base_water_w := RIVER_TILE_WORLD * 0.22
+	var n := smooth.size()
+	var left_world:  Array = []
+	var right_world: Array = []
+	for i in n:
+		var pt: Vector2 = smooth[i]
+		var dir := Vector2.DOWN
+		if i < n - 1: dir = (smooth[i + 1] - pt).normalized()
+		elif i > 0:   dir = (pt - smooth[i - 1]).normalized()
+		var perp := Vector2(-dir.y, dir.x)
+		var water_w := base_water_w
+		if taper:
+			water_w = lerpf(base_water_w, 0.5, clampf(float(i) / float(n - 1), 0.0, 1.0))
+		left_world.append(pt - perp * water_w)
+		right_world.append(pt + perp * water_w)
+	for i in range(n - 1):
+		var lw0: Vector2 = left_world[i];   var rw0: Vector2 = right_world[i]
+		var lw1: Vector2 = left_world[i+1]; var rw1: Vector2 = right_world[i+1]
+		# Quad as two triangles; UVs are world-pos / tex_size (shader adds TIME scroll)
+		verts.append(lw0); uvs.append(lw0 / tex_sz)
+		verts.append(rw0); uvs.append(rw0 / tex_sz)
+		verts.append(lw1); uvs.append(lw1 / tex_sz)
+		verts.append(rw0); uvs.append(rw0 / tex_sz)
+		verts.append(rw1); uvs.append(rw1 / tex_sz)
+		verts.append(lw1); uvs.append(lw1 / tex_sz)
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = verts
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
+
+
+func _build_river_bank_data(smooth: Array) -> Dictionary:
+	var base_water_w := RIVER_TILE_WORLD * 0.22
+	var n := smooth.size()
+	var left_pts:   Array = []
+	var right_pts:  Array = []
+	var left_perps:  Array = []
+	var right_perps: Array = []
+	for i in n:
+		var pt: Vector2 = smooth[i]
+		var dir := Vector2.DOWN
+		if i < n - 1: dir = (smooth[i + 1] - pt).normalized()
+		elif i > 0:   dir = (pt - smooth[i - 1]).normalized()
+		var perp := Vector2(-dir.y, dir.x)
+		var water_w := lerpf(base_water_w, 0.5, clampf(float(i) / float(n - 1), 0.0, 1.0))
+		left_pts.append(pt - perp * water_w)
+		right_pts.append(pt + perp * water_w)
+		left_perps.append(-perp)
+		right_perps.append(perp)
+	# bank_start_idx: skip ~1 tile inward from the junction
+	var bank_start_idx := 0
+	var dist_accum := 0.0
+	for i in range(1, n):
+		dist_accum += (smooth[i] as Vector2).distance_to(smooth[i - 1] as Vector2)
+		if dist_accum >= RIVER_TILE_WORLD * 0.25:
+			bank_start_idx = i
+			break
+	return {
+		"left_pts": left_pts, "right_pts": right_pts,
+		"left_perps": left_perps, "right_perps": right_perps,
+		"bank_start_idx": bank_start_idx,
+	}
+
+
+func _build_biome_meshes() -> void:
+	_swamp_mesh    = _triangulate_rect_tiles(_swamp_tile_data,  640.0, 320.0)
+	_swamp_ie_mesh = _triangulate_rect_tiles(_swamp_ie_data,    384.0, 320.0)
+	_desert_mesh   = _triangulate_rect_tiles(_desert_tile_data, 640.0, 320.0)
+	_tundra_mesh   = _triangulate_rect_tiles(_tundra_tile_data, 640.0, 320.0)
+
+func _triangulate_rect_tiles(tile_data: Array, atlas_w: float, atlas_h: float) -> ArrayMesh:
+	if tile_data.is_empty():
+		return null
+	var verts  := PackedVector2Array()
+	var uvs    := PackedVector2Array()
+	var colors := PackedColorArray()
+	for entry in tile_data:
+		var wr: Rect2 = entry["world_rect"]
+		var sr: Rect2 = entry["src_rect"]
+		var mod: Color = entry.get("modulate", Color.WHITE)
+		# Quad corners in world space
+		var tl := wr.position
+		var tr := Vector2(wr.end.x,    wr.position.y)
+		var bl := Vector2(wr.position.x, wr.end.y)
+		var br := wr.end
+		# UV corners normalised to [0,1]
+		var u0 := sr.position.x / atlas_w;  var v0 := sr.position.y / atlas_h
+		var u1 := sr.end.x      / atlas_w;  var v1 := sr.end.y      / atlas_h
+		# Triangle 1: tl, tr, bl
+		verts.append(tl); uvs.append(Vector2(u0, v0)); colors.append(mod)
+		verts.append(tr); uvs.append(Vector2(u1, v0)); colors.append(mod)
+		verts.append(bl); uvs.append(Vector2(u0, v1)); colors.append(mod)
+		# Triangle 2: tr, br, bl
+		verts.append(tr); uvs.append(Vector2(u1, v0)); colors.append(mod)
+		verts.append(br); uvs.append(Vector2(u1, v1)); colors.append(mod)
+		verts.append(bl); uvs.append(Vector2(u0, v1)); colors.append(mod)
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = verts
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_COLOR]  = colors
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
 
 func _build_terrain_mesh() -> void:
 	_terrain_mesh = null
@@ -1587,34 +1870,76 @@ func _filter_river_trees() -> void:
 	_drawable_trees = filtered
 
 func _draw_swamp_pits() -> void:
-	if _swamp_atlas_tex != null:
-		for entry in _swamp_tile_data:
-			var wr: Rect2 = entry["world_rect"]
-			var sr: Rect2 = entry["src_rect"]
-			var tl := _to_screen(wr.position)
-			var br := _to_screen(wr.end)
-			var mod: Color = entry.get("modulate", Color.WHITE)
-			draw_texture_rect_region(_swamp_atlas_tex, Rect2(tl, br - tl), sr, mod)
-	# Inner concave corner overlay — drawn on top of regular swamp tiles
-	if _swamp_ie_tex != null:
-		for entry in _swamp_ie_data:
-			var wr: Rect2 = entry["world_rect"]
-			var sr: Rect2 = entry["src_rect"]
-			var tl := _to_screen(wr.position)
-			var br := _to_screen(wr.end)
-			draw_texture_rect_region(_swamp_ie_tex, Rect2(tl, br - tl), sr)
+	var xform := Transform2D(Vector2(_zoom, 0.0), Vector2(0.0, _zoom), _origin * _zoom)
+	if _swamp_mesh != null and _swamp_atlas_tex != null:
+		draw_mesh(_swamp_mesh, _swamp_atlas_tex, xform)
+	if _swamp_ie_mesh != null and _swamp_ie_tex != null:
+		draw_mesh(_swamp_ie_mesh, _swamp_ie_tex, xform)
+
+func _draw_desert_ground() -> void:
+	var xform := Transform2D(Vector2(_zoom, 0.0), Vector2(0.0, _zoom), _origin * _zoom)
+	if _desert_mesh != null and _desert_atlas_tex != null:
+		draw_mesh(_desert_mesh, _desert_atlas_tex, xform)
+
+func _draw_tundra_ground() -> void:
+	var xform := Transform2D(Vector2(_zoom, 0.0), Vector2(0.0, _zoom), _origin * _zoom)
+	if _tundra_mesh != null and _tundra_atlas_tex != null:
+		draw_mesh(_tundra_mesh, _tundra_atlas_tex, xform)
 
 
-func _draw_trees() -> void:
+func _build_tree_meshes() -> void:
+	_tree_meshes.clear()
 	if _tree_textures.is_empty() or _drawable_trees.is_empty():
 		return
-	var sz: float = TREE_WORLD_SIZE * _zoom
+	# Bucket verts/uvs by texture index
+	var buckets: Array = []
+	for i in _tree_textures.size():
+		buckets.append({"verts": PackedVector2Array(), "uvs": PackedVector2Array()})
+	var hw: float = TREE_WORLD_SIZE * 0.5   # half-width in world units
+	var hh: float = TREE_WORLD_SIZE          # full height (root at pos, top is pos.y - hh)
 	for entry in _drawable_trees:
-		var tex: Texture2D = _tree_textures[entry["tex_idx"] % _tree_textures.size()]
-		var sp: Vector2 = _to_screen(entry["pos"])
+		var idx: int = entry["tex_idx"] % _tree_textures.size()
+		var pos: Vector2 = entry["pos"]
 		var flip: bool = entry.get("flip", false)
-		var rect := Rect2(sp.x - sz * 0.5, sp.y - sz, sz, sz) if not flip else Rect2(sp.x + sz * 0.5, sp.y - sz, -sz, sz)
-		draw_texture_rect(tex, rect, false)
+		var tl := Vector2(pos.x - hw, pos.y - hh)
+		var tr := Vector2(pos.x + hw, pos.y - hh)
+		var bl := Vector2(pos.x - hw, pos.y)
+		var br := Vector2(pos.x + hw, pos.y)
+		var u0 := 1.0 if flip else 0.0
+		var u1 := 0.0 if flip else 1.0
+		var b: Dictionary = buckets[idx]
+		var v: PackedVector2Array = b["verts"]
+		var u: PackedVector2Array = b["uvs"]
+		v.append(tl); u.append(Vector2(u0, 0.0))
+		v.append(tr); u.append(Vector2(u1, 0.0))
+		v.append(bl); u.append(Vector2(u0, 1.0))
+		v.append(tr); u.append(Vector2(u1, 0.0))
+		v.append(br); u.append(Vector2(u1, 1.0))
+		v.append(bl); u.append(Vector2(u0, 1.0))
+	_tree_meshes.resize(_tree_textures.size())
+	for i in _tree_textures.size():
+		var b: Dictionary = buckets[i]
+		var verts: PackedVector2Array = b["verts"]
+		if verts.is_empty():
+			_tree_meshes[i] = null
+			continue
+		var arrays: Array = []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = verts
+		arrays[Mesh.ARRAY_TEX_UV] = b["uvs"]
+		var mesh := ArrayMesh.new()
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		_tree_meshes[i] = mesh
+
+func _draw_trees() -> void:
+	if _tree_meshes.is_empty():
+		return
+	var xform := Transform2D(Vector2(_zoom, 0.0), Vector2(0.0, _zoom), _origin * _zoom)
+	for i in _tree_meshes.size():
+		var mesh: ArrayMesh = _tree_meshes[i]
+		if mesh == null:
+			continue
+		draw_mesh(mesh, _tree_textures[i], xform)
 
 
 func _draw_cells() -> void:

@@ -575,6 +575,17 @@ func _assign_biomes(map_data: MapData) -> void:
 			for neighbor_id in (adj[pid] as Array):
 				var nid: int = int(neighbor_id)
 				if not assigned.has(nid):
+					# Prevent tundra and desert from being adjacent — border
+					# provinces are left unassigned and fall through to plains.
+					if biome == "tundra" or biome == "desert":
+						var conflict: bool = false
+						var opposing: String = "desert" if biome == "tundra" else "tundra"
+						for nn_id in (adj[nid] as Array):
+							if assigned.get(int(nn_id), "") == opposing:
+								conflict = true
+								break
+						if conflict:
+							continue
 					assigned[nid] = biome
 					q.append(nid)
 					remaining -= 1

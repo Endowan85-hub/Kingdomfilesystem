@@ -62,6 +62,24 @@ const SWAMP_IE_NE:           int    = 5                        # row 0, col 5
 const SWAMP_IE_SW:           int    = 24                       # row 4, col 0
 const SWAMP_IE_SE:           int    = 29                       # row 4, col 5
 
+# -- Tundra biome overlay --
+const TUNDRA_ATLAS_PATH:  String = "res://Art/tiles/biomes/tundra/mega_snow.png"
+const TUNDRA_EDGE_PATH:   String = "res://Art/map/terrain/tiles/tundra_edge.txt"
+const TUNDRA_INNER_PATH:  String = "res://Art/map/terrain/tiles/tundra_inner.txt"
+const TUNDRA_ATLAS_COLS:  int    = 10
+const TUNDRA_ATLAS_ROWS:  int    = 5
+const TUNDRA_TILE_W:      float  = 32.0
+const TUNDRA_TILE_H:      float  = 32.0
+
+# -- Desert biome overlay --
+const DESERT_ATLAS_PATH:  String = "res://Art/tiles/biomes/desert/mega_desert.png"
+const DESERT_EDGE_PATH:   String = "res://Art/map/terrain/tiles/desert_edge.txt"
+const DESERT_INNER_PATH:  String = "res://Art/map/terrain/tiles/desert_inner.txt"
+const DESERT_ATLAS_COLS:  int    = 10
+const DESERT_ATLAS_ROWS:  int    = 5
+const DESERT_TILE_W:      float  = 32.0
+const DESERT_TILE_H:      float  = 32.0
+
 # -- Tree scatter --
 const TREE_PATHS: Array = [
 	"res://Art/map/terrain/trees/tree_01.png",
@@ -145,6 +163,12 @@ var swamp_tile_data: Array = []
 var swamp_ie_atlas: Texture2D = null     # inner concave corner overlay
 var swamp_ie_data: Array = []
 
+var desert_atlas: Texture2D = null
+var desert_tile_data: Array = []
+
+var tundra_atlas: Texture2D = null
+var tundra_tile_data: Array = []
+
 var tree_textures: Array = []         # Array of Texture2D (regular, then dead, then tundra)
 var dead_tree_start_idx: int = 0      # index where dead trees begin
 var tundra_tree_start_idx: int = 0    # index where tundra trees begin
@@ -164,6 +188,8 @@ func generate_base_tiles(map_data: MapData) -> void:
 	dark_tile_data.clear();  dark_atlas  = null
 	swamp_tile_data.clear(); swamp_atlas   = null
 	swamp_ie_data.clear();   swamp_ie_atlas = null
+	desert_tile_data.clear(); desert_atlas  = null
+	tundra_tile_data.clear(); tundra_atlas  = null
 	tree_textures.clear();   tree_positions.clear()
 	if map_data == null or map_data.provinces.is_empty():
 		return
@@ -205,6 +231,22 @@ func generate_biome_tiles(map_data: MapData) -> void:
 				swamp_edge_indices, swamp_inner_indices, SWAMP_TILE_W, SWAMP_TILE_H,
 				SWAMP_ATLAS_COLS, SWAMP_ATLAS_ROWS)
 		DebugLogger.log("swamp_tiles_built", {"total": swamp_tile_data.size(), "tile_w": SWAMP_TILE_W})
+	desert_atlas = load(DESERT_ATLAS_PATH) as Texture2D
+	var desert_edge_indices  := _load_indices_from(DESERT_EDGE_PATH)
+	var desert_inner_indices := _load_indices_from(DESERT_INNER_PATH)
+	if desert_atlas != null:
+		desert_tile_data = _build_tiles_biome("desert", map_data, _continent_poly,
+				desert_edge_indices, desert_inner_indices, DESERT_TILE_W, DESERT_TILE_H,
+				DESERT_ATLAS_COLS, DESERT_ATLAS_ROWS)
+		DebugLogger.log("desert_tiles_built", {"total": desert_tile_data.size(), "tile_w": DESERT_TILE_W})
+	tundra_atlas = load(TUNDRA_ATLAS_PATH) as Texture2D
+	var tundra_edge_indices  := _load_indices_from(TUNDRA_EDGE_PATH)
+	var tundra_inner_indices := _load_indices_from(TUNDRA_INNER_PATH)
+	if tundra_atlas != null:
+		tundra_tile_data = _build_tiles_biome("tundra", map_data, _continent_poly,
+				tundra_edge_indices, tundra_inner_indices, TUNDRA_TILE_W, TUNDRA_TILE_H,
+				TUNDRA_ATLAS_COLS, TUNDRA_ATLAS_ROWS)
+		DebugLogger.log("tundra_tiles_built", {"total": tundra_tile_data.size(), "tile_w": TUNDRA_TILE_W})
 
 func generate_trees(map_data: MapData) -> void:
 	if _continent_poly.size() < 3:
@@ -870,13 +912,13 @@ func _build_tiles_biome(biome: String, map_data: MapData,
 				# by 1/4 and bleeds into the adjacent non-swamp terrain.
 				if is_edge:
 					if miss_n:
-						result.append({world_rect = Rect2(wx, wy - tile_h * 0.5, tile_w, tile_h), src_rect = sr, is_edge = true})
+						result.append({world_rect = Rect2(wx, wy - tile_h * 0.375, tile_w, tile_h), src_rect = sr, is_edge = true})
 					if miss_s:
-						result.append({world_rect = Rect2(wx, wy + tile_h * 0.5, tile_w, tile_h), src_rect = sr, is_edge = true})
+						result.append({world_rect = Rect2(wx, wy + tile_h * 0.375, tile_w, tile_h), src_rect = sr, is_edge = true})
 					if miss_w:
-						result.append({world_rect = Rect2(wx - tile_w * 0.5, wy, tile_w, tile_h), src_rect = sr, is_edge = true})
+						result.append({world_rect = Rect2(wx - tile_w * 0.375, wy, tile_w, tile_h), src_rect = sr, is_edge = true})
 					if miss_e:
-						result.append({world_rect = Rect2(wx + tile_w * 0.5, wy, tile_w, tile_h), src_rect = sr, is_edge = true})
+						result.append({world_rect = Rect2(wx + tile_w * 0.375, wy, tile_w, tile_h), src_rect = sr, is_edge = true})
 			gy += 1; wy += tile_h
 		gx += 1; wx += tile_w
 
@@ -1202,6 +1244,16 @@ func _scatter_trees(continent_poly: PackedVector2Array, map_data: MapData, dead_
 			if _near_province(pt, province_centers):
 				continue
 			if _tree_too_close(pt, spatial_grid):
+				continue
+			# Confirm the candidate is actually in a tundra province
+			var pt_biome := ""
+			var pt_d := 1.0e18
+			for pd in all_province_data:
+				var d: float = pt.distance_squared_to((pd as ProvinceData).center)
+				if d < pt_d:
+					pt_d = d
+					pt_biome = (pd as ProvinceData).biome
+			if pt_biome != "tundra":
 				continue
 			var tr: float = rng.randf()
 			var tex_idx: int

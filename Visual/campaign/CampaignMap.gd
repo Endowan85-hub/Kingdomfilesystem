@@ -41,6 +41,11 @@ var _province_panel: ProvincePanel
 
 var _game_state: GameState
 var _map_data: MapData
+
+# Temporary FPS overlay
+var _fps_label: Label = null
+var _fps_acc: float   = 0.0
+var _fps_frames: int  = 0
 var _human_id: int = 0
 var _turn_manager: TurnManager
 var _processing_turn: bool = false
@@ -53,6 +58,7 @@ var _mission_panel: MissionPanel = null
 
 
 func _ready() -> void:
+	_init_fps_overlay()
 	_init_debug_view()
 	_init_player_map()
 	_init_hud()
@@ -98,6 +104,32 @@ func _on_music_finished(music: AudioStreamPlayer) -> void:
 	_music_index = (_music_index + 1) % MUSIC_TRACKS.size()
 	music.play()
 
+
+func _init_fps_overlay() -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 200
+	add_child(layer)
+	_fps_label = Label.new()
+	_fps_label.position = Vector2(8, 8)
+	_fps_label.add_theme_font_size_override("font_size", 14)
+	_fps_label.add_theme_color_override("font_color", Color(1, 1, 0, 0.9))
+	_fps_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+	_fps_label.add_theme_constant_override("shadow_offset_x", 1)
+	_fps_label.add_theme_constant_override("shadow_offset_y", 1)
+	_fps_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(_fps_label)
+
+func _process(delta: float) -> void:
+	if _fps_label == null:
+		return
+	_fps_acc    += delta
+	_fps_frames += 1
+	if _fps_acc >= 0.25:
+		var fps: float  = _fps_frames / _fps_acc
+		var ms: float   = (_fps_acc / _fps_frames) * 1000.0
+		_fps_label.text = "FPS: %d  |  %.2f ms" % [roundi(fps), ms]
+		_fps_acc    = 0.0
+		_fps_frames = 0
 
 # --------------------------------------------------
 # Initialization

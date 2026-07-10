@@ -1,26 +1,24 @@
 extends Node2D
 
-var river_tiles: Array = []
-var river_path_tiles: Array = []
+# Prebuilt world-space triangle strip meshes for the river parallax water fill.
+# PlayerMap sets these after _build_river_path() runs.
+# The ShaderMaterial on this node (RiverParallax.gdshader) scrolls UVs via TIME
+# automatically — no queue_redraw() needed for the animation itself.
+var strip_main: ArrayMesh = null
+var strip_tribs: Array = []       # Array[ArrayMesh], one per tributary
+var parallax_tex: Texture2D = null
+
+# Camera params — synced by PlayerMap whenever the camera moves
 var zoom: float = 1.0
 var origin: Vector2 = Vector2.ZERO
-var tile_world: float = 45.0
+
 
 func _draw() -> void:
-	if river_tiles.is_empty() or river_path_tiles.is_empty():
+	if parallax_tex == null:
 		return
-	var mat := material as ShaderMaterial
-	if mat:
-		mat.set_shader_parameter("cam_origin", origin)
-		mat.set_shader_parameter("cam_zoom", zoom)
-	var tile_sz := tile_world * zoom * 1.12
-	var half := tile_sz * 0.5
-	for entry in river_path_tiles:
-		var tile_idx: int = entry["tile"]
-		if tile_idx < 0 or tile_idx >= river_tiles.size():
-			continue
-		var tex: Texture2D = river_tiles[tile_idx]
-		if tex == null:
-			continue
-		var sp: Vector2 = (entry["pos"] + origin) * zoom
-		draw_texture_rect(tex, Rect2(sp.x - half, sp.y - half, tile_sz, tile_sz), false)
+	var xform := Transform2D(Vector2(zoom, 0.0), Vector2(0.0, zoom), origin * zoom)
+	if strip_main != null:
+		draw_mesh(strip_main, parallax_tex, xform)
+	for mesh in strip_tribs:
+		if mesh != null:
+			draw_mesh(mesh, parallax_tex, xform)

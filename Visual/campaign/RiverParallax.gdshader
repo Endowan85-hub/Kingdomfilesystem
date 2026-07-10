@@ -1,15 +1,11 @@
 shader_type canvas_item;
 
-uniform sampler2D parallax_tex : repeat_enable, hint_default_white;
+// Scroll speed (world-UV units per second) — matches old _river_wind_uv accumulation rate
+uniform vec2 scroll_speed = vec2(0.005, 0.0017);
 
 void fragment() {
-	vec4 tile = texture(TEXTURE, UV);
-
-	if (tile.a < 0.1) {
-		COLOR = vec4(0.0);
-		return;
-	}
-
-	// Show red for ALL non-transparent pixels
-	COLOR = vec4(1.0, 0.0, 0.0, 1.0);
+	// UV comes from the prebuilt river strip mesh (world_pos / tex_size).
+	// TIME drives the scroll on the GPU so no CPU redraw is needed each frame.
+	vec2 scrolled_uv = UV + scroll_speed * TIME;
+	COLOR = texture(TEXTURE, scrolled_uv);
 }
